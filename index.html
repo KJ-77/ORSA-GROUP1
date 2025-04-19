@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORSA GROUP</title>
+
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  
+  <!-- Custom JS -->
+  <script src="js/language.js"></script>
+  <script src="js/mobile-nav.js"></script>
+  <script src="js/3d-scroll-effects.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      perspective: 1000px;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .navbar .logo a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+
+    .all-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .all-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .all-links a:hover {
+      color: #f9c349;
+      transform: translateZ(5px);
+    }
+
+    .hero {
+      background-image: url(images/INTROO.png);
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      flex-direction: column;
+      text-align: center;
+      padding: 150px 20px 50px;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      width: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .hero-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      transform: translateZ(50px);
+    }
+
+    .hero-content p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      transform: translateZ(30px);
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #fff;
+      color: #000;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      transform: translateZ(20px);
+    }
+
+    .hero-btn:hover {
+      background-color: transparent;
+      color: #fff;
+      border-color: #fff;
+      transform: translateZ(30px) scale(1.05);
+    }
+
+    .section {
+      padding: 80px 20px;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      transform-style: preserve-3d;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 40px 20px;
+      transform-style: preserve-3d;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 250px;
+      width: 100%;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      transform-style: preserve-3d;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) translateZ(20px) rotateX(5deg) rotateY(5deg);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 8px;
+      transform: translateZ(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover img {
+      transform: translateZ(20px);
+    }
+
+    .card a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    .about-section {
+      background: linear-gradient(to right, #f9c349, #f5a623);
+      color: #333;
+      padding: 80px 20px;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .about-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('images/light.jpg') center/cover;
+      opacity: 0.05;
+      z-index: 0;
+      transform: translateZ(-50px);
+    }
+
+    .about-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      transform-style: preserve-3d;
+    }
+
+    .about-image {
+      flex: 1;
+      min-width: 300px;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      transform: rotateY(0deg);
+    }
+
+    .about-image:hover img {
+      transform: rotateY(5deg) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .about-content {
+      flex: 1;
+      min-width: 300px;
+      transform-style: preserve-3d;
+    }
+
+    .about-content h2 {
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      position: relative;
+      padding-bottom: 15px;
+      transform: translateZ(20px);
+    }
+
+    .about-content h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 3px;
+      background-color: #333;
+      transform: translateZ(10px);
+    }
+
+    .about-content p {
+      margin-bottom: 15px;
+      line-height: 1.8;
+      font-size: 1.1rem;
+      transform: translateZ(10px);
+    }
+
+    .contact-section {
+      padding: 80px 20px;
+      background-color: #f9f9f9;
+      transform-style: preserve-3d;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 50px;
+      transform-style: preserve-3d;
+    }
+
+    .page-title h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 15px;
+      transform: translateZ(30px);
+    }
+
+    .page-title h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateZ(20px);
+      width: 80px;
+      height: 3px;
+      background-color: #f9c349;
+    }
+
+    .page-title p {
+      color: #666;
+      font-size: 1.1rem;
+      transform: translateZ(20px);
+    }
+
+    .contact-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .contact-info {
+      flex: 1;
+      min-width: 300px;
+      padding: 40px;
+      background-color: #f9c349;
+      color: #333;
+      transform-style: preserve-3d;
+    }
+
+    .contact-title {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 15px;
+      transform: translateZ(20px);
+    }
+
+    .contact-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: #333;
+      transform: translateZ(10px);
+    }
+
+    .contact-details {
+      margin-bottom: 30px;
+      transform-style: preserve-3d;
+    }
+
+    .contact-details p {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+      font-size: 1.1rem;
+      transform: translateZ(10px);
+    }
+
+    .contact-details i {
+      margin-right: 15px;
+      color: #333;
+      min-width: 20px;
+      text-align: center;
+      margin-top: 4px;
+      transform: translateZ(15px);
+    }
+
+    .contact-social {
+      display: flex;
+      gap: 15px;
+      transform-style: preserve-3d;
+    }
+
+    .contact-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #333;
+      color: #f9c349;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      transform: translateZ(10px);
+    }
+
+    .contact-social a:hover {
+      background-color: white;
+      color: #333;
+      transform: translateY(-3px) translateZ(20px);
+    }
+
+    .contact-form {
+      flex: 1;
+      min-width: 300px;
+      padding: 40px;
+      transform-style: preserve-3d;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      transform-style: preserve-3d;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+      transform: translateZ(5px);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+      transform: translateZ(5px);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #f9c349;
+      outline: none;
+      transform: translateZ(10px);
+    }
+
+    .form-group textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    .form-button {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #f9c349;
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      transform: translateZ(10px);
+    }
+
+    .form-button:hover {
+      background-color: #e6b43a;
+      transform: translateY(-3px) translateZ(20px);
+    }
+
+    footer {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      padding: 30px 20px;
+      transform-style: preserve-3d;
+    }
+
+    footer p {
+      margin-bottom: 15px;
+      transform: translateZ(10px);
+    }
+
+    .footer-links {
+      margin-top: 15px;
+      transform-style: preserve-3d;
+    }
+
+    .footer-links a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      transform: translateZ(10px);
+    }
+
+    .footer-links a:hover {
+      color: #f9c349;
+      transform: translateZ(15px);
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      transition: transform 0.3s ease;
+      transform-style: preserve-3d;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1) translateZ(20px);
+    }
+
+    .whatsapp-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #25D366;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      transform: translateZ(10px);
+    }
+
+    /* Language selector */
+    .language-selector {
+      position: relative;
+      margin-left: 20px;
+      transform-style: preserve-3d;
+    }
+
+    .language-btn {
+      background: none;
+      border: 1px solid #ddd;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: white;
+      transition: all 0.3s ease;
+      transform: translateZ(5px);
+    }
+
+    .language-btn i {
+      margin-left: 5px;
+    }
+
+    .language-btn:hover {
+      background-color: rgba(255,255,255,0.1);
+      transform: translateZ(10px);
+    }
+
+    .language-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: #000;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-radius: 4px;
+      padding: 10px 0;
+      min-width: 120px;
+      display: none;
+      z-index: 10;
+      transform-style: preserve-3d;
+    }
+
+    .language-dropdown.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .language-dropdown a {
+      display: block;
+      padding: 8px 15px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      transform: translateZ(5px);
+    }
+
+    .language-dropdown a:hover {
+      background-color: rgba(255,255,255,0.1);
+      transform: translateZ(10px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 40px;
+      height: 40px;
+      background-color: #f9c349;
+      color: #333;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      transform-style: preserve-3d;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background-color: #e6b43a;
+      transform: translateY(-3px) rotateY(10deg);
+    }
+
+    /* Scroll down indicator */
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(20px);
+      animation: bounce 2s infinite;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .scroll-down i {
+      color: white;
+      font-size: 2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) translateX(-50%) translateZ(20px);
+      }
+      40% {
+        transform: translateY(-20px) translateX(-50%) translateZ(30px);
+      }
+      60% {
+        transform: translateY(-10px) translateX(-50%) translateZ(25px);
+      }
+    }
+
+    /* 3D animation for page elements */
+    .animate-3d {
+      animation: float 6s ease-in-out infinite;
+      transform-style: preserve-3d;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateZ(0) translateY(0) rotateX(0) rotateY(0);
+      }
+      50% {
+        transform: translateZ(20px) translateY(-10px) rotateX(5deg) rotateY(5deg);
+      }
+      100% {
+        transform: translateZ(0) translateY(0) rotateX(0) rotateY(0);
+      }
+    }
+
+    /* Responsive styles for specific elements */
+    @media screen and (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-content p {
+        font-size: 1.2rem;
+      }
+      
+      .about-content h2, 
+      .page-title h1 {
+        font-size: 2rem;
+      }
+      
+      .contact-info, 
+      .contact-form {
+        padding: 30px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+      }
+      
+      .hero-btn {
+        padding: 10px 20px;
+      }
+      
+      .section {
+        padding: 60px 15px;
+      }
+      
+      .scroll-down {
+        bottom: 20px;
+      }
+      
+      .scroll-down i {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <h2 class="logo"><a href="index.html">ORSA GROUP</a></h2>
+      <ul class="all-links">
+        <li><a href="our-items.html">Our Items</a></li>
+        <li><a href="our-offers.html">Our Offers</a></li>
+        <li><a href="our-branches.html">Our Branches</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+        <li>
+          <div class="language-selector">
+            <button class="language-btn">EN <i class="fas fa-chevron-down"></i></button>
+            <div class="language-dropdown">
+              <a href="#" data-lang="en">English</a>
+              <a href="#" data-lang="fr">Français</a>
+              <a href="#" data-lang="ar">العربية</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content animate-3d">
+      <h1>ORSA GROUP</h1>
+      <p>Premium Lebanese Products</p>
+      <a href="our-items.html" class="hero-btn">OUR ITEMS</a>
+    </div>
+    <div class="scroll-down">
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="about-container">
+        <div class="about-image">
+          <img src="images/intro.jpeg" alt="About ORSA GROUP">
+        </div>
+        <div class="about-content">
+          <h2>About Us</h2>
+          <p>ORSA GROUP is a leading importer and distributor of premium Lebanese products in Europe. We specialize in bringing authentic Lebanese flavors directly from local farmers and producers to your table.</p>
+          <p>Our mission is to share the rich culinary heritage of Lebanon with the world, offering only the highest quality olive oils, tahini, olives, and other traditional Lebanese delicacies.</p>
+          <p>With branches in both Belgium and Lebanon, we ensure direct sourcing and quality control at every step of the process, from farm to table.</p>
+          <p>We take pride in supporting local Lebanese farmers and producers, ensuring fair trade practices and sustainable farming methods.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <div class="page-title">
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you</p>
+      </div>
+
+      <div class="contact-container">
+        <div class="contact-info">
+          <h2 class="contact-title">Get In Touch</h2>
+          <div class="contact-details">
+            <p><i class="fas fa-phone"></i> Belgium: +32 478 69 25 86<br>Lebanon: +961 70 141 087</p>
+            <p><i class="fas fa-envelope"></i> Email: info@orsa-group.com</p>
+            <p><i class="fas fa-globe"></i> Website: orsagroup.store</p>
+            <p><i class="fas fa-map-marker-alt"></i> Belgium: Grotewinkellaan 80, 1853 Grimbergen<br>Lebanon: Beirut Central District</p>
+          </div>
+          <h2 class="contact-title">Follow Us</h2>
+          <div class="contact-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <h2 class="contact-title">Send Us a Message</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="form-button">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <a href="https://wa.me/+32478692586" class="whatsapp-float" target="_blank">
+    <img src="images/whatsapp.jpg" alt="WhatsApp" class="whatsapp-logo">
+  </a>
+
+  <div class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <footer>
+    <p>ORSA GROUP © 2023 All Rights Reserved</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="our-items.html">Our Items</a>
+      <a href="our-offers.html">Our Offers</a>
+      <a href="our-branches.html">Our Branches</a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Language selector functionality
+      const languageBtn = document.querySelector('.language-btn');
+      const languageDropdown = document.querySelector('.language-dropdown');
+      
+      languageBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        languageDropdown.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.language-selector')) {
+          languageDropdown.classList.remove('show');
+        }
+      });
+      
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 70,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Back to top button
+      const backToTopBtn = document.querySelector('.back-to-top');
+      
+      window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.classList.add('show');
+        } else {
+          backToTopBtn.classList.remove('show');
+        }
+      });
+      
+      backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Form submission
+      const contactForm = document.getElementById('contactForm');
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Thank you for your message! We will get back to you soon.');
+          contactForm.reset();
+        });
+      }
+      
+      // Scroll down indicator
+      const scrollDown = document.querySelector('.scroll-down');
+      if (scrollDown) {
+        scrollDown.addEventListener('click', function() {
+          window.scrollTo({
+            top: window.innerHeight,
+            behavior: 'smooth'
+          });
+        });
+      }
+      
+      // Add 3D mouse movement effect to hero section
+      const hero = document.querySelector('.hero');
+      const heroContent = document.querySelector('.hero-content');
+      
+      if (hero && heroContent) {
+        hero.addEventListener('mousemove', function(e) {
+          const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+          const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+          
+          heroContent.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateZ(50px)`;
+        });
+        
+        hero.addEventListener('mouseenter', function() {
+          heroContent.style.transition = 'none';
+        });
+        
+        hero.addEventListener('mouseleave', function() {
+          heroContent.style.transition = 'all 0.5s ease';
+          heroContent.style.transform = 'rotateY(0deg) rotateX(0deg) translateZ(50px)';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
