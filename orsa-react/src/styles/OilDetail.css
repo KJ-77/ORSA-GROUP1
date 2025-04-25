@@ -1,0 +1,248 @@
+/* Oil Detail Page Styles */
+.oil-detail-page {
+  padding: 2rem 0;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  margin: 1rem 0 2rem;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.breadcrumb a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* Product Overview */
+.product-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+/* Product Gallery */
+.product-gallery {
+  position: relative;
+}
+
+.main-image {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1rem;
+}
+
+.main-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.thumbnail-images {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.thumbnail:hover {
+  opacity: 1;
+}
+
+.thumbnail.active {
+  opacity: 1;
+  border: 2px solid var(--primary-color);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Product Info */
+.product-info h1 {
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.product-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.product-details {
+  font-size: 0.95rem;
+  color: #777;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Product Details Section */
+.product-details-section {
+  margin-bottom: 4rem;
+}
+
+.product-details-section h2 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.product-long-description {
+  line-height: 1.8;
+}
+
+.product-long-description p {
+  margin-bottom: 1.5rem;
+}
+
+/* Nutrition Facts Section */
+.nutrition-facts-section {
+  margin-bottom: 4rem;
+}
+
+.nutrition-facts-section h2 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.nutrition-facts-table {
+  max-width: 500px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+}
+
+.nutrition-header {
+  border-bottom: 8px solid #000;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.nutrition-header h3 {
+  margin-bottom: 0.5rem;
+}
+
+.nutrition-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.nutrition-item.sub-item {
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* Related Products Section */
+.related-products-section {
+  margin-bottom: 3rem;
+}
+
+.related-products-section h2 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.related-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.related-product-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease;
+}
+
+.related-product-card:hover {
+  transform: translateY(-5px);
+}
+
+.related-product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.related-product-card h3 {
+  padding: 1rem 1rem 0.5rem;
+  font-size: 1.2rem;
+}
+
+.related-product-card .btn {
+  margin: 0 1rem 1rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+}
+
+.back-button {
+  margin-top: 2rem;
+}
+
+/* Product Not Found */
+.product-not-found {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.product-not-found h2 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.product-not-found p {
+  margin-bottom: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-info h1 {
+    font-size: 2rem;
+  }
+  
+  .related-products {
+    grid-template-columns: 1fr;
+  }
+}
