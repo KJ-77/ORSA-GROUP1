@@ -10,7 +10,7 @@ const oilProducts = [
   {
     id: 1,
     name: 'Extra Virgin Olive Oil',
-    description: 'Our premium extra virgin olive oil is cold-pressed from handpicked Lebanese olives, delivering an authentic taste of Lebanon's rich olive heritage.',
+    description: 'Our premium extra virgin olive oil is cold-pressed from handpicked Lebanese olives, delivering an authentic taste of Lebanon\'s rich olive heritage.',
     image: '/assets/images/oil1.jpg',
     details: 'Available in 500ml and 750ml bottles'
   },

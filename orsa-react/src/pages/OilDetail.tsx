@@ -8,7 +8,7 @@ const oilProducts = [
   {
     id: 1,
     name: 'Extra Virgin Olive Oil',
-    description: 'Our premium extra virgin olive oil is cold-pressed from handpicked Lebanese olives, delivering an authentic taste of Lebanon's rich olive heritage.',
+    description: 'Our premium extra virgin olive oil is cold-pressed from handpicked Lebanese olives, delivering an authentic taste of Lebanon\'s rich olive heritage.',
     longDescription: `Our Extra Virgin Olive Oil is the crown jewel of our collection. Sourced from ancient olive groves in the mountains of Lebanon, this premium oil is produced using traditional methods passed down through generations.
     
     The olives are carefully hand-picked at the perfect moment of ripeness and cold-pressed within hours to preserve their exceptional flavor and nutritional properties. The result is an exquisite, golden-green oil with a fruity aroma, smooth texture, and a distinct peppery finish.
