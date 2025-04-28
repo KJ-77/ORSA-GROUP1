@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import "../styles/OurBranches.css";
 
 // Sample branch data
 const branches = [
@@ -80,35 +79,49 @@ const OurBranches = () => {
   }, []);
 
   return (
-    <div className="our-branches-page">
+    <div className="w-full">
       {/* Page Header */}
-      <div ref={headerRef} className="page-header">
-        <div className="container">
+      <div
+        ref={headerRef}
+        className="bg-[#4a8e3b] text-white py-24 pb-16 text-center"
+      >
+        <div className="max-w-7xl mx-auto px-8">
           <div className="page-header-content">
-            <h1>{t("our-branches")}</h1>
-            <p>Visit us at one of our locations across Lebanon</p>
+            <h1 className="text-5xl mb-4 uppercase md:text-4xl">
+              {t("our-branches")}
+            </h1>
+            <p className="text-xl max-w-[600px] mx-auto md:text-lg">
+              Visit us at one of our locations across Lebanon
+            </p>
           </div>
         </div>
       </div>
 
       {/* Branches Section */}
-      <section ref={branchesRef} className="branches-section">
-        <div className="container">
-          <div className="branches-grid">
+      <section ref={branchesRef} className="py-20">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {branches.map((branch) => (
-              <div key={branch.id} className="branch-card">
-                <div className="branch-image">
-                  <img src={branch.image} alt={branch.name} />
+              <div
+                key={branch.id}
+                className="branch-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-2.5"
+              >
+                <div className="h-[250px] overflow-hidden">
+                  <img
+                    src={branch.image}
+                    alt={branch.name}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
                 </div>
-                <div className="branch-content">
-                  <h2>{branch.name}</h2>
-                  <p className="branch-address">{branch.address}</p>
-                  <p className="branch-contact">
+                <div className="p-6">
+                  <h2 className="text-2xl text-[#333] mb-4">{branch.name}</h2>
+                  <p className="text-gray-600 mb-4 italic">{branch.address}</p>
+                  <p className="mb-4 leading-relaxed">
                     <strong>Phone:</strong> {branch.phone}
                     <br />
                     <strong>Email:</strong> {branch.email}
                   </p>
-                  <p className="branch-hours">
+                  <p className="mb-4 leading-relaxed">
                     <strong>Hours:</strong>
                     <br />
                     {branch.hours}
@@ -117,7 +130,7 @@ const OurBranches = () => {
                     href={branch.mapUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn"
+                    className="inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c] mt-2"
                   >
                     View on Map
                   </a>
@@ -129,17 +142,19 @@ const OurBranches = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="contact-section">
-        <div className="container">
-          <div className="contact-content">
-            <h2>Get in Touch</h2>
-            <p>
+      <section className="py-20 bg-gray-100">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-4xl text-[#4a8e3b] mb-6 md:text-3xl">
+              Get in Touch
+            </h2>
+            <p className="mb-8 text-lg">
               Can't find a branch near you? Contact our customer service team
               for information about our products, wholesale inquiries, or to
               place an order for delivery.
             </p>
-            <div className="contact-info">
-              <p>
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <p className="mb-4">
                 <strong>General Inquiries:</strong> info@orsagroup.com
               </p>
               <p>

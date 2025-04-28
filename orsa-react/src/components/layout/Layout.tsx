@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Navbar />
-      <main className="main-content">{children}</main>
+      <main className="min-h-screen pt-20 pb-8">{children}</main>
       <Footer />
     </>
   );
