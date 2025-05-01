@@ -3,47 +3,34 @@ import { useLanguage } from "../context/LanguageContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
-// Sample branch data
+// Branch data with map embed URLs
 const branches = [
   {
     id: 1,
-    nameKey: "branch-1-name",
-    address: "123 Hamra Street, Beirut, Lebanon",
-    phone: "+961 1 234 567",
-    email: "beirut@orsagroup.com",
-    hours: "Monday - Saturday: 9am - 7pm, Sunday: 10am - 5pm",
-    mapUrl: "https://maps.google.com/?q=Beirut,Lebanon",
-    image: "/assets/images/cover2.jpg",
+    nameKey: "lebanon-branch",
+    address: "Beirut Central District, Lebanon",
+    phone: "+961 70 141 087",
+    email: "lebanon@orsa-group.com",
+    hours:
+      "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed",
+    mapUrl: "https://maps.google.com/?q=Beirut+Central+District,+Lebanon",
+    mapEmbed:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13249.114069868514!2d35.50229724249348!3d33.89633563239309!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151f17215880a78f%3A0x729182bae99836b4!2sBeirut%20Central%20District%2C%20Beirut%2C%20Lebanon!5e0!3m2!1sen!2sus!4v1652690749261!5m2!1sen!2sus",
+    image: "/assets/images/intro.jpeg",
   },
   {
     id: 2,
-    nameKey: "branch-2-name",
-    address: "456 Main Road, Tripoli, Lebanon",
-    phone: "+961 6 789 012",
-    email: "tripoli@orsagroup.com",
-    hours: "Monday - Saturday: 9am - 7pm, Sunday: Closed",
-    mapUrl: "https://maps.google.com/?q=Tripoli,Lebanon",
-    image: "/assets/images/cover3.jpg",
-  },
-  {
-    id: 3,
-    nameKey: "branch-3-name",
-    address: "789 Coastal Highway, Byblos, Lebanon",
-    phone: "+961 9 345 678",
-    email: "byblos@orsagroup.com",
-    hours: "Monday - Sunday: 10am - 8pm",
-    mapUrl: "https://maps.google.com/?q=Byblos,Lebanon",
-    image: "/assets/images/cover4.jpg",
-  },
-  {
-    id: 4,
-    nameKey: "branch-4-name",
-    address: "101 Temple Road, Baalbek, Lebanon",
-    phone: "+961 8 901 234",
-    email: "baalbek@orsagroup.com",
-    hours: "Monday - Friday: 9am - 6pm, Saturday - Sunday: 10am - 4pm",
-    mapUrl: "https://maps.google.com/?q=Baalbek,Lebanon",
-    image: "/assets/images/cover5.jpg",
+    nameKey: "belgium-branch",
+    address: "Grotewinkellaan 80, 1853 Grimbergen, Belgium",
+    phone: "+32 478 69 25 86",
+    email: "belgium@orsa-group.com",
+    hours:
+      "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed",
+    mapUrl:
+      "https://maps.google.com/?q=Grotewinkellaan+80,+1853+Grimbergen,+Belgium",
+    mapEmbed:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2516.9295886847384!2d4.36675731577342!3d50.92686817954371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c24765f9f333%3A0x605c157948878c46!2sGrotewinkellaan%2080%2C%201853%20Grimbergen%2C%20Belgium!5e0!3m2!1sen!2sus!4v1652690859615!5m2!1sen!2sus",
+    image: "/assets/images/intro.jpeg",
   },
 ];
 
@@ -118,32 +105,68 @@ const OurBranches = () => {
                 <div className="h-[250px] overflow-hidden">
                   <img
                     src={branch.image}
-                    alt={t(branch.nameKey)}
+                    alt={
+                      branch.nameKey === "lebanon-branch"
+                        ? "Lebanon Branch"
+                        : "Belgium Branch"
+                    }
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
                 <div className="p-6">
-                  <h2 className="text-2xl text-[#333] mb-4">
-                    {t(branch.nameKey)}
+                  <h2 className="text-2xl text-[#333] mb-4 flex items-center">
+                    <i className="fas fa-map-marker-alt mr-2"></i>
+                    {branch.nameKey === "lebanon-branch"
+                      ? "Lebanon Branch"
+                      : "Belgium Branch"}
                   </h2>
-                  <p className="text-gray-600 mb-4 italic">{branch.address}</p>
-                  <p className="mb-4 leading-relaxed">
-                    <strong>{t("phone")}:</strong> {branch.phone}
-                    <br />
-                    <strong>{t("email")}:</strong> {branch.email}
+                  <p className="text-gray-600 mb-4 flex items-start">
+                    <i className="fas fa-location-dot mr-2 mt-1"></i>
+                    <span>{branch.address}</span>
                   </p>
-                  <p className="mb-4 leading-relaxed">
-                    <strong>{t("hours")}:</strong>
-                    <br />
-                    {branch.hours}
+                  <p className="mb-2 flex items-center">
+                    <i className="fas fa-phone mr-2"></i>
+                    <span>{branch.phone}</span>
                   </p>
+                  <p className="mb-2 flex items-center">
+                    <i className="fas fa-envelope mr-2"></i>
+                    <span>{branch.email}</span>
+                  </p>
+                  <p className="mb-4 flex items-start">
+                    <i className="fas fa-clock mr-2 mt-1"></i>
+                    <span>
+                      {branch.hours.split("\n").map((line, idx) => (
+                        <span key={idx}>
+                          {line}
+                          <br />
+                        </span>
+                      ))}
+                    </span>
+                  </p>
+                  {/* Google Maps Embed */}
+                  <div className="mb-4 h-[250px] rounded overflow-hidden">
+                    <iframe
+                      src={branch.mapEmbed}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={`${
+                        branch.nameKey === "lebanon-branch"
+                          ? "Lebanon"
+                          : "Belgium"
+                      } Branch Location`}
+                    ></iframe>
+                  </div>
                   <a
                     href={branch.mapUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c] mt-2"
                   >
-                    {t("view-on-map")}
+                    Get Directions
                   </a>
                 </div>
               </div>
@@ -162,10 +185,10 @@ const OurBranches = () => {
             <p className="mb-8 text-lg">{t("cannot-find")}</p>
             <div className="bg-white p-8 rounded-lg shadow-md">
               <p className="mb-4">
-                <strong>{t("general-inquiries")}:</strong> info@orsagroup.com
+                <strong>{t("general-inquiries")}:</strong> info@orsa-group.com
               </p>
               <p>
-                <strong>{t("customer-service")}:</strong> +961 1 123 456
+                <strong>{t("customer-service")}:</strong> +961 70 141 087
               </p>
             </div>
           </div>
