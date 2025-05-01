@@ -64,11 +64,16 @@ const Oil = () => {
   useEffect(() => {
     // Header animation
     if (headerRef.current) {
-      gsap.fromTo(
-        headerRef.current.querySelector(".page-header-content"),
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1 }
+      const pageHeaderContent = headerRef.current.querySelector(
+        ".page-header-content"
       );
+      if (pageHeaderContent) {
+        gsap.fromTo(
+          pageHeaderContent,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 1 }
+        );
+      }
     }
 
     // Products animation
@@ -77,11 +82,15 @@ const Oil = () => {
         trigger: productsRef.current,
         start: "top 80%",
         onEnter: () => {
-          gsap.fromTo(
-            productsRef.current?.querySelectorAll(".oil-product-card"),
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }
-          );
+          const oilProductCards =
+            productsRef.current?.querySelectorAll(".oil-product-card");
+          if (oilProductCards && oilProductCards.length > 0) {
+            gsap.fromTo(
+              oilProductCards,
+              { opacity: 0, y: 50 },
+              { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }
+            );
+          }
         },
       });
     }

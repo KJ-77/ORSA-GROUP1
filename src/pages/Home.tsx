@@ -16,11 +16,14 @@ const Home = () => {
   useEffect(() => {
     // Header animation
     if (headerRef.current) {
-      gsap.fromTo(
-        headerRef.current.querySelector(".hero-content"),
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1 }
-      );
+      const heroContent = headerRef.current.querySelector(".hero-content");
+      if (heroContent) {
+        gsap.fromTo(
+          heroContent,
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0, duration: 1 }
+        );
+      }
     }
 
     // About section animation
@@ -29,11 +32,15 @@ const Home = () => {
         trigger: aboutRef.current,
         start: "top 80%",
         onEnter: () => {
-          gsap.fromTo(
-            aboutRef.current?.querySelector(".about-content"),
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 1 }
-          );
+          const aboutContent =
+            aboutRef.current?.querySelector(".about-content");
+          if (aboutContent) {
+            gsap.fromTo(
+              aboutContent,
+              { opacity: 0, y: 50 },
+              { opacity: 1, y: 0, duration: 1 }
+            );
+          }
         },
       });
     }
@@ -44,11 +51,15 @@ const Home = () => {
         trigger: productsRef.current,
         start: "top 80%",
         onEnter: () => {
-          gsap.fromTo(
-            productsRef.current?.querySelectorAll(".product-card"),
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }
-          );
+          const productCards =
+            productsRef.current?.querySelectorAll(".product-card");
+          if (productCards && productCards.length > 0) {
+            gsap.fromTo(
+              productCards,
+              { opacity: 0, y: 50 },
+              { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }
+            );
+          }
         },
       });
     }
