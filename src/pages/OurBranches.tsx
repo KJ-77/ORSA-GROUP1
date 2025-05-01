@@ -7,7 +7,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 const branches = [
   {
     id: 1,
-    name: "Beirut Flagship Store",
+    nameKey: "branch-1-name",
     address: "123 Hamra Street, Beirut, Lebanon",
     phone: "+961 1 234 567",
     email: "beirut@orsagroup.com",
@@ -17,7 +17,7 @@ const branches = [
   },
   {
     id: 2,
-    name: "Tripoli Branch",
+    nameKey: "branch-2-name",
     address: "456 Main Road, Tripoli, Lebanon",
     phone: "+961 6 789 012",
     email: "tripoli@orsagroup.com",
@@ -27,7 +27,7 @@ const branches = [
   },
   {
     id: 3,
-    name: "Byblos Outlet",
+    nameKey: "branch-3-name",
     address: "789 Coastal Highway, Byblos, Lebanon",
     phone: "+961 9 345 678",
     email: "byblos@orsagroup.com",
@@ -37,7 +37,7 @@ const branches = [
   },
   {
     id: 4,
-    name: "Baalbek Shop",
+    nameKey: "branch-4-name",
     address: "101 Temple Road, Baalbek, Lebanon",
     phone: "+961 8 901 234",
     email: "baalbek@orsagroup.com",
@@ -97,10 +97,10 @@ const OurBranches = () => {
         <div className="max-w-7xl mx-auto px-8">
           <div className="page-header-content">
             <h1 className="text-5xl mb-4 uppercase md:text-4xl">
-              {t("our-branches")}
+              {t("branches-page-title")}
             </h1>
             <p className="text-xl max-w-[600px] mx-auto md:text-lg">
-              Visit us at one of our locations across Lebanon
+              {t("branches-page-subtitle")}
             </p>
           </div>
         </div>
@@ -118,20 +118,22 @@ const OurBranches = () => {
                 <div className="h-[250px] overflow-hidden">
                   <img
                     src={branch.image}
-                    alt={branch.name}
+                    alt={t(branch.nameKey)}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
                 <div className="p-6">
-                  <h2 className="text-2xl text-[#333] mb-4">{branch.name}</h2>
+                  <h2 className="text-2xl text-[#333] mb-4">
+                    {t(branch.nameKey)}
+                  </h2>
                   <p className="text-gray-600 mb-4 italic">{branch.address}</p>
                   <p className="mb-4 leading-relaxed">
-                    <strong>Phone:</strong> {branch.phone}
+                    <strong>{t("phone")}:</strong> {branch.phone}
                     <br />
-                    <strong>Email:</strong> {branch.email}
+                    <strong>{t("email")}:</strong> {branch.email}
                   </p>
                   <p className="mb-4 leading-relaxed">
-                    <strong>Hours:</strong>
+                    <strong>{t("hours")}:</strong>
                     <br />
                     {branch.hours}
                   </p>
@@ -141,7 +143,7 @@ const OurBranches = () => {
                     rel="noopener noreferrer"
                     className="inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c] mt-2"
                   >
-                    View on Map
+                    {t("view-on-map")}
                   </a>
                 </div>
               </div>
@@ -155,19 +157,15 @@ const OurBranches = () => {
         <div className="max-w-7xl mx-auto px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl text-[#4a8e3b] mb-6 md:text-3xl">
-              Get in Touch
+              {t("get-in-touch")}
             </h2>
-            <p className="mb-8 text-lg">
-              Can't find a branch near you? Contact our customer service team
-              for information about our products, wholesale inquiries, or to
-              place an order for delivery.
-            </p>
+            <p className="mb-8 text-lg">{t("cannot-find")}</p>
             <div className="bg-white p-8 rounded-lg shadow-md">
               <p className="mb-4">
-                <strong>General Inquiries:</strong> info@orsagroup.com
+                <strong>{t("general-inquiries")}:</strong> info@orsagroup.com
               </p>
               <p>
-                <strong>Customer Service:</strong> +961 1 123 456
+                <strong>{t("customer-service")}:</strong> +961 1 123 456
               </p>
             </div>
           </div>

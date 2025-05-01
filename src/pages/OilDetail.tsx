@@ -6,9 +6,9 @@ import { useLanguage } from "../context/LanguageContext";
 const oilProducts = [
   {
     id: 1,
-    name: "Extra Virgin Olive Oil",
-    description:
-      "Our premium extra virgin olive oil is cold-pressed from handpicked Lebanese olives, delivering an authentic taste of Lebanon's rich olive heritage.",
+    nameKey: "product-1-name",
+    descriptionKey: "product-1-desc",
+    detailsKey: "product-1-details",
     longDescription: `Our Extra Virgin Olive Oil is the crown jewel of our collection. Sourced from ancient olive groves in the mountains of Lebanon, this premium oil is produced using traditional methods passed down through generations.
     
     The olives are carefully hand-picked at the perfect moment of ripeness and cold-pressed within hours to preserve their exceptional flavor and nutritional properties. The result is an exquisite, golden-green oil with a fruity aroma, smooth texture, and a distinct peppery finish.
@@ -20,7 +20,6 @@ const oilProducts = [
       "/assets/images/oil21.jpg",
       "/assets/images/oil22.jpg",
     ],
-    details: "Available in 500ml and 750ml bottles",
     nutritionFacts: {
       servingSize: "1 tbsp (15ml)",
       calories: 120,
@@ -37,9 +36,9 @@ const oilProducts = [
   },
   {
     id: 2,
-    name: "Organic Olive Oil",
-    description:
-      "Certified organic olive oil from our sustainable orchards in Lebanon, perfect for health-conscious consumers looking for pure, natural products.",
+    nameKey: "product-2-name",
+    descriptionKey: "product-2-desc",
+    detailsKey: "product-2-details",
     longDescription: `Our Organic Olive Oil is produced from olives grown in certified organic orchards in Lebanon. We adhere to strict organic farming practices, avoiding the use of synthetic pesticides, herbicides, or fertilizers.
     
     The olives are harvested at their optimal ripeness and cold-pressed using environmentally friendly methods that maintain the oil's organic integrity and nutritional value.
@@ -51,7 +50,6 @@ const oilProducts = [
       "/assets/images/oil31.jpg",
       "/assets/images/oil32.jpg",
     ],
-    details: "Available in 500ml bottles",
     nutritionFacts: {
       servingSize: "1 tbsp (15ml)",
       calories: 120,
@@ -68,9 +66,9 @@ const oilProducts = [
   },
   {
     id: 3,
-    name: "Infused Olive Oil - Garlic",
-    description:
-      "Our classic olive oil infused with fresh garlic, adding a delicious flavor to your favorite dishes.",
+    nameKey: "product-3-name",
+    descriptionKey: "product-3-desc",
+    detailsKey: "product-3-details",
     longDescription: `Our Garlic Infused Olive Oil combines our premium extra virgin olive oil with the rich, aromatic flavor of fresh garlic. This infusion creates a versatile cooking oil that adds depth and complexity to any dish without the need to chop or mince garlic.
     
     We use a delicate infusion process that preserves the integrity of both the olive oil and the garlic flavor, resulting in a harmonious blend that elevates your culinary creations.
@@ -82,7 +80,6 @@ const oilProducts = [
       "/assets/images/oil41.jpg",
       "/assets/images/oil42.jpg",
     ],
-    details: "Available in 250ml bottles",
     nutritionFacts: {
       servingSize: "1 tbsp (15ml)",
       calories: 120,
@@ -99,9 +96,9 @@ const oilProducts = [
   },
   {
     id: 4,
-    name: "Infused Olive Oil - Rosemary",
-    description:
-      "Extra virgin olive oil infused with fresh rosemary for a fragrant and herbaceous flavor profile.",
+    nameKey: "product-4-name",
+    descriptionKey: "product-4-desc",
+    detailsKey: "product-4-details",
     longDescription: `Our Rosemary Infused Olive Oil marries our premium extra virgin olive oil with the aromatic essence of fresh rosemary. This infusion creates a distinctive oil with a herbaceous character that enhances a wide variety of dishes.
     
     We carefully select fresh rosemary and infuse it into our oil using a method that captures the herb's essential oils and flavor compounds, resulting in a product that truly embodies the essence of this classic Mediterranean herb.
@@ -113,7 +110,6 @@ const oilProducts = [
       "/assets/images/oil51.jpg",
       "/assets/images/oil52.jpg",
     ],
-    details: "Available in 250ml bottles",
     nutritionFacts: {
       servingSize: "1 tbsp (15ml)",
       calories: 120,
@@ -130,9 +126,9 @@ const oilProducts = [
   },
   {
     id: 5,
-    name: "Premium Blend Olive Oil",
-    description:
-      "A carefully crafted blend of olive varieties, offering a balanced flavor profile perfect for everyday cooking.",
+    nameKey: "product-5-name",
+    descriptionKey: "product-5-desc",
+    detailsKey: "product-5-details",
     longDescription: `Our Premium Blend Olive Oil is a meticulously crafted combination of different olive varieties from our Lebanese groves. This thoughtful blend creates an oil with a balanced flavor profile that's versatile enough for everyday use while still maintaining the quality and character you expect from ORSA GROUP.
     
     The oil has a golden color, a mild fruity aroma, and a smooth taste with just a hint of peppery notes on the finish.
@@ -144,7 +140,6 @@ const oilProducts = [
       "/assets/images/oil66.jpg",
       "/assets/images/tents.jpg",
     ],
-    details: "Available in 1L bottles",
     nutritionFacts: {
       servingSize: "1 tbsp (15ml)",
       calories: 120,
@@ -161,9 +156,9 @@ const oilProducts = [
   },
   {
     id: 6,
-    name: "Early Harvest Olive Oil",
-    description:
-      "Harvested from young green olives for a more intense flavor with peppery notes and higher antioxidant content.",
+    nameKey: "product-6-name",
+    descriptionKey: "product-6-desc",
+    detailsKey: "product-6-details",
     longDescription: `Our Early Harvest Olive Oil is produced from olives picked at the beginning of the harvest season when they're still green and slightly underripe. This early harvesting creates an oil with distinctive characteristics prized by olive oil connoisseurs.
     
     The resulting oil has a vibrant green color, robust fruity flavor, and a pronounced peppery finish that catches at the back of the throat – a sign of high polyphenol content and exceptional quality.
@@ -175,7 +170,6 @@ const oilProducts = [
       "/assets/images/oil81.jpeg",
       "/assets/images/oil82.jpeg",
     ],
-    details: "Available in 500ml bottles, limited production",
     nutritionFacts: {
       servingSize: "1 tbsp (15ml)",
       calories: 120,
@@ -234,7 +228,7 @@ const OilDetail = () => {
         {/* Breadcrumb Navigation */}
         <div className="my-4 mb-8 text-sm text-gray-500">
           <Link to="/" className="text-[#4a8e3b] no-underline hover:underline">
-            Home
+            {t("home")}
           </Link>{" "}
           &gt;{" "}
           <Link
@@ -243,7 +237,7 @@ const OilDetail = () => {
           >
             {t("our-oil")}
           </Link>{" "}
-          &gt; {product.name}
+          &gt; {t(product.nameKey)}
         </div>
 
         {/* Product Overview */}
@@ -252,7 +246,7 @@ const OilDetail = () => {
             <div className="rounded-lg overflow-hidden shadow-md mb-4">
               <img
                 src={activeImage}
-                alt={product.name}
+                alt={t(product.nameKey)}
                 className="w-full h-auto object-cover"
               />
             </div>
@@ -269,7 +263,7 @@ const OilDetail = () => {
                 >
                   <img
                     src={image}
-                    alt={`${product.name} thumbnail ${index + 1}`}
+                    alt={`${t(product.nameKey)} thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -279,17 +273,17 @@ const OilDetail = () => {
 
           <div>
             <h1 className="text-4xl text-[#333] mb-4 md:text-3xl">
-              {product.name}
+              {t(product.nameKey)}
             </h1>
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-              {product.description}
+              {t(product.descriptionKey)}
             </p>
             <p className="text-sm text-gray-500 italic mb-8">
-              {product.details}
+              {t(product.detailsKey)}
             </p>
             <div className="flex gap-4">
               <button className="inline-block bg-[#4a8e3b] text-white py-3 px-6 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]">
-                Contact for Pricing
+                {t("contact-us")}
               </button>
             </div>
           </div>
@@ -298,7 +292,7 @@ const OilDetail = () => {
         {/* Product Details */}
         <div className="mb-16">
           <h2 className="text-3xl text-[#4a8e3b] mb-6 pb-2 border-b border-gray-200">
-            Product Details
+            {t("product-details")}
           </h2>
           <div className="leading-relaxed">
             {product.longDescription.split("\n\n").map((paragraph, index) => (
@@ -308,6 +302,12 @@ const OilDetail = () => {
             ))}
           </div>
         </div>
+
+        {/* Nutrition Facts */}
+        <div className="mb-16">
+          <h2 className="text-3xl text-[#4a8e3b] mb-6 pb-2 border-b border-gray-200">
+            {t("nutrition-facts")}
+          </h2>
 
         {/* Nutrition Facts */}
         <div className="mb-16">
@@ -379,10 +379,10 @@ const OilDetail = () => {
                 >
                   <img
                     src={relatedProduct.image}
-                    alt={relatedProduct.name}
+                    alt={relatedProduct.nameKey}
                     className="w-full h-[180px] object-cover"
                   />
-                  <h3 className="p-4 pb-2 text-xl">{relatedProduct.name}</h3>
+                  <h3 className="p-4 pb-2 text-xl">{relatedProduct.nameKey}</h3>
                   <Link
                     to={`/oil/${relatedProduct.id}`}
                     className="mx-4 mb-4 inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded text-sm font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
@@ -404,6 +404,7 @@ const OilDetail = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 

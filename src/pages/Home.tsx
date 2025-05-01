@@ -77,10 +77,10 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-8 relative z-10">
           <div className="hero-content">
             <h1 className="text-5xl mb-4 uppercase tracking-wider md:text-4xl">
-              ORSA GROUP
+              {t("hero-title")}
             </h1>
             <p className="text-xl mb-8 max-w-[600px] mx-auto md:text-base">
-              Premium Lebanese Olive Oil and Authentic Products
+              {t("hero-subtitle")}
             </p>
             <Link
               to="/oil"
@@ -99,17 +99,8 @@ const Home = () => {
             <h2 className="text-4xl text-[#4a8e3b] mb-8 md:text-3xl">
               {t("about-us")}
             </h2>
-            <p className="mb-6 text-lg leading-relaxed">
-              ORSA GROUP is dedicated to bringing the finest Lebanese olive oil
-              and authentic products to consumers worldwide. Our mission is to
-              share Lebanon's rich culinary heritage through high-quality,
-              sustainably sourced products.
-            </p>
-            <p className="mb-6 text-lg leading-relaxed">
-              Founded with a passion for Lebanese traditions, ORSA GROUP ensures
-              that every product meets the highest standards of quality and
-              authenticity.
-            </p>
+            <p className="mb-6 text-lg leading-relaxed">{t("about-desc-1")}</p>
+            <p className="mb-6 text-lg leading-relaxed">{t("about-desc-2")}</p>
           </div>
         </div>
       </section>
@@ -118,65 +109,59 @@ const Home = () => {
       <section ref={productsRef} className="py-24">
         <div className="max-w-7xl mx-auto px-8">
           <h2 className="text-4xl text-[#4a8e3b] mb-12 text-center md:text-3xl">
-            Featured Products
+            {t("featured-products")}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Product cards */}
             <div className="product-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-2.5">
               <img
                 src="/oil1.jpg"
-                alt="Olive Oil"
+                alt={t("extra-virgin")}
                 className="w-full h-[200px] object-cover"
               />
               <h3 className="p-6 pb-2 text-xl text-[#333]">
-                Extra Virgin Olive Oil
+                {t("extra-virgin")}
               </h3>
-              <p className="px-6 pb-6 text-[#666]">
-                Premium quality Lebanese olive oil from our estates.
-              </p>
+              <p className="px-6 pb-6 text-[#666]">{t("extra-virgin-desc")}</p>
               <Link
                 to="/oil/1"
                 className="mx-6 mb-6 inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
               >
-                Learn More
+                {t("learn-more")}
               </Link>
             </div>
             <div className="product-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-2.5">
               <img
                 src="/oil2.jpg"
-                alt="Olive Oil"
+                alt={t("organic-oil")}
                 className="w-full h-[200px] object-cover"
               />
               <h3 className="p-6 pb-2 text-xl text-[#333]">
-                Organic Olive Oil
+                {t("organic-oil")}
               </h3>
-              <p className="px-6 pb-6 text-[#666]">
-                100% organic olive oil from traditional Lebanese orchards.
-              </p>
+              <p className="px-6 pb-6 text-[#666]">{t("organic-oil-desc")}</p>
               <Link
                 to="/oil/2"
                 className="mx-6 mb-6 inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
               >
-                Learn More
+                {t("learn-more")}
               </Link>
             </div>
             <div className="product-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-2.5">
               <img
                 src="/oil3.jpg"
-                alt="Olive Oil"
+                alt={t("infused-oil")}
                 className="w-full h-[200px] object-cover"
               />
               <h3 className="p-6 pb-2 text-xl text-[#333]">
-                Infused Olive Oil
+                {t("infused-oil")}
               </h3>
-              <p className="px-6 pb-6 text-[#666]">
-                Olive oil infused with local Lebanese herbs and spices.
-              </p>
+              <p className="px-6 pb-6 text-[#666]">{t("infused-oil-desc")}</p>
               <Link
                 to="/oil/3"
                 className="mx-6 mb-6 inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
               >
-                Learn More
+                {t("learn-more")}
               </Link>
             </div>
           </div>

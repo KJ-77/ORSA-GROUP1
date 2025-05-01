@@ -4,10 +4,15 @@ import { useLanguage } from "../../context/LanguageContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { language, toggleLanguage, t } = useLanguage();
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const { language, t, setLanguage } = useLanguage();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleLangMenu = () => {
+    setIsLangMenuOpen(!isLangMenuOpen);
   };
 
   return (
@@ -78,12 +83,66 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center">
-          <button
-            className="border border-[#4a8e3b] bg-transparent text-[#4a8e3b] py-2 px-4 rounded cursor-pointer transition-all duration-300 hover:bg-[#4a8e3b] hover:text-white mr-4"
-            onClick={toggleLanguage}
-          >
-            {language === "en" ? "عربي" : "English"}
-          </button>
+          <div className="relative mr-4">
+            <button
+              className="border border-[#4a8e3b] bg-transparent text-[#4a8e3b] py-2 px-4 rounded cursor-pointer transition-all duration-300 hover:bg-[#4a8e3b] hover:text-white flex items-center"
+              onClick={toggleLangMenu}
+            >
+              {t("toggle-language")}
+              <svg
+                className="w-4 h-4 ml-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d={isLangMenuOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
+                />
+              </svg>
+            </button>
+
+            {isLangMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                <button
+                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
+                    language === "en" ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => {
+                    setLanguage("en");
+                    setIsLangMenuOpen(false);
+                  }}
+                >
+                  {t("english")}
+                </button>
+                <button
+                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
+                    language === "ar" ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => {
+                    setLanguage("ar");
+                    setIsLangMenuOpen(false);
+                  }}
+                >
+                  {t("arabic")}
+                </button>
+                <button
+                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
+                    language === "nl" ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => {
+                    setLanguage("nl");
+                    setIsLangMenuOpen(false);
+                  }}
+                >
+                  {t("dutch")}
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="md:hidden cursor-pointer" onClick={toggleMenu}>
             <div className="flex flex-col justify-between w-[30px] h-[21px]">

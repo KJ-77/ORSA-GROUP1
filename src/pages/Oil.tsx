@@ -8,51 +8,45 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 const oilProducts = [
   {
     id: 1,
-    name: "Extra Virgin Olive Oil",
-    description:
-      "Our premium extra virgin olive oil is cold-pressed from handpicked Lebanese olives, delivering an authentic taste of Lebanon's rich olive heritage.",
+    nameKey: "product-1-name",
+    descriptionKey: "product-1-desc",
     image: "/oil1.jpg",
-    details: "Available in 500ml and 750ml bottles",
+    detailsKey: "product-1-details",
   },
   {
     id: 2,
-    name: "Organic Olive Oil",
-    description:
-      "Certified organic olive oil from our sustainable orchards in Lebanon, perfect for health-conscious consumers looking for pure, natural products.",
+    nameKey: "product-2-name",
+    descriptionKey: "product-2-desc",
     image: "/oil2.jpg",
-    details: "Available in 500ml bottles",
+    detailsKey: "product-2-details",
   },
   {
     id: 3,
-    name: "Infused Olive Oil - Garlic",
-    description:
-      "Our classic olive oil infused with fresh garlic, adding a delicious flavor to your favorite dishes.",
+    nameKey: "product-3-name",
+    descriptionKey: "product-3-desc",
     image: "/oil3.jpg",
-    details: "Available in 250ml bottles",
+    detailsKey: "product-3-details",
   },
   {
     id: 4,
-    name: "Infused Olive Oil - Rosemary",
-    description:
-      "Extra virgin olive oil infused with fresh rosemary for a fragrant and herbaceous flavor profile.",
+    nameKey: "product-4-name",
+    descriptionKey: "product-4-desc",
     image: "/oil4.jpg",
-    details: "Available in 250ml bottles",
+    detailsKey: "product-4-details",
   },
   {
     id: 5,
-    name: "Premium Blend Olive Oil",
-    description:
-      "A carefully crafted blend of olive varieties, offering a balanced flavor profile perfect for everyday cooking.",
+    nameKey: "product-5-name",
+    descriptionKey: "product-5-desc",
     image: "/oil5.jpg",
-    details: "Available in 1L bottles",
+    detailsKey: "product-5-details",
   },
   {
     id: 6,
-    name: "Early Harvest Olive Oil",
-    description:
-      "Harvested from young green olives for a more intense flavor with peppery notes and higher antioxidant content.",
-    image: "/oil22.jpg",
-    details: "Available in 500ml bottles, limited production",
+    nameKey: "product-6-name",
+    descriptionKey: "product-6-desc",
+    image: "/oil6.jpg",
+    detailsKey: "product-6-details",
   },
 ];
 
@@ -106,10 +100,10 @@ const Oil = () => {
         <div className="max-w-7xl mx-auto px-8">
           <div className="page-header-content">
             <h1 className="text-5xl mb-4 uppercase md:text-4xl">
-              {t("our-oil")}
+              {t("oil-page-title")}
             </h1>
             <p className="text-xl max-w-[600px] mx-auto md:text-lg">
-              Discover our selection of premium Lebanese olive oils
+              {t("oil-page-subtitle")}
             </p>
           </div>
         </div>
@@ -126,20 +120,22 @@ const Oil = () => {
               >
                 <img
                   src={product.image}
-                  alt={product.name}
+                  alt={t(product.nameKey)}
                   className="w-full h-[240px] object-cover"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl mb-2">{product.name}</h3>
-                  <p className="mb-4 text-gray-600">{product.description}</p>
+                  <h3 className="text-xl mb-2">{t(product.nameKey)}</h3>
+                  <p className="mb-4 text-gray-600">
+                    {t(product.descriptionKey)}
+                  </p>
                   <p className="mb-4 text-sm text-gray-500 italic">
-                    {product.details}
+                    {t(product.detailsKey)}
                   </p>
                   <Link
                     to={`/oil/${product.id}`}
                     className="inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
                   >
-                    Learn More
+                    {t("learn-more")}
                   </Link>
                 </div>
               </div>
@@ -153,19 +149,10 @@ const Oil = () => {
         <div className="max-w-7xl mx-auto px-8">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl text-[#4a8e3b] mb-6 text-center">
-              Our Commitment to Quality
+              {t("quality-commitment")}
             </h2>
-            <p className="mb-4">
-              At ORSA GROUP, we're committed to delivering the highest quality
-              olive oil. Our olives are hand-picked at the optimal time and
-              cold-pressed within hours to ensure maximum freshness and
-              nutritional value.
-            </p>
-            <p>
-              We maintain strict quality control throughout our production
-              process, from cultivation to bottling, ensuring that every bottle
-              meets our exacting standards.
-            </p>
+            <p className="mb-4">{t("quality-desc-1")}</p>
+            <p>{t("quality-desc-2")}</p>
           </div>
         </div>
       </section>
