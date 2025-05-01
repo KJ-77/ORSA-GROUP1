@@ -124,7 +124,7 @@ const Home = () => {
             {/* Product cards */}
             <div className="product-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-2.5">
               <img
-                src="/assets/images/oil1.jpg"
+                src="/oil1.jpg"
                 alt="Olive Oil"
                 className="w-full h-[200px] object-cover"
               />
@@ -143,7 +143,7 @@ const Home = () => {
             </div>
             <div className="product-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-2.5">
               <img
-                src="/assets/images/oil2.jpg"
+                src="/oil2.jpg"
                 alt="Olive Oil"
                 className="w-full h-[200px] object-cover"
               />
@@ -162,7 +162,7 @@ const Home = () => {
             </div>
             <div className="product-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:-translate-y-2.5">
               <img
-                src="/assets/images/oil3.jpg"
+                src="/oil3.jpg"
                 alt="Olive Oil"
                 className="w-full h-[200px] object-cover"
               />
