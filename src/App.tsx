@@ -21,14 +21,14 @@ function App() {
             <Route path="/oil" element={<Oil />} />
             <Route path="/oil/:id" element={<OilDetail />} />
             <Route path="/our-branches" element={<OurBranches />} />
-            <Route
+            {/* <Route
               path="/our-items"
               element={<div>Our Items Page (to be implemented)</div>}
             />
             <Route
               path="/our-offers"
               element={<div>Our Offers Page (to be implemented)</div>}
-            />
+            /> */}
           </Routes>
         </Layout>
       </Router>

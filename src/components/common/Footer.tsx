@@ -34,14 +34,14 @@ const Footer = () => {
                 {t("our-oil")}
               </Link>
             </li>
-            <li className="mb-2">
+            {/* <li className="mb-2">
               <Link
                 to="/our-items"
                 className="text-[#ddd] no-underline transition-colors duration-300 hover:text-[#4a8e3b]"
               >
                 {t("our-items")}
               </Link>
-            </li>
+            </li> */}
             <li className="mb-2">
               <Link
                 to="/our-branches"
@@ -50,14 +50,14 @@ const Footer = () => {
                 {t("our-branches")}
               </Link>
             </li>
-            <li className="mb-2">
+            {/* <li className="mb-2">
               <Link
                 to="/our-offers"
                 className="text-[#ddd] no-underline transition-colors duration-300 hover:text-[#4a8e3b]"
               >
                 {t("our-offers")}
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 

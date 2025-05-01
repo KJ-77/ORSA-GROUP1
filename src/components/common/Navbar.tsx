@@ -50,14 +50,14 @@ const Navbar = () => {
                 {t("our-oil")}
               </Link>
             </li>
-            <li className="mx-4 my-6 md:my-0 md:mx-4">
+            {/* <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/our-items"
                 className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {t("our-items")}
               </Link>
-            </li>
+            </li> */}
             <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/our-branches"
@@ -66,14 +66,14 @@ const Navbar = () => {
                 {t("our-branches")}
               </Link>
             </li>
-            <li className="mx-4 my-6 md:my-0 md:mx-4">
+            {/* <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/our-offers"
                 className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {t("our-offers")}
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 

@@ -11,7 +11,7 @@ const oilProducts = [
     name: "Extra Virgin Olive Oil",
     description:
       "Our premium extra virgin olive oil is cold-pressed from handpicked Lebanese olives, delivering an authentic taste of Lebanon's rich olive heritage.",
-    image: "/assets/images/oil1.jpg",
+    image: "/oil1.jpg",
     details: "Available in 500ml and 750ml bottles",
   },
   {
@@ -19,7 +19,7 @@ const oilProducts = [
     name: "Organic Olive Oil",
     description:
       "Certified organic olive oil from our sustainable orchards in Lebanon, perfect for health-conscious consumers looking for pure, natural products.",
-    image: "/assets/images/oil2.jpg",
+    image: "/oil2.jpg",
     details: "Available in 500ml bottles",
   },
   {
@@ -27,7 +27,7 @@ const oilProducts = [
     name: "Infused Olive Oil - Garlic",
     description:
       "Our classic olive oil infused with fresh garlic, adding a delicious flavor to your favorite dishes.",
-    image: "/assets/images/oil3.jpg",
+    image: "/oil3.jpg",
     details: "Available in 250ml bottles",
   },
   {
@@ -35,7 +35,7 @@ const oilProducts = [
     name: "Infused Olive Oil - Rosemary",
     description:
       "Extra virgin olive oil infused with fresh rosemary for a fragrant and herbaceous flavor profile.",
-    image: "/assets/images/oil4.jpg",
+    image: "/oil4.jpg",
     details: "Available in 250ml bottles",
   },
   {
@@ -43,7 +43,7 @@ const oilProducts = [
     name: "Premium Blend Olive Oil",
     description:
       "A carefully crafted blend of olive varieties, offering a balanced flavor profile perfect for everyday cooking.",
-    image: "/assets/images/oil5.jpg",
+    image: "/oil5.jpg",
     details: "Available in 1L bottles",
   },
   {
@@ -51,7 +51,7 @@ const oilProducts = [
     name: "Early Harvest Olive Oil",
     description:
       "Harvested from young green olives for a more intense flavor with peppery notes and higher antioxidant content.",
-    image: "/assets/images/oil6.jpg",
+    image: "/oil22.jpg",
     details: "Available in 500ml bottles, limited production",
   },
 ];
