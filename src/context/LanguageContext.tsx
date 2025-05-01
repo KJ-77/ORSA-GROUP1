@@ -98,6 +98,25 @@ const translations = {
     "branch-2-name": "Tripoli Branch",
     "branch-3-name": "Byblos Outlet",
     "branch-4-name": "Baalbek Shop",
+    "lebanon-branch": "Lebanon Branch",
+    "belgium-branch": "Belgium Branch",
+    "get-directions": "Get Directions",
+
+    // Team Section
+    "our-team": "Our Team",
+    "team-subtitle": "Meet the dedicated professionals behind ORSA GROUP",
+    "founder-ceo": "Founder & CEO",
+    "operations-manager": "Operations Manager",
+    "lebanon-branch-manager": "Lebanon Branch Manager",
+    "customer-relations": "Customer Relations",
+    "john-doe-desc":
+      "With over 15 years of experience in importing Lebanese products, John founded ORSA GROUP to share authentic Lebanese flavors with Europe.",
+    "sarah-smith-desc":
+      "Sarah oversees all operations between our Belgium and Lebanon branches, ensuring smooth logistics and product quality.",
+    "ali-hassan-desc":
+      "Ali works directly with Lebanese farmers and producers to source the highest quality products for our customers.",
+    "marie-dubois-desc":
+      "Marie ensures all our customers receive exceptional service and helps with product selection and recommendations.",
 
     // Footer
     "footer-description":
@@ -196,6 +215,25 @@ const translations = {
     "branch-2-name": "فرع طرابلس",
     "branch-3-name": "منفذ جبيل",
     "branch-4-name": "متجر بعلبك",
+    "lebanon-branch": "فرع لبنان",
+    "belgium-branch": "فرع بلجيكا",
+    "get-directions": "الحصول على الاتجاهات",
+
+    // Team Section
+    "our-team": "فريقنا",
+    "team-subtitle": "تعرف على المحترفين المتفانين وراء مجموعة أورسا",
+    "founder-ceo": "المؤسس والرئيس التنفيذي",
+    "operations-manager": "مدير العمليات",
+    "lebanon-branch-manager": "مدير فرع لبنان",
+    "customer-relations": "علاقات العملاء",
+    "john-doe-desc":
+      "بخبرة تزيد عن 15 عامًا في استيراد المنتجات اللبنانية، أسس جون مجموعة أورسا لمشاركة النكهات اللبنانية الأصيلة مع أوروبا.",
+    "sarah-smith-desc":
+      "تشرف سارة على جميع العمليات بين فروعنا في بلجيكا ولبنان، مما يضمن سلاسة الخدمات اللوجستية وجودة المنتج.",
+    "ali-hassan-desc":
+      "يعمل علي مباشرة مع المزارعين والمنتجين اللبنانيين للحصول على أعلى جودة من المنتجات لعملائنا.",
+    "marie-dubois-desc":
+      "تضمن ماري حصول جميع عملائنا على خدمة استثنائية وتساعد في اختيار المنتجات وتقديم التوصيات.",
 
     // Footer
     "footer-description":
@@ -296,6 +334,26 @@ const translations = {
     "branch-2-name": "Tripoli Filiaal",
     "branch-3-name": "Byblos Outlet",
     "branch-4-name": "Baalbek Winkel",
+    "lebanon-branch": "Libanon Vestiging",
+    "belgium-branch": "België Vestiging",
+    "get-directions": "Routebeschrijving",
+
+    // Team Section
+    "our-team": "Ons Team",
+    "team-subtitle":
+      "Maak kennis met de toegewijde professionals achter ORSA GROUP",
+    "founder-ceo": "Oprichter & CEO",
+    "operations-manager": "Operationeel Manager",
+    "lebanon-branch-manager": "Libanon Vestigingsmanager",
+    "customer-relations": "Klantenrelaties",
+    "john-doe-desc":
+      "Met meer dan 15 jaar ervaring in het importeren van Libanese producten, richtte John ORSA GROUP op om authentieke Libanese smaken met Europa te delen.",
+    "sarah-smith-desc":
+      "Sarah houdt toezicht op alle activiteiten tussen onze vestigingen in België en Libanon, en zorgt voor een soepele logistiek en productkwaliteit.",
+    "ali-hassan-desc":
+      "Ali werkt rechtstreeks samen met Libanese boeren en producenten om de hoogste kwaliteit producten voor onze klanten te verkrijgen.",
+    "marie-dubois-desc":
+      "Marie zorgt ervoor dat al onze klanten uitzonderlijke service ontvangen en helpt bij productselectie en aanbevelingen.",
 
     // Footer
     "footer-description":
