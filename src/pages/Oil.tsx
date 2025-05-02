@@ -45,7 +45,7 @@ const oilProducts = [
     id: 6,
     nameKey: "product-6-name",
     descriptionKey: "product-6-desc",
-    image: "/oil6.jpg",
+    image: "/oil21.jpg",
     detailsKey: "product-6-details",
   },
 ];
