@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, ReactNode } from "react";
 
-type Language = "en" | "ar" | "nl";
+type Language = "en" | "ar" | "nl" | "fr";
 type Direction = "ltr" | "rtl";
 
 interface LanguageContextType {
@@ -246,6 +246,7 @@ const translations = {
     english: "English",
     arabic: "العربية",
     dutch: "Nederlands",
+    french: "Français",
   },
   nl: {
     // Navigation & Common
@@ -366,6 +367,131 @@ const translations = {
     english: "English",
     arabic: "العربية",
     dutch: "Nederlands",
+    french: "Français",
+  },
+  fr: {
+    // Navigation & Common
+    home: "Accueil",
+    "our-oil": "Notre Huile",
+    "our-items": "Nos Produits",
+    "our-branches": "Nos Succursales",
+    "our-offers": "Nos Offres",
+    "contact-us": "Contactez-Nous",
+    "about-us": "À Propos",
+
+    // Home Page
+    "hero-title": "ORSA GROUP",
+    "hero-subtitle": "Huile d'Olive Libanaise Premium et Produits Authentiques",
+    "featured-products": "Produits Vedettes",
+    "extra-virgin": "Huile d'Olive Extra Vierge",
+    "extra-virgin-desc":
+      "Huile d'olive libanaise de qualité premium de nos domaines.",
+    "organic-oil": "Huile d'Olive Biologique",
+    "organic-oil-desc":
+      "Huile d'olive 100% biologique des vergers traditionnels libanais.",
+    "infused-oil": "Huile d'Olive Infusée",
+    "infused-oil-desc":
+      "Huile d'olive infusée d'herbes et d'épices libanaises locales.",
+    "learn-more": "En Savoir Plus",
+    "about-desc-1":
+      "ORSA GROUP se consacre à apporter la meilleure huile d'olive libanaise et des produits authentiques aux consommateurs du monde entier. Notre mission est de partager le riche patrimoine culinaire du Liban à travers des produits de haute qualité, sourcés de manière durable.",
+    "about-desc-2":
+      "Fondé avec une passion pour les traditions libanaises, ORSA GROUP s'assure que chaque produit répond aux normes les plus élevées de qualité et d'authenticité.",
+
+    // Oil Page
+    "oil-page-title": "Notre Huile",
+    "oil-page-subtitle":
+      "Découvrez notre sélection d'huiles d'olive libanaises premium",
+    "quality-commitment": "Notre Engagement Qualité",
+    "quality-desc-1":
+      "Chez ORSA GROUP, nous nous engageons à fournir de l'huile d'olive de la plus haute qualité. Nos olives sont cueillies à la main au moment optimal et pressées à froid en quelques heures pour garantir un maximum de fraîcheur et de valeur nutritive.",
+    "quality-desc-2":
+      "Nous maintenons un contrôle de qualité strict tout au long de notre processus de production, de la culture à l'embouteillage, garantissant que chaque bouteille répond à nos normes exigeantes.",
+
+    // Product Descriptions
+    "product-1-name": "Huile d'Olive Extra Vierge",
+    "product-1-desc":
+      "Notre huile d'olive extra vierge premium est pressée à froid à partir d'olives libanaises cueillies à la main, offrant un goût authentique du riche patrimoine oléicole du Liban.",
+    "product-1-details": "Disponible en bouteilles de 500ml et 750ml",
+
+    "product-2-name": "Huile d'Olive Biologique",
+    "product-2-desc":
+      "Huile d'olive biologique certifiée de nos vergers durables au Liban, parfaite pour les consommateurs soucieux de leur santé qui recherchent des produits purs et naturels.",
+    "product-2-details": "Disponible en bouteilles de 500ml",
+
+    "product-3-name": "Huile d'Olive Infusée - Ail",
+    "product-3-desc":
+      "Notre huile d'olive classique infusée à l'ail frais, ajoutant une saveur délicieuse à vos plats préférés.",
+    "product-3-details": "Disponible en bouteilles de 250ml",
+
+    "product-4-name": "Huile d'Olive Infusée - Romarin",
+    "product-4-desc":
+      "Huile d'olive extra vierge infusée au romarin frais pour un profil de saveur parfumé et herbacé.",
+    "product-4-details": "Disponible en bouteilles de 250ml",
+
+    "product-5-name": "Mélange d'Huile d'Olive Premium",
+    "product-5-desc":
+      "Un mélange soigneusement élaboré de variétés d'olives, offrant un profil de saveur équilibré parfait pour la cuisine quotidienne.",
+    "product-5-details": "Disponible en bouteilles de 1L",
+
+    "product-6-name": "Huile d'Olive de Récolte Précoce",
+    "product-6-desc":
+      "Récoltée à partir de jeunes olives vertes pour une saveur plus intense avec des notes poivrées et une teneur plus élevée en antioxydants.",
+    "product-6-details":
+      "Disponible en bouteilles de 500ml, production limitée",
+
+    // Branches Page
+    "branches-page-title": "Nos Succursales",
+    "branches-page-subtitle":
+      "Visitez-nous dans l'un de nos emplacements à travers le Liban",
+    "get-in-touch": "Contactez-Nous",
+    "cannot-find":
+      "Vous ne trouvez pas de succursale près de chez vous? Contactez notre équipe de service client pour obtenir des informations sur nos produits, des demandes de gros, ou pour passer une commande pour livraison.",
+    "general-inquiries": "Renseignements Généraux",
+    "customer-service": "Service Client",
+    hours: "Heures d'Ouverture",
+    "view-on-map": "Voir sur la Carte",
+    phone: "Téléphone",
+    email: "Email",
+
+    // Branch Names
+    "branch-1-name": "Magasin Phare de Beyrouth",
+    "branch-2-name": "Succursale de Tripoli",
+    "branch-3-name": "Outlet de Byblos",
+    "branch-4-name": "Boutique de Baalbek",
+    "lebanon-branch": "Succursale Liban",
+    "belgium-branch": "Succursale Belgique",
+    "get-directions": "Obtenir l'Itinéraire",
+
+    // Team Section
+    "our-team": "Notre Équipe",
+    "team-subtitle":
+      "Rencontrez les professionnels dévoués derrière ORSA GROUP",
+    "founder-ceo": "Fondateur et PDG",
+    "operations-manager": "Directeur des Opérations",
+    "lebanon-branch-manager": "Directeur de la Succursale Libanaise",
+    "customer-relations": "Relations Clientèle",
+    "john-doe-desc":
+      "Avec plus de 15 ans d'expérience dans l'importation de produits libanais, John a fondé ORSA GROUP pour partager les saveurs libanaises authentiques avec l'Europe.",
+    "sarah-smith-desc":
+      "Sarah supervise toutes les opérations entre nos succursales en Belgique et au Liban, assurant une logistique fluide et la qualité des produits.",
+    "ali-hassan-desc":
+      "Ali travaille directement avec les agriculteurs et producteurs libanais pour sourcer les produits de la plus haute qualité pour nos clients.",
+    "marie-dubois-desc":
+      "Marie s'assure que tous nos clients reçoivent un service exceptionnel et aide à la sélection de produits et aux recommandations.",
+
+    // Footer
+    "footer-description":
+      "Votre source principale d'huile d'olive libanaise et de produits libanais authentiques.",
+    "rights-reserved": "Tous droits réservés.",
+
+    // Miscellaneous
+    "toggle-language": "Langue",
+    "select-language": "Sélectionner la Langue",
+    english: "English",
+    arabic: "العربية",
+    dutch: "Nederlands",
+    french: "Français",
   },
 };
 
@@ -376,11 +502,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>("en");
   const direction = language === "ar" ? "rtl" : "ltr";
-
   const toggleLanguage = () => {
     setLanguageState((prevLang) => {
       if (prevLang === "en") return "ar";
       if (prevLang === "ar") return "nl";
+      if (prevLang === "nl") return "fr";
       return "en";
     });
   };

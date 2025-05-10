@@ -128,7 +128,7 @@ const Navbar = () => {
                   }}
                 >
                   {t("arabic")}
-                </button>
+                </button>{" "}
                 <button
                   className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
                     language === "nl" ? "bg-gray-100" : ""
@@ -139,6 +139,17 @@ const Navbar = () => {
                   }}
                 >
                   {t("dutch")}
+                </button>
+                <button
+                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
+                    language === "fr" ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => {
+                    setLanguage("fr");
+                    setIsLangMenuOpen(false);
+                  }}
+                >
+                  {t("french")}
                 </button>
               </div>
             )}
