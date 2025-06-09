@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Oil from "./pages/Oil";
 import OilDetail from "./pages/OilDetail";
 import OurBranches from "./pages/OurBranches";
+import Cart from "./pages/Cart";
 
 // Import other pages later
 // import OurItems from './pages/OurItems'
@@ -15,11 +16,11 @@ function App() {
   return (
     <LanguageProvider>
       <Router>
-        <Layout>
-          <Routes>
+        <Layout>          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/oil" element={<Oil />} />
             <Route path="/oil/:id" element={<OilDetail />} />
+            <Route path="/cart" element={<Cart />} />
             <Route path="/our-branches" element={<OurBranches />} />
             {/* <Route
               path="/our-items"

@@ -111,10 +111,24 @@ const Oil = () => {
       setLoading(false);
     }
   }, []);
-
   // Function to get product image
   const getProductImage = (index: number) => {
     return defaultProductImages[index % defaultProductImages.length];
+  };
+  // Function to add product to cart
+  const addToCart = (productId: number) => {
+    // Get existing cart items from localStorage
+    const existingCart = localStorage.getItem('cart');
+    const cartItems: number[] = existingCart ? JSON.parse(existingCart) : [];
+    
+    // Add the product ID to cart if not already present
+    if (!cartItems.includes(productId)) {
+      const updatedCartItems = [...cartItems, productId];
+      localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+      alert('Product added to cart!');
+    } else {
+      alert('Product is already in cart!');
+    }
   };
   useEffect(() => {
     // Fetch products on component mount
@@ -221,8 +235,7 @@ const Oil = () => {
                   />
                   <div className="p-6">
                     <h3 className="text-xl mb-2">{product.name}</h3>
-                    <p className="mb-4 text-gray-600">{product.description}</p>
-                    <div className="mb-4">
+                    <p className="mb-4 text-gray-600">{product.description}</p>                    <div className="mb-4">
                       <p className="text-lg font-semibold text-[#4a8e3b]">
                         ${product.price}
                       </p>
@@ -232,12 +245,25 @@ const Oil = () => {
                           : "Out of stock"}
                       </p>
                     </div>
-                    <Link
-                      to={`/oil/${product.id}`}
-                      className="inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
-                    >
-                      {t("learn-more")}
-                    </Link>
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/oil/${product.id}`}
+                        className="inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
+                      >
+                        {t("learn-more")}
+                      </Link>
+                      <button
+                        onClick={() => addToCart(product.id)}
+                        disabled={product.quantity === 0}
+                        className={`py-2 px-4 rounded font-semibold transition-all duration-300 ${
+                          product.quantity > 0
+                            ? "bg-green-600 text-white hover:bg-green-700"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
