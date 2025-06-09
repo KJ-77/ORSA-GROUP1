@@ -1,11 +1,18 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const { language, t, setLanguage } = useLanguage();
+  const location = useLocation();
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+    setIsLangMenuOpen(false);
+  }, [location.pathname]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -38,10 +45,10 @@ const Navbar = () => {
                 ? "flex flex-col items-center w-full py-8"
                 : "hidden md:flex"
             } list-none m-0 p-0`}
-          >
-            <li className="mx-4 my-0 md:my-0 md:mx-4">
+          >            <li className="mx-4 my-0 md:my-0 md:mx-4">
               <Link
                 to="/"
+                onClick={() => setIsOpen(false)}
                 className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {t("home")}
@@ -50,6 +57,7 @@ const Navbar = () => {
             <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/oil"
+                onClick={() => setIsOpen(false)}
                 className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {t("our-oil")}
@@ -65,6 +73,7 @@ const Navbar = () => {
             </li> */}            <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/our-branches"
+                onClick={() => setIsOpen(false)}
                 className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {t("our-branches")}
@@ -73,6 +82,7 @@ const Navbar = () => {
             <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/cart"
+                onClick={() => setIsOpen(false)}
                 className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
               >
                 Cart

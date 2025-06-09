@@ -31,9 +31,8 @@ const defaultProductImages = [
   "/oil22.jpg",
   "/oil23.jpg",
 ];
-
   // Function to fetch a single product by ID
-  const fetchProductById = async (productId: number): Promise<ApiProduct | null> => {
+  const fetchProductById = useCallback(async (productId: number): Promise<ApiProduct | null> => {
     try {
       const response = await fetch(
         `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${productId}`
@@ -50,7 +49,7 @@ const defaultProductImages = [
       console.warn(`Error fetching product ${productId}:`, error);
       return null;
     }
-  };
+  }, []);
 
   // Function to get default product image
   const getProductImage = (index: number) => {
@@ -117,11 +116,10 @@ const defaultProductImages = [
   useEffect(() => {
     loadCartProducts();
   }, [loadCartProducts]);
-
   return (
-    <div className="w-full">
+    <div className="w-full min-h-screen">
       {/* Page Header */}
-      <div className="bg-[#4a8e3b] text-white py-24 pb-16 text-center">
+      <div className="bg-[#4a8e3b] text-white py-24 pb-16 text-center relative z-10">
         <div className="max-w-7xl mx-auto px-8">
           <div className="page-header-content">
             <h1 className="text-5xl mb-4 uppercase md:text-4xl">
@@ -135,7 +133,7 @@ const defaultProductImages = [
       </div>
 
       {/* Cart Content */}
-      <section className="py-20">
+      <section className="py-20 relative z-10">
         <div className="max-w-7xl mx-auto px-8">
           {/* Loading State */}
           {loading && (
