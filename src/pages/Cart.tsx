@@ -3,53 +3,51 @@ import { Link } from "react-router-dom";
 
 // API Product interface (same as in Oil.tsx)
 
-
-
-
-
-
 const Cart = () => {
   const [cartProducts, setCartProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   interface ApiProduct {
-  id: number;
-  name: string;
-  price: string;
-  quantity: number;
-  description: string;
-  primaryImage?: string;
-}
-const defaultProductImages = [
-  "/oil1.jpg",
-  "/oil2.jpg",
-  "/oil3.jpg",
-  "/oil4.jpg",
-  "/oil5.jpg",
-  "/oil6.jpg",
-  "/oil21.jpg",
-  "/oil22.jpg",
-  "/oil23.jpg",
-];
+    id: number;
+    name: string;
+    price: string;
+    quantity: number;
+    description: string;
+    primaryImage?: string;
+  }
+  const defaultProductImages = [
+    "/oil1.jpg",
+    "/oil2.jpg",
+    "/oil3.jpg",
+    "/oil4.jpg",
+    "/oil5.jpg",
+    "/oil6.jpg",
+    "/oil21.jpg",
+    "/oil22.jpg",
+    "/oil23.jpg",
+  ];
   // Function to fetch a single product by ID
-  const fetchProductById = useCallback(async (productId: number): Promise<ApiProduct | null> => {
-    try {
-      const response = await fetch(
-        `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${productId}`
-      );
+  const fetchProductById = useCallback(
+    async (productId: number): Promise<ApiProduct | null> => {
+      try {
+        const response = await fetch(
+          `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${productId}`
+        );
 
-      if (!response.ok) {
-        console.warn(`Failed to fetch product ${productId}`);
+        if (!response.ok) {
+          console.warn(`Failed to fetch product ${productId}`);
+          return null;
+        }
+
+        const product: ApiProduct = await response.json();
+        return product;
+      } catch (error) {
+        console.warn(`Error fetching product ${productId}:`, error);
         return null;
       }
-
-      const product: ApiProduct = await response.json();
-      return product;
-    } catch (error) {
-      console.warn(`Error fetching product ${productId}:`, error);
-      return null;
-    }
-  }, []);
+    },
+    []
+  );
 
   // Function to get default product image
   const getProductImage = (index: number) => {
@@ -58,20 +56,22 @@ const defaultProductImages = [
 
   // Function to remove item from cart
   const removeFromCart = (productId: number) => {
-    const existingCart = localStorage.getItem('cart');
+    const existingCart = localStorage.getItem("cart");
     if (existingCart) {
       const cartItems: number[] = JSON.parse(existingCart);
-      const updatedCartItems = cartItems.filter(id => id !== productId);
-      localStorage.setItem('cart', JSON.stringify(updatedCartItems));
-      
+      const updatedCartItems = cartItems.filter((id) => id !== productId);
+      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+
       // Update the displayed products
-      setCartProducts(prev => prev.filter(product => product.id !== productId));
+      setCartProducts((prev) =>
+        prev.filter((product) => product.id !== productId)
+      );
     }
   };
 
   // Function to clear entire cart
   const clearCart = () => {
-    localStorage.removeItem('cart');
+    localStorage.removeItem("cart");
     setCartProducts([]);
   };
   // Function to load cart products
@@ -81,7 +81,7 @@ const defaultProductImages = [
       setError(null);
 
       // Get cart items from localStorage
-      const existingCart = localStorage.getItem('cart');
+      const existingCart = localStorage.getItem("cart");
       const cartItems: number[] = existingCart ? JSON.parse(existingCart) : [];
 
       if (cartItems.length === 0) {
@@ -91,12 +91,14 @@ const defaultProductImages = [
       }
 
       // Fetch all products in cart
-      const productPromises = cartItems.map(id => fetchProductById(id));
+      const productPromises = cartItems.map((id) => fetchProductById(id));
       const products = await Promise.all(productPromises);
-      
+
       // Filter out any null results (failed fetches)
-      const validProducts = products.filter(product => product !== null) as ApiProduct[];
-      
+      const validProducts = products.filter(
+        (product) => product !== null
+      ) as ApiProduct[];
+
       setCartProducts(validProducts);
     } catch (err) {
       console.error("Error loading cart products:", err);
@@ -108,9 +110,11 @@ const defaultProductImages = [
 
   // Calculate total price
   const calculateTotal = () => {
-    return cartProducts.reduce((total, product) => {
-      return total + parseFloat(product.price);
-    }, 0).toFixed(2);
+    return cartProducts
+      .reduce((total, product) => {
+        return total + parseFloat(product.price);
+      }, 0)
+      .toFixed(2);
   };
 
   useEffect(() => {
@@ -162,7 +166,9 @@ const defaultProductImages = [
           {!loading && !error && cartProducts.length === 0 && (
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">
-                <h2 className="text-2xl text-gray-600 mb-4">Your cart is empty</h2>
+                <h2 className="text-2xl text-gray-600 mb-4">
+                  Your cart is empty
+                </h2>
                 <p className="text-gray-500 mb-6">
                   Add some products to your cart to see them here.
                 </p>
@@ -207,8 +213,12 @@ const defaultProductImages = [
                       }}
                     />
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-                      <p className="text-gray-600 mb-4">{product.description}</p>
+                      <h3 className="text-xl font-semibold mb-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {product.description}
+                      </p>
                       <div className="flex justify-between items-center">
                         <p className="text-xl font-bold text-[#4a8e3b]">
                           ${product.price}
@@ -238,7 +248,9 @@ const defaultProductImages = [
                 <div className="max-w-md ml-auto">
                   <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-gray-600">Items ({cartProducts.length}):</span>
+                    <span className="text-gray-600">
+                      Items ({cartProducts.length}):
+                    </span>
                     <span className="font-semibold">${calculateTotal()}</span>
                   </div>
                   <div className="border-t pt-4">

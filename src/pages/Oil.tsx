@@ -118,16 +118,16 @@ const Oil = () => {
   // Function to add product to cart
   const addToCart = (productId: number) => {
     // Get existing cart items from localStorage
-    const existingCart = localStorage.getItem('cart');
+    const existingCart = localStorage.getItem("cart");
     const cartItems: number[] = existingCart ? JSON.parse(existingCart) : [];
-    
+
     // Add the product ID to cart if not already present
     if (!cartItems.includes(productId)) {
       const updatedCartItems = [...cartItems, productId];
-      localStorage.setItem('cart', JSON.stringify(updatedCartItems));
-      alert('Product added to cart!');
+      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      alert("Product added to cart!");
     } else {
-      alert('Product is already in cart!');
+      alert("Product is already in cart!");
     }
   };
   useEffect(() => {
@@ -235,7 +235,10 @@ const Oil = () => {
                   />
                   <div className="p-6">
                     <h3 className="text-xl mb-2">{product.name}</h3>
-                    <p className="mb-4 text-gray-600">{product.description}</p>                    <div className="mb-4">
+                    <p className="mb-4 text-gray-600">
+                      {product.description}
+                    </p>{" "}
+                    <div className="mb-4">
                       <p className="text-lg font-semibold text-[#4a8e3b]">
                         ${product.price}
                       </p>

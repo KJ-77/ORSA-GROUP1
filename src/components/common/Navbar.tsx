@@ -45,7 +45,9 @@ const Navbar = () => {
                 ? "flex flex-col items-center w-full py-8"
                 : "hidden md:flex"
             } list-none m-0 p-0`}
-          >            <li className="mx-4 my-0 md:my-0 md:mx-4">
+          >
+            {" "}
+            <li className="mx-4 my-0 md:my-0 md:mx-4">
               <Link
                 to="/"
                 onClick={() => setIsOpen(false)}
@@ -70,7 +72,8 @@ const Navbar = () => {
               >
                 {t("our-items")}
               </Link>
-            </li> */}            <li className="mx-4 my-6 md:my-0 md:mx-4">
+            </li> */}{" "}
+            <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/our-branches"
                 onClick={() => setIsOpen(false)}
