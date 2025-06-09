@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import gsap from "gsap";
@@ -11,6 +11,20 @@ interface ApiProduct {
   price: string;
   quantity: number;
   description: string;
+  primaryImage?: string;
+}
+
+// API Image interface
+interface ApiImage {
+  id: number;
+  product_id: number;
+  image_url: string;
+  image_key: string;
+  alt_text: string | null;
+  display_order: number;
+  is_primary: number;
+  created_at: string;
+  updated_at: string;
 }
 
 // Default product images
@@ -23,7 +37,7 @@ const defaultProductImages = [
   "/oil6.jpg",
   "/oil21.jpg",
   "/oil22.jpg",
-  "/oil23.jpg"
+  "/oil23.jpg",
 ];
 
 const Oil = () => {
@@ -33,37 +47,79 @@ const Oil = () => {
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Function to fetch images for a product
+  const fetchProductImages = async (productId: number): Promise<string> => {
+    try {
+      const response = await fetch(
+        `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${productId}/images`
+      );
 
+      if (!response.ok) {
+        console.warn(`Failed to fetch images for product ${productId}`);
+        return defaultProductImages[0]; // Return default image if API fails
+      }
+
+      const images: ApiImage[] = await response.json();
+
+      // Find the primary image
+      const primaryImage = images.find((img) => img.is_primary === 1);
+
+      // Return the primary image URL or the first image if no primary is found
+      if (primaryImage) {
+        return primaryImage.image_url;
+      } else if (images.length > 0) {
+        return images[0].image_url;
+      } else {
+        return defaultProductImages[0]; // Return default if no images
+      }
+    } catch (error) {
+      console.warn(`Error fetching images for product ${productId}:`, error);
+      return defaultProductImages[0]; // Return default image if error occurs
+    }
+  };
   // Function to fetch products from API
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products');
-      
+      const response = await fetch(
+        "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products"
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
-      const data = await response.json();
-      setProducts(data);
+
+      const data: ApiProduct[] = await response.json();
+
+      // Fetch images for each product
+      const productsWithImages = await Promise.all(
+        data.map(async (product) => {
+          const primaryImage = await fetchProductImages(product.id);
+          return {
+            ...product,
+            primaryImage,
+          };
+        })
+      );
+
+      setProducts(productsWithImages);
       setError(null);
     } catch (err) {
-      console.error('Error fetching products:', err);
-      setError('Failed to load products. Please try again later.');
+      console.error("Error fetching products:", err);
+      setError("Failed to load products. Please try again later.");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Function to get product image
   const getProductImage = (index: number) => {
     return defaultProductImages[index % defaultProductImages.length];
   };
-
   useEffect(() => {
     // Fetch products on component mount
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   useEffect(() => {
     // Only run animations after products are loaded
@@ -131,7 +187,6 @@ const Oil = () => {
               <p className="mt-4 text-gray-600">Loading products...</p>
             </div>
           )}
-
           {/* Error State */}
           {error && (
             <div className="text-center py-16">
@@ -145,8 +200,7 @@ const Oil = () => {
                 </button>
               </div>
             </div>
-          )}
-
+          )}{" "}
           {/* Products Grid */}
           {!loading && !error && products.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -156,9 +210,14 @@ const Oil = () => {
                   className="oil-product-card bg-white rounded-lg overflow-hidden shadow-md"
                 >
                   <img
-                    src={getProductImage(index)}
+                    src={product.primaryImage || getProductImage(index)}
                     alt={product.name}
                     className="w-full h-[240px] object-cover"
+                    onError={(e) => {
+                      // Fallback to default image if API image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.src = getProductImage(index);
+                    }}
                   />
                   <div className="p-6">
                     <h3 className="text-xl mb-2">{product.name}</h3>
@@ -168,10 +227,9 @@ const Oil = () => {
                         ${product.price}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {product.quantity > 0 
-                          ? `${product.quantity} in stock` 
-                          : 'Out of stock'
-                        }
+                        {product.quantity > 0
+                          ? `${product.quantity} in stock`
+                          : "Out of stock"}
                       </p>
                     </div>
                     <Link
@@ -185,11 +243,12 @@ const Oil = () => {
               ))}
             </div>
           )}
-
           {/* No Products State */}
           {!loading && !error && products.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-gray-600 mb-4">No products available at the moment.</p>
+              <p className="text-gray-600 mb-4">
+                No products available at the moment.
+              </p>
               <button
                 onClick={fetchProducts}
                 className="bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
