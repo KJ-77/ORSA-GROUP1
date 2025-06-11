@@ -94,10 +94,9 @@ const Navbar = () => {
               </Link>
             </li>
             {user ? (
-              <li className="mx-4 my-6 md:my-0 md:mx-4">
-                <div className="flex items-center gap-4">
+              <li className="mx-4 my-6 md:my-0 md:mx-4">                <div className="flex items-center gap-4">
                   <span className="text-[#333] font-medium">
-                    Welcome, {user.username}
+                    Welcome, {user.name || user.username}
                   </span>
                   <button
                     onClick={() => {

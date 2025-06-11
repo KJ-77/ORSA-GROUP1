@@ -22,6 +22,7 @@ const userPool = new CognitoUserPool(poolData);
 export interface User {
   username: string;
   email?: string;
+  name?: string;
   attributes?: { [key: string]: string };
 }
 
@@ -61,13 +62,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           console.error("Error getting session:", err);
           setLoading(false);
           return;
-        }
-
-        if (session.isValid()) {
+        }        if (session.isValid()) {
           currentUser.getUserAttributes((err, attributes) => {
             if (err) {
               console.error("Error getting user attributes:", err);
             } else {
+              console.log("Session user attributes:", attributes);
               const userAttributes: { [key: string]: string } = {};
               attributes?.forEach((attr) => {
                 userAttributes[attr.Name] = attr.Value;
@@ -76,6 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               setUser({
                 username: currentUser.getUsername(),
                 email: userAttributes["email"],
+                name: userAttributes["name"] || userAttributes["given_name"] || userAttributes["preferred_username"] || currentUser.getUsername(),
                 attributes: userAttributes,
               });
             }
@@ -108,12 +109,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         Pool: userPool,
       };
 
-      const cognitoUser = new CognitoUser(userData);
-
-      cognitoUser.authenticateUser(authenticationDetails, {
+      const cognitoUser = new CognitoUser(userData);      cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
+          // Log the authentication result to see the token
+          console.log("Authentication result:", result);
+          console.log("Access Token:", result.getAccessToken().getJwtToken());
+          console.log("ID Token:", result.getIdToken().getJwtToken());
+          
           // Get user attributes after successful login
           cognitoUser.getUserAttributes((err, attributes) => {
+            console.log("User attributes:", attributes);
             const userAttributes: { [key: string]: string } = {};
             attributes?.forEach((attr) => {
               userAttributes[attr.Name] = attr.Value;
@@ -122,6 +127,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setUser({
               username: cognitoUser.getUsername(),
               email: userAttributes["email"],
+              name: userAttributes["name"] || userAttributes["given_name"] || userAttributes["preferred_username"] || cognitoUser.getUsername(),
               attributes: userAttributes,
             });
             setLoading(false);
