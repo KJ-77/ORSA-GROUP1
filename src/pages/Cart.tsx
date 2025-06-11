@@ -1,9 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 // API Product interface (same as in Oil.tsx)
 
 const Cart = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [cartProducts, setCartProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -116,10 +119,14 @@ const Cart = () => {
       }, 0)
       .toFixed(2);
   };
-
   useEffect(() => {
+    // Redirect to login if user is not authenticated
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
     loadCartProducts();
-  }, [loadCartProducts]);
+  }, [loadCartProducts, user, navigate]);
   return (
     <div className="w-full min-h-screen">
       {/* Page Header */}

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const { language, t, setLanguage } = useLanguage();
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   // Close mobile menu when route changes
@@ -81,7 +83,7 @@ const Navbar = () => {
               >
                 {t("our-branches")}
               </Link>
-            </li>
+            </li>{" "}
             <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/cart"
@@ -91,6 +93,34 @@ const Navbar = () => {
                 Cart
               </Link>
             </li>
+            {user ? (
+              <li className="mx-4 my-6 md:my-0 md:mx-4">
+                <div className="flex items-center gap-4">
+                  <span className="text-[#333] font-medium">
+                    Welcome, {user.username}
+                  </span>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                    }}
+                    className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </li>
+            ) : (
+              <li className="mx-4 my-6 md:my-0 md:mx-4">
+                <Link
+                  to="/auth"
+                  onClick={() => setIsOpen(false)}
+                  className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
+                >
+                  Login
+                </Link>
+              </li>
+            )}
             {/* <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/our-offers"

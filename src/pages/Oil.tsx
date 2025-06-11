@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
+import { useAuth } from "../context/AuthContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -42,6 +43,8 @@ const defaultProductImages = [
 
 const Oil = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const headerRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   const [products, setProducts] = useState<ApiProduct[]>([]);
@@ -114,9 +117,15 @@ const Oil = () => {
   // Function to get product image
   const getProductImage = (index: number) => {
     return defaultProductImages[index % defaultProductImages.length];
-  };
-  // Function to add product to cart
+  }; // Function to add product to cart
   const addToCart = (productId: number) => {
+    // Check if user is authenticated
+    if (!user) {
+      alert("Please log in to add items to your cart");
+      navigate("/auth");
+      return;
+    }
+
     // Get existing cart items from localStorage
     const existingCart = localStorage.getItem("cart");
     const cartItems: number[] = existingCart ? JSON.parse(existingCart) : [];
