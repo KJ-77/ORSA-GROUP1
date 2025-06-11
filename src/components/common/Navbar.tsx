@@ -2,10 +2,21 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../context/AuthContext";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const { language, t, setLanguage } = useLanguage();
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -92,22 +103,50 @@ const Navbar = () => {
               >
                 Cart
               </Link>
-            </li>
+            </li>{" "}
             {user ? (
-              <li className="mx-4 my-6 md:my-0 md:mx-4">                
+              <li className="mx-4 my-6 md:my-0 md:mx-4">
                 <div className="flex items-center gap-4">
                   <span className="text-[#333] font-medium">
                     Welcome, {user.name || user.username}
                   </span>
-                  <button
-                    onClick={() => {
-                      logout();
-                      setIsOpen(false);
-                    }}
-                    className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
+                  <Dialog
+                    open={isLogoutDialogOpen}
+                    onOpenChange={setIsLogoutDialogOpen}
                   >
-                    Logout
-                  </button>
+                    <DialogTrigger asChild>
+                      <button className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full">
+                        Logout
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Confirm Logout</DialogTitle>
+                        <DialogDescription>
+                          Are you sure you want to logout? You will be
+                          redirected to the home page.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => setIsLogoutDialogOpen(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => {
+                            logout();
+                            setIsLogoutDialogOpen(false);
+                            setIsOpen(false);
+                          }}
+                        >
+                          Logout
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </li>
             ) : (

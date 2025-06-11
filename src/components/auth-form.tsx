@@ -21,12 +21,19 @@ export default function LoginForm({
   isSignup = false,
   ...props
 }: LoginFormProps) {
-  const { login, signup, confirmSignup, resendConfirmationCode, loading, error } = useAuth();
-  
+  const {
+    login,
+    signup,
+    confirmSignup,
+    resendConfirmationCode,
+    loading,
+    error,
+  } = useAuth();
+
   // Login form state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+
   // Signup form state
   const [email, setEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
@@ -50,7 +57,7 @@ export default function LoginForm({
   };
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (signupPassword !== confirmPassword) {
       alert("Passwords don't match");
       return;
@@ -68,7 +75,9 @@ export default function LoginForm({
       const username = await signup(signupData);
       setSignupUsername(username);
       setShowVerification(true);
-      alert(`Account created! Please check your email for a verification code.`);
+      alert(
+        `Account created! Please check your email for a verification code.`
+      );
     } catch (err) {
       console.error("Signup error:", err);
     }
@@ -76,7 +85,7 @@ export default function LoginForm({
 
   const handleVerification = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await confirmSignup(signupUsername, verificationCode);
       alert("Account verified successfully! You can now log in.");
@@ -98,7 +107,11 @@ export default function LoginForm({
 
   if (isSignup && showVerification) {
     return (
-      <form className={cn("flex flex-col gap-6", className)} onSubmit={handleVerification} {...props}>
+      <form
+        className={cn("flex flex-col gap-6", className)}
+        onSubmit={handleVerification}
+        {...props}
+      >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">Verify Your Account</h1>
           <p className="text-muted-foreground text-sm text-balance">
@@ -110,7 +123,8 @@ export default function LoginForm({
             <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
               {error}
             </div>
-          )}          <div className="grid gap-3">
+          )}{" "}
+          <div className="grid gap-3">
             <Label htmlFor="verificationCode">Verification Code</Label>
             <div className="flex justify-center">
               <InputOTP
@@ -132,17 +146,17 @@ export default function LoginForm({
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Verifying..." : "Verify Account"}
           </Button>
-          <Button 
-            type="button" 
-            variant="outline" 
-            className="w-full" 
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
             onClick={handleResendCode}
             disabled={loading}
           >
             Resend Code
           </Button>
           <div className="text-center text-sm">
-            <button 
+            <button
               type="button"
               onClick={() => setShowVerification(false)}
               className="underline underline-offset-4 hover:text-primary"
@@ -157,7 +171,11 @@ export default function LoginForm({
 
   if (isSignup) {
     return (
-      <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSignup} {...props}>
+      <form
+        className={cn("flex flex-col gap-6", className)}
+        onSubmit={handleSignup}
+        {...props}
+      >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">Create your account</h1>
           <p className="text-muted-foreground text-sm text-balance">
@@ -173,70 +191,71 @@ export default function LoginForm({
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-3">
               <Label htmlFor="givenName">First Name</Label>
-              <Input 
-                id="givenName" 
-                type="text" 
-                placeholder="John" 
+              <Input
+                id="givenName"
+                type="text"
+                placeholder="John"
                 value={givenName}
                 onChange={(e) => setGivenName(e.target.value)}
-                required 
+                required
               />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="familyName">Last Name</Label>
-              <Input 
-                id="familyName" 
-                type="text" 
-                placeholder="Doe" 
+              <Input
+                id="familyName"
+                type="text"
+                placeholder="Doe"
                 value={familyName}
                 onChange={(e) => setFamilyName(e.target.value)}
-                required 
+                required
               />
             </div>
           </div>
           <div className="grid gap-3">
             <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              placeholder="john@example.com" 
+            <Input
+              id="email"
+              type="email"
+              placeholder="john@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required 
+              required
             />
           </div>
           <div className="grid gap-3">
             <Label htmlFor="phoneNumber">Phone Number</Label>
-            <Input 
-              id="phoneNumber" 
-              type="tel" 
-              placeholder="+1234567890" 
+            <Input
+              id="phoneNumber"
+              type="tel"
+              placeholder="+1234567890"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              required 
+              required
             />
           </div>
           <div className="grid gap-3">
             <Label htmlFor="signupPassword">Password</Label>
-            <Input 
-              id="signupPassword" 
-              type="password" 
+            <Input
+              id="signupPassword"
+              type="password"
               value={signupPassword}
               onChange={(e) => setSignupPassword(e.target.value)}
-              required 
+              required
             />
             <p className="text-xs text-muted-foreground">
-              Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character
+              Password must contain at least 1 uppercase, 1 lowercase, 1 number,
+              and 1 special character
             </p>
           </div>
           <div className="grid gap-3">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input 
-              id="confirmPassword" 
-              type="password" 
+            <Input
+              id="confirmPassword"
+              type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              required 
+              required
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
@@ -244,7 +263,7 @@ export default function LoginForm({
           </Button>
           <div className="text-center text-sm">
             Already have an account?{" "}
-            <button 
+            <button
               type="button"
               onClick={onToggleMode}
               className="underline underline-offset-4 hover:text-primary"
@@ -258,7 +277,11 @@ export default function LoginForm({
   }
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} onSubmit={handleLogin} {...props}>
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      onSubmit={handleLogin}
+      {...props}
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
@@ -273,13 +296,13 @@ export default function LoginForm({
         )}
         <div className="grid gap-3">
           <Label htmlFor="username">Username</Label>
-          <Input 
-            id="username" 
-            type="text" 
-            placeholder="Enter your username" 
+          <Input
+            id="username"
+            type="text"
+            placeholder="Enter your username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required 
+            required
           />
         </div>
         <div className="grid gap-3">
@@ -292,12 +315,12 @@ export default function LoginForm({
               Forgot your password?
             </a>
           </div>
-          <Input 
-            id="password" 
-            type="password" 
+          <Input
+            id="password"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required 
+            required
           />
         </div>
         <Button type="submit" className="w-full" disabled={loading}>
@@ -305,7 +328,7 @@ export default function LoginForm({
         </Button>
         <div className="text-center text-sm">
           Don&apos;t have an account?{" "}
-          <button 
+          <button
             type="button"
             onClick={onToggleMode}
             className="underline underline-offset-4 hover:text-primary"

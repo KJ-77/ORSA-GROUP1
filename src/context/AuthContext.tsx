@@ -74,7 +74,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           console.error("Error getting session:", err);
           setLoading(false);
           return;
-        }        if (session.isValid()) {
+        }
+        if (session.isValid()) {
           currentUser.getUserAttributes((err, attributes) => {
             if (err) {
               console.error("Error getting user attributes:", err);
@@ -88,7 +89,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               setUser({
                 username: currentUser.getUsername(),
                 email: userAttributes["email"],
-                name: userAttributes["name"] || userAttributes["given_name"] || userAttributes["preferred_username"] || currentUser.getUsername(),
+                name:
+                  userAttributes["name"] ||
+                  userAttributes["given_name"] ||
+                  userAttributes["preferred_username"] ||
+                  currentUser.getUsername(),
                 attributes: userAttributes,
               });
             }
@@ -121,13 +126,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         Pool: userPool,
       };
 
-      const cognitoUser = new CognitoUser(userData);      cognitoUser.authenticateUser(authenticationDetails, {
+      const cognitoUser = new CognitoUser(userData);
+      cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
           // Log the authentication result to see the token
           console.log("Authentication result:", result);
           console.log("Access Token:", result.getAccessToken().getJwtToken());
           console.log("ID Token:", result.getIdToken().getJwtToken());
-          
+
           // Get user attributes after successful login
           cognitoUser.getUserAttributes((err, attributes) => {
             console.log("User attributes:", attributes);
@@ -139,12 +145,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setUser({
               username: cognitoUser.getUsername(),
               email: userAttributes["email"],
-              name: userAttributes["name"] || userAttributes["given_name"] || userAttributes["preferred_username"] || cognitoUser.getUsername(),
+              name:
+                userAttributes["name"] ||
+                userAttributes["given_name"] ||
+                userAttributes["preferred_username"] ||
+                cognitoUser.getUsername(),
               attributes: userAttributes,
             });
             setLoading(false);
             resolve();
-          });        },
+          });
+        },
         onFailure: (err) => {
           setError(err.message || "Login failed");
           setLoading(false);
@@ -163,7 +174,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Email attribute
       const dataEmail = {
-        Name: 'email',
+        Name: "email",
         Value: signupData.email,
       };
       const attributeEmail = new CognitoUserAttribute(dataEmail);
@@ -171,7 +182,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Phone number attribute
       const dataPhone = {
-        Name: 'phone_number',
+        Name: "phone_number",
         Value: signupData.phoneNumber,
       };
       const attributePhone = new CognitoUserAttribute(dataPhone);
@@ -179,7 +190,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Given name attribute
       const dataGivenName = {
-        Name: 'given_name',
+        Name: "given_name",
         Value: signupData.givenName,
       };
       const attributeGivenName = new CognitoUserAttribute(dataGivenName);
@@ -187,29 +198,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Family name attribute
       const dataFamilyName = {
-        Name: 'family_name',
+        Name: "family_name",
         Value: signupData.familyName,
       };
       const attributeFamilyName = new CognitoUserAttribute(dataFamilyName);
       attributeList.push(attributeFamilyName);
 
-      userPool.signUp(signupData.email, signupData.password, attributeList, [], (err, result) => {
-        setLoading(false);
-        if (err) {
-          console.error('Signup error:', err);
-          setError(err.message || 'An error occurred during signup');
-          reject(err);
-          return;
-        }        console.log('Signup successful:', result);
-        if (result?.user) {
-          resolve(result.user.getUsername());
-        } else {
-          reject(new Error('Signup failed - no user returned'));
+      userPool.signUp(
+        signupData.email,
+        signupData.password,
+        attributeList,
+        [],
+        (err, result) => {
+          setLoading(false);
+          if (err) {
+            console.error("Signup error:", err);
+            setError(err.message || "An error occurred during signup");
+            reject(err);
+            return;
+          }
+          console.log("Signup successful:", result);
+          if (result?.user) {
+            resolve(result.user.getUsername());
+          } else {
+            reject(new Error("Signup failed - no user returned"));
+          }
         }
-      });    });
+      );
+    });
   };
 
-  const confirmSignup = async (username: string, code: string): Promise<void> => {
+  const confirmSignup = async (
+    username: string,
+    code: string
+  ): Promise<void> => {
     setLoading(true);
     setError(null);
 
@@ -224,13 +246,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       cognitoUser.confirmRegistration(code, true, (err, result) => {
         setLoading(false);
         if (err) {
-          console.error('Confirmation error:', err);
-          setError(err.message || 'An error occurred during confirmation');
+          console.error("Confirmation error:", err);
+          setError(err.message || "An error occurred during confirmation");
           reject(err);
           return;
         }
 
-        console.log('Confirmation successful:', result);
+        console.log("Confirmation successful:", result);
         resolve();
       });
     });
@@ -251,13 +273,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       cognitoUser.resendConfirmationCode((err, result) => {
         setLoading(false);
         if (err) {
-          console.error('Resend confirmation error:', err);
-          setError(err.message || 'An error occurred while resending confirmation code');
+          console.error("Resend confirmation error:", err);
+          setError(
+            err.message || "An error occurred while resending confirmation code"
+          );
           reject(err);
           return;
         }
 
-        console.log('Confirmation code resent:', result);
+        console.log("Confirmation code resent:", result);
         resolve();
       });
     });
