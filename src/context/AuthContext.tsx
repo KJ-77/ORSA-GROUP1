@@ -138,10 +138,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           // Log the authentication result to see the token
           console.log("Authentication result:", result);
           console.log("Access Token:", result.getAccessToken().getJwtToken());
-          console.log("ID Token:", result.getIdToken().getJwtToken());
-
-          // Get user attributes after successful login
-          cognitoUser.getUserAttributes((err, attributes) => {
+          console.log("ID Token:", result.getIdToken().getJwtToken()); // Get user attributes after successful login
+          cognitoUser.getUserAttributes((_err, attributes) => {
             console.log("User attributes:", attributes);
             const userAttributes: { [key: string]: string } = {};
             attributes?.forEach((attr) => {
@@ -233,7 +231,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       );
     });
-  };  const confirmSignup = async (
+  };
+  const confirmSignup = async (
     username: string,
     code: string
   ): Promise<void> => {
@@ -269,14 +268,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               Password: pendingSignupData.password,
             };
 
-            const authenticationDetails = new AuthenticationDetails(authenticationData);
-            
+            const authenticationDetails = new AuthenticationDetails(
+              authenticationData
+            );
             cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: (authResult) => {
+              onSuccess: (_authResult) => {
                 // Now we can get user attributes
                 cognitoUser.getUserAttributes((attrErr, attributes) => {
                   if (attrErr) {
-                    console.error("Error getting user attributes after auth:", attrErr);
+                    console.error(
+                      "Error getting user attributes after auth:",
+                      attrErr
+                    );
                     setPendingSignupData(null);
                     setLoading(false);
                     resolve(); // Still resolve since confirmation was successful
@@ -286,7 +289,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                   const subAttribute = attributes?.find(
                     (attr) => attr.Name === "sub"
                   );
-                  
+
                   if (subAttribute && pendingSignupData) {
                     // Call API to save user data
                     saveUserToDatabase(subAttribute.Value, pendingSignupData)
@@ -297,7 +300,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                         resolve();
                       })
                       .catch((apiError) => {
-                        console.error("Failed to save user to database:", apiError);
+                        console.error(
+                          "Failed to save user to database:",
+                          apiError
+                        );
                         setPendingSignupData(null);
                         setLoading(false);
                         resolve(); // Still resolve since confirmation was successful
@@ -311,11 +317,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 });
               },
               onFailure: (authError) => {
-                console.error("Authentication failed after confirmation:", authError);
+                console.error(
+                  "Authentication failed after confirmation:",
+                  authError
+                );
                 setPendingSignupData(null);
                 setLoading(false);
                 resolve(); // Still resolve since confirmation was successful
-              }
+              },
             });
           } catch (error) {
             console.error("Error in confirmSignup API call:", error);
