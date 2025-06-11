@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GalleryVerticalEnd } from "lucide-react";
-import LoginForm from "@/components/login-form";
+import AuthForm from "@/components/auth-form";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Auth() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isSignup, setIsSignup] = useState(false);
 
   // Redirect to home if user is logged in
   useEffect(() => {
@@ -14,6 +15,10 @@ export default function Auth() {
       navigate("/");
     }
   }, [user, navigate]);
+
+  const toggleMode = () => {
+    setIsSignup(!isSignup);
+  };
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
@@ -23,12 +28,12 @@ export default function Auth() {
             <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
               <GalleryVerticalEnd className="size-4" />
             </div>
-            Acme Inc.
+            ORSA GROUP
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <LoginForm />
+            <AuthForm isSignup={isSignup} onToggleMode={toggleMode} />
           </div>
         </div>
       </div>
