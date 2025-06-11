@@ -26,6 +26,9 @@ export interface SignupData {
   phoneNumber: string;
   givenName: string;
   familyName: string;
+  address: string;
+  birthdate: string;
+  gender: "M" | "F";
 }
 
 export interface User {
@@ -64,6 +67,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [pendingSignupData, setPendingSignupData] = useState<SignupData | null>(
+    null
+  );
 
   // Check if user is already logged in on app load
   useEffect(() => {
@@ -164,7 +170,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     });
   };
-
   const signup = async (signupData: SignupData): Promise<string> => {
     setLoading(true);
     setError(null);
@@ -219,6 +224,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
           console.log("Signup successful:", result);
           if (result?.user) {
+            // Store signup data for later use in confirmSignup
+            setPendingSignupData(signupData);
             resolve(result.user.getUsername());
           } else {
             reject(new Error("Signup failed - no user returned"));
@@ -226,9 +233,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       );
     });
-  };
-
-  const confirmSignup = async (
+  };  const confirmSignup = async (
     username: string,
     code: string
   ): Promise<void> => {
@@ -243,21 +248,88 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const cognitoUser = new CognitoUser(userData);
 
-      cognitoUser.confirmRegistration(code, true, (err, result) => {
-        setLoading(false);
+      cognitoUser.confirmRegistration(code, true, async (err, result) => {
         if (err) {
           console.error("Confirmation error:", err);
           setError(err.message || "An error occurred during confirmation");
+          setLoading(false);
           reject(err);
           return;
         }
 
         console.log("Confirmation successful:", result);
-        resolve();
+
+        // After successful confirmation, save user data to API
+        if (pendingSignupData) {
+          try {
+            // Since we can't easily get the sub immediately after confirmation,
+            // we'll need to authenticate the user first to get their attributes
+            const authenticationData = {
+              Username: username,
+              Password: pendingSignupData.password,
+            };
+
+            const authenticationDetails = new AuthenticationDetails(authenticationData);
+            
+            cognitoUser.authenticateUser(authenticationDetails, {
+              onSuccess: (authResult) => {
+                // Now we can get user attributes
+                cognitoUser.getUserAttributes((attrErr, attributes) => {
+                  if (attrErr) {
+                    console.error("Error getting user attributes after auth:", attrErr);
+                    setPendingSignupData(null);
+                    setLoading(false);
+                    resolve(); // Still resolve since confirmation was successful
+                    return;
+                  }
+
+                  const subAttribute = attributes?.find(
+                    (attr) => attr.Name === "sub"
+                  );
+                  
+                  if (subAttribute && pendingSignupData) {
+                    // Call API to save user data
+                    saveUserToDatabase(subAttribute.Value, pendingSignupData)
+                      .then(() => {
+                        console.log("User data saved to API successfully");
+                        setPendingSignupData(null);
+                        setLoading(false);
+                        resolve();
+                      })
+                      .catch((apiError) => {
+                        console.error("Failed to save user to database:", apiError);
+                        setPendingSignupData(null);
+                        setLoading(false);
+                        resolve(); // Still resolve since confirmation was successful
+                      });
+                  } else {
+                    console.error("Could not find user sub attribute");
+                    setPendingSignupData(null);
+                    setLoading(false);
+                    resolve();
+                  }
+                });
+              },
+              onFailure: (authError) => {
+                console.error("Authentication failed after confirmation:", authError);
+                setPendingSignupData(null);
+                setLoading(false);
+                resolve(); // Still resolve since confirmation was successful
+              }
+            });
+          } catch (error) {
+            console.error("Error in confirmSignup API call:", error);
+            setPendingSignupData(null);
+            setLoading(false);
+            resolve(); // Still resolve since Cognito confirmation was successful
+          }
+        } else {
+          setLoading(false);
+          resolve();
+        }
       });
     });
   };
-
   const resendConfirmationCode = async (username: string): Promise<void> => {
     setLoading(true);
     setError(null);
@@ -285,6 +357,47 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         resolve();
       });
     });
+  };
+
+  // Function to save user data to API
+  const saveUserToDatabase = async (
+    userId: string,
+    signupData: SignupData
+  ): Promise<void> => {
+    try {
+      const userData = {
+        id: userId,
+        first_name: signupData.givenName,
+        last_name: signupData.familyName,
+        email: signupData.email,
+        address: signupData.address,
+        birthdate: signupData.birthdate,
+        gender: signupData.gender,
+        phone_number: signupData.phoneNumber.replace(/^\+/, ""), // Remove + if present
+      };
+
+      const response = await fetch(
+        "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/users",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `API call failed: ${response.status} ${response.statusText}`
+        );
+      }
+
+      console.log("User data saved to database successfully");
+    } catch (error) {
+      console.error("Failed to save user data to database:", error);
+      throw error;
+    }
   };
 
   const logout = () => {

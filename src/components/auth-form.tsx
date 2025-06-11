@@ -33,7 +33,6 @@ export default function LoginForm({
   // Login form state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   // Signup form state
   const [email, setEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
@@ -41,6 +40,9 @@ export default function LoginForm({
   const [phoneNumber, setPhoneNumber] = useState("");
   const [givenName, setGivenName] = useState("");
   const [familyName, setFamilyName] = useState("");
+  const [address, setAddress] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [gender, setGender] = useState<"M" | "F">("M");
 
   // Verification state
   const [showVerification, setShowVerification] = useState(false);
@@ -69,6 +71,9 @@ export default function LoginForm({
       phoneNumber,
       givenName,
       familyName,
+      address,
+      birthdate,
+      gender,
     };
 
     try {
@@ -222,7 +227,7 @@ export default function LoginForm({
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </div>
+          </div>{" "}
           <div className="grid gap-3">
             <Label htmlFor="phoneNumber">Phone Number</Label>
             <Input
@@ -233,6 +238,42 @@ export default function LoginForm({
               onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
+          </div>
+          <div className="grid gap-3">
+            <Label htmlFor="address">Address</Label>
+            <Input
+              id="address"
+              type="text"
+              placeholder="123 Main St, City, Country"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="grid gap-3">
+              <Label htmlFor="birthdate">Date of Birth</Label>
+              <Input
+                id="birthdate"
+                type="date"
+                value={birthdate}
+                onChange={(e) => setBirthdate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="gender">Gender</Label>
+              <select
+                id="gender"
+                value={gender}
+                onChange={(e) => setGender(e.target.value as "M" | "F")}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                required
+              >
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
           </div>
           <div className="grid gap-3">
             <Label htmlFor="signupPassword">Password</Label>
