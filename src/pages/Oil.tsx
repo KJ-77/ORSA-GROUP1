@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
-import { useAuth } from "../context/AuthContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger);
 
 // API Product interface
 interface ApiProduct {
@@ -12,20 +14,6 @@ interface ApiProduct {
   price: string;
   quantity: number;
   description: string;
-  primaryImage?: string;
-}
-
-// API Image interface
-interface ApiImage {
-  id: number;
-  product_id: number;
-  image_url: string;
-  image_key: string;
-  alt_text: string | null;
-  display_order: number;
-  is_primary: number;
-  created_at: string;
-  updated_at: string;
 }
 
 // Default product images
@@ -36,52 +24,33 @@ const defaultProductImages = [
   "/oil4.jpg",
   "/oil5.jpg",
   "/oil6.jpg",
-  "/oil21.jpg",
-  "/oil22.jpg",
-  "/oil23.jpg",
 ];
 
 const Oil = () => {
   const { t } = useLanguage();
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const headerRef = useRef<HTMLDivElement>(null);
-  const productsRef = useRef<HTMLDivElement>(null);
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Function to fetch images for a product
-  const fetchProductImages = async (productId: number): Promise<string> => {
-    try {
-      const response = await fetch(
-        `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${productId}/images`
-      );
+  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState("");
 
-      if (!response.ok) {
-        console.warn(`Failed to fetch images for product ${productId}`);
-        return defaultProductImages[0]; // Return default image if API fails
-      }
+  const headerRef = useRef<HTMLDivElement>(null);
+  const productsRef = useRef<HTMLDivElement>(null);
+  const qualityRef = useRef<HTMLDivElement>(null);
 
-      const images: ApiImage[] = await response.json();
-
-      // Find the primary image
-      const primaryImage = images.find((img) => img.is_primary === 1);
-
-      // Return the primary image URL or the first image if no primary is found
-      if (primaryImage) {
-        return primaryImage.image_url;
-      } else if (images.length > 0) {
-        return images[0].image_url;
-      } else {
-        return defaultProductImages[0]; // Return default if no images
-      }
-    } catch (error) {
-      console.warn(`Error fetching images for product ${productId}:`, error);
-      return defaultProductImages[0]; // Return default image if error occurs
-    }
+  const openImageModal = (imageSrc: string) => {
+    setCurrentImage(imageSrc);
+    setIsModalOpen(true);
   };
-  // Function to fetch products from API
-  const fetchProducts = useCallback(async () => {
+
+  const closeImageModal = () => {
+    setIsModalOpen(false);
+    setCurrentImage("");
+  };
+
+  // Function to fetch products
+  const fetchProducts = async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -93,19 +62,7 @@ const Oil = () => {
       }
 
       const data: ApiProduct[] = await response.json();
-
-      // Fetch images for each product
-      const productsWithImages = await Promise.all(
-        data.map(async (product) => {
-          const primaryImage = await fetchProductImages(product.id);
-          return {
-            ...product,
-            primaryImage,
-          };
-        })
-      );
-
-      setProducts(productsWithImages);
+      setProducts(data);
       setError(null);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -113,205 +70,374 @@ const Oil = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
-  // Function to get product image
-  const getProductImage = (index: number) => {
-    return defaultProductImages[index % defaultProductImages.length];
-  }; // Function to add product to cart
-  const addToCart = (productId: number) => {
-    // Check if user is authenticated
-    if (!user) {
-      alert("Please log in to add items to your cart");
-      navigate("/auth");
-      return;
-    }
-
-    // Get existing cart items from localStorage
-    const existingCart = localStorage.getItem("cart");
-    const cartItems: number[] = existingCart ? JSON.parse(existingCart) : [];
-
-    // Add the product ID to cart if not already present
-    if (!cartItems.includes(productId)) {
-      const updatedCartItems = [...cartItems, productId];
-      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-      alert("Product added to cart!");
-    } else {
-      alert("Product is already in cart!");
-    }
   };
+
   useEffect(() => {
-    // Fetch products on component mount
     fetchProducts();
-  }, [fetchProducts]);
+  }, []);
 
   useEffect(() => {
-    // Only run animations after products are loaded
-    if (!loading && products.length > 0) {
-      // Header animation
-      if (headerRef.current) {
-        const pageHeaderContent = headerRef.current.querySelector(
-          ".page-header-content"
+    // Ultra-enhanced header animation
+    if (headerRef.current) {
+      const headerContent = headerRef.current.querySelector(".page-header-content");
+      const floatingShapes = headerRef.current.querySelectorAll(".floating-shape");
+      
+      if (headerContent) {
+        gsap.fromTo(headerContent, 
+          { opacity: 0, y: 80, scale: 0.9, rotationX: 15 }, 
+          { opacity: 1, y: 0, scale: 1, rotationX: 0, duration: 1.5, ease: "power4.out" }
         );
-        if (pageHeaderContent) {
-          gsap.fromTo(
-            pageHeaderContent,
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 1 }
-          );
-        }
       }
-
-      // Products animation
-      if (productsRef.current) {
-        ScrollTrigger.create({
-          trigger: productsRef.current,
-          start: "top 80%",
-          onEnter: () => {
-            const oilProductCards =
-              productsRef.current?.querySelectorAll(".oil-product-card");
-            if (oilProductCards && oilProductCards.length > 0) {
-              gsap.fromTo(
-                oilProductCards,
-                { opacity: 0, y: 50 },
-                { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }
-              );
-            }
-          },
-        });
+      
+      if (floatingShapes) {
+        gsap.fromTo(floatingShapes, 
+          { opacity: 0, scale: 0, rotation: 180 }, 
+          { opacity: 1, scale: 1, rotation: 0, stagger: 0.2, duration: 2, ease: "elastic.out(1, 0.3)" }
+        );
       }
     }
-  }, [loading, products]);
+
+    // Enhanced products section animation
+    if (productsRef.current) {
+      ScrollTrigger.create({
+        trigger: productsRef.current,
+        start: "top 80%",
+        onEnter: () => {
+          const productCards = productsRef.current?.querySelectorAll(".product-card");
+          const filterButtons = productsRef.current?.querySelectorAll(".filter-button");
+          
+          if (filterButtons) {
+            gsap.fromTo(filterButtons, 
+              { opacity: 0, y: -30, scale: 0.8 }, 
+              { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 1, ease: "power3.out" }
+            );
+          }
+          
+          if (productCards && productCards.length > 0) {
+            gsap.fromTo(productCards, 
+              { opacity: 0, y: 100, scale: 0.8, rotationY: 25 }, 
+              { opacity: 1, y: 0, scale: 1, rotationY: 0, stagger: 0.15, duration: 1.2, ease: "power4.out" }
+            );
+          }
+        },
+      });
+    }
+
+    // Enhanced quality section animation
+    if (qualityRef.current) {
+      ScrollTrigger.create({
+        trigger: qualityRef.current,
+        start: "top 80%",
+        onEnter: () => {
+          const qualityFeatures = qualityRef.current?.querySelectorAll(".quality-feature");
+          
+          if (qualityFeatures) {
+            gsap.fromTo(qualityFeatures, 
+              { opacity: 0, y: 60, scale: 0.9, rotationX: 20 }, 
+              { opacity: 1, y: 0, scale: 1, rotationX: 0, stagger: 0.2, duration: 1.3, ease: "power4.out" }
+            );
+          }
+        },
+      });
+    }
+
+    // Advanced parallax effects
+    gsap.to(".parallax-bg", {
+      yPercent: -20,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".parallax-bg",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1
+      }
+    });
+
+    // Morphing shapes animation
+    gsap.to(".morphing-shape", {
+      rotation: 360,
+      scale: 1.1,
+      duration: 15,
+      repeat: -1,
+      ease: "none"
+    });
+
+  }, []);
+
+  // Filter products based on selected filter
+  const filteredProducts = products.filter(product => {
+    if (selectedFilter === "all") return true;
+    if (selectedFilter === "premium") return product.name.toLowerCase().includes("extra virgin");
+    if (selectedFilter === "organic") return product.name.toLowerCase().includes("organic");
+    if (selectedFilter === "infused") return product.name.toLowerCase().includes("garlic") || product.name.toLowerCase().includes("herb");
+    return true;
+  });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block relative">
+            <div className="animate-spin rounded-full h-32 w-32 border-4 border-emerald-200 border-t-emerald-600"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          <p className="mt-8 text-3xl text-white font-bold">Loading our premium oils...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="backdrop-blur-md bg-red-50/20 border-2 border-red-200/30 rounded-3xl p-16 max-w-lg mx-auto shadow-2xl">
+            <div className="w-24 h-24 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
+              <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+              </svg>
+            </div>
+            <p className="text-red-200 mb-8 text-xl font-semibold">{error}</p>
+            <button
+              onClick={fetchProducts}
+              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 px-8 rounded-full font-bold text-lg transition-all duration-500 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl transform hover:scale-105"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full">
-      {/* Page Header */}
-      <div
-        ref={headerRef}
-        className="bg-[#4a8e3b] text-white py-24 pb-16 text-center"
-      >
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="page-header-content">
-            <h1 className="text-5xl mb-4 uppercase md:text-4xl">
-              {t("oil-page-title")}
+    <div className="w-full overflow-hidden">
+      {/* Ultra-Enhanced Header with New Background */}
+      <div ref={headerRef} className="py-32 bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(\"/new-background.jpg\")` }}>
+        {/* Advanced Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70"></div>
+        
+        {/* Animated Geometric Shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="floating-shape absolute top-20 left-20 w-40 h-40 bg-gradient-to-br from-emerald-400/20 to-teal-500/20 rounded-full blur-xl"></div>
+          <div className="floating-shape absolute bottom-1/4 right-1/4 w-32 h-32 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-full blur-lg"></div>
+          <div className="floating-shape absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-lg transform rotate-45 blur-md"></div>
+          <div className="floating-shape absolute bottom-1/4 right-1/3 w-24 h-24 bg-gradient-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-md"></div>
+        </div>
+        
+        {/* Glassmorphism Pattern Overlay */}
+        <div className="absolute inset-0 bg-gray-900 opacity-10"></div>
+        
+        <div className="max-w-7xl mx-auto px-8 relative z-10">
+          <div className="page-header-content backdrop-blur-md bg-white/10 rounded-3xl p-16 border border-white/20">
+            {/* 3D Icon */}
+            <div className="mb-8 perspective-1000">
+              <div className="inline-block p-8 bg-gradient-to-br from-emerald-400/20 to-teal-600/20 rounded-full backdrop-blur-md border border-white/20 shadow-2xl transform-gpu">
+                <svg className="w-20 h-20 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                </svg>
+              </div>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl text-center text-transparent bg-gradient-to-r from-white via-emerald-200 to-cyan-200 bg-clip-text mb-8 font-black">
+              {t("our-oil")}
             </h1>
-            <p className="text-xl max-w-[600px] mx-auto md:text-lg">
-              {t("oil-page-subtitle")}
+            <p className="text-lg md:text-2xl text-center text-gray-200 max-w-4xl mx-auto leading-relaxed">
+              Discover our premium collection of Lebanese olive oils, crafted with tradition and passion for exceptional flavor and quality.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Oil Products */}
-      <section ref={productsRef} className="py-20">
-        <div className="max-w-7xl mx-auto px-8">
-          {/* Loading State */}
-          {loading && (
-            <div className="text-center py-16">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#4a8e3b]"></div>
-              <p className="mt-4 text-gray-600">Loading products...</p>
-            </div>
-          )}
-          {/* Error State */}
-          {error && (
-            <div className="text-center py-16">
-              <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-                <p className="text-red-600 mb-4">{error}</p>
-                <button
-                  onClick={fetchProducts}
-                  className="bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
-                >
-                  Try Again
-                </button>
+      {/* Ultra-Enhanced Oil Products Section */}
+      <section ref={productsRef} className="py-40 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+        <div className="parallax-bg absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent"></div>
+        
+        <div className="max-w-7xl mx-auto px-8 relative z-10">
+          {/* Enhanced Filter Buttons */}
+          <div className="flex justify-center mb-16">
+            <div className="backdrop-blur-md bg-white/80 rounded-2xl p-2 border border-white/20 shadow-xl">
+              <div className="flex gap-2">
+                {[
+                  { key: "all", label: "All Products" },
+                  { key: "premium", label: "Premium" },
+                  { key: "organic", label: "Organic" },
+                  { key: "infused", label: "Infused" }
+                ].map((filter) => (
+                  <button
+                    key={filter.key}
+                    onClick={() => setSelectedFilter(filter.key)}
+                    className={`filter-button px-6 py-3 rounded-xl font-bold text-lg transition-all duration-500 transform hover:scale-105 ${
+                      selectedFilter === filter.key
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg"
+                        : "text-gray-700 hover:bg-emerald-50"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
               </div>
             </div>
-          )}{" "}
-          {/* Products Grid */}
-          {!loading && !error && products.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.map((product: ApiProduct, index: number) => (
-                <div
-                  key={product.id}
-                  className="oil-product-card bg-white rounded-lg overflow-hidden shadow-md"
-                >
-                  <img
-                    src={product.primaryImage || getProductImage(index)}
-                    alt={product.name}
-                    className="w-full h-[240px] object-cover"
-                    onError={(e) => {
-                      // Fallback to default image if API image fails to load
-                      const target = e.target as HTMLImageElement;
-                      target.src = getProductImage(index);
-                    }}
-                  />
-                  <div className="p-6">
-                    <h3 className="text-xl mb-2">{product.name}</h3>
-                    <p className="mb-4 text-gray-600">
-                      {product.description}
-                    </p>{" "}
-                    <div className="mb-4">
-                      <p className="text-lg font-semibold text-[#4a8e3b]">
-                        ${product.price}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {product.quantity > 0
-                          ? `${product.quantity} in stock`
-                          : "Out of stock"}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Link
-                        to={`/oil/${product.id}`}
-                        className="inline-block bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
-                      >
-                        {t("learn-more")}
-                      </Link>
-                      <button
-                        onClick={() => addToCart(product.id)}
-                        disabled={product.quantity === 0}
-                        className={`py-2 px-4 rounded font-semibold transition-all duration-300 ${
-                          product.quantity > 0
-                            ? "bg-green-600 text-white hover:bg-green-700"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
+          </div>
+
+          {/* Enhanced Product Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {filteredProducts.map((product, index) => (
+              <div
+                key={product.id}
+                className="product-card backdrop-blur-md bg-white/90 rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-4xl group relative transform-gpu perspective-1000 border border-white/20"
+              >
+                {/* Premium Badge */}
+                <div className="absolute top-6 left-6 z-20">
+                  <div className="backdrop-blur-md bg-emerald-500/90 text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl">
+                    Premium Quality
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-          {/* No Products State */}
-          {!loading && !error && products.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-gray-600 mb-4">
-                No products available at the moment.
-              </p>
-              <button
-                onClick={fetchProducts}
-                className="bg-[#4a8e3b] text-white py-2 px-4 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
-              >
-                Refresh
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Quality Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl text-[#4a8e3b] mb-6 text-center">
-              {t("quality-commitment")}
-            </h2>
-            <p className="mb-4">{t("quality-desc-1")}</p>
-            <p>{t("quality-desc-2")}</p>
+                
+                {/* Enhanced Image Container */}
+                <div className="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                  <img
+                    src={defaultProductImages[index % defaultProductImages.length]}
+                    alt={product.name}
+                    className="w-full h-80 object-cover transition-transform duration-1000 group-hover:scale-125 cursor-pointer"
+                    onClick={() => openImageModal(defaultProductImages[index % defaultProductImages.length])}
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  
+                  {/* Floating Heart Icon */}
+                  <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110">
+                    <div className="w-12 h-12 bg-white/20 rounded-full backdrop-blur-md flex items-center justify-center border border-white/30 shadow-xl">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  {/* Glassmorphism Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 backdrop-blur-sm"></div>
+                </div>
+                
+                {/* Enhanced Content */}
+                <div className="p-8 relative">
+                  {/* Decorative Element */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-50 to-transparent rounded-bl-3xl opacity-50"></div>
+                  
+                  <h3 className="text-3xl mb-4 text-gray-800 font-black group-hover:text-emerald-700 transition-colors duration-500">
+                    {product.name}
+                  </h3>
+                  
+                  <p className="mb-6 text-gray-600 leading-relaxed text-lg line-clamp-3">
+                    {product.description}
+                  </p>
+                  
+                  {/* Price and Stock */}
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="text-3xl font-black text-emerald-600">
+                      ${product.price}
+                    </div>
+                    <div className={`px-4 py-2 rounded-full text-sm font-bold ${
+                      product.quantity > 0 
+                        ? "bg-emerald-100 text-emerald-700" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      {product.quantity > 0 ? `${product.quantity} in stock` : "Out of stock"}
+                    </div>
+                  </div>
+                  
+                  {/* Enhanced Button */}
+                  <Link
+                    to={`/oil/${product.id}`}
+                    className="inline-flex items-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 px-8 rounded-full font-bold text-lg transition-all duration-500 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 group/btn"
+                  >
+                    View Details
+                    <span className="ml-3 transition-transform duration-300 group-hover/btn:translate-x-2">→</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Ultra-Enhanced Quality Section */}
+      <section ref={qualityRef} className="py-32 bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gray-900 opacity-5"></div>
+        
+        <div className="max-w-7xl mx-auto px-8 relative z-10">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-6xl text-center text-transparent bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text mb-20 font-black">
+              Our Quality Commitment
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="quality-feature backdrop-blur-md bg-white/10 rounded-3xl p-8 border border-white/20 text-center text-white transform-gpu">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold mb-4">Certified Quality</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">International quality standards and certifications</p>
+              </div>
+              
+              <div className="quality-feature backdrop-blur-md bg-white/10 rounded-3xl p-8 border border-white/20 text-center text-white transform-gpu">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold mb-4">Premium Grade</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">Only the finest olives make it to our bottles</p>
+              </div>
+              
+              <div className="quality-feature backdrop-blur-md bg-white/10 rounded-3xl p-8 border border-white/20 text-center text-white transform-gpu">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold mb-4">Sustainable</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">Environmentally responsible farming practices</p>
+              </div>
+              
+              <div className="quality-feature backdrop-blur-md bg-white/10 rounded-3xl p-8 border border-white/20 text-center text-white transform-gpu">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold mb-4">Family Made</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">Three generations of Lebanese tradition</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Image Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={closeImageModal}
+        >
+          <div className="relative bg-white rounded-lg overflow-hidden max-w-3xl max-h-full w-full">
+            <button
+              className="absolute top-2 right-2 text-white text-3xl font-bold p-2 z-10"
+              onClick={closeImageModal}
+            >
+              &times;
+            </button>
+            <img src={currentImage} alt="Product Image" className="w-full h-auto object-contain" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Oil;
+

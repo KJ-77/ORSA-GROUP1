@@ -2,271 +2,387 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../context/AuthContext";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-  const { language, t, setLanguage } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const { user, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  // Close mobile menu when route changes
   useEffect(() => {
-    setIsOpen(false);
-    setIsLangMenuOpen(false);
-  }, [location.pathname]);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false);
   };
 
-  const toggleLangMenu = () => {
-    setIsLangMenuOpen(!isLangMenuOpen);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white/95 shadow-md z-[1000] transition-all duration-300">
-      <div className="flex justify-between items-center py-4 px-8 max-w-7xl mx-auto">
-        <Link
-          to="/"
-          className="text-2xl font-bold text-[#333] no-underline transition-colors duration-300 hover:text-[#4a8e3b]"
-        >
-          ORSA GROUP
-        </Link>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 backdrop-blur-md bg-white/90 shadow-xl border-b border-white/20`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Enhanced Logo Section */}
+          <Link to="/" className="flex items-center space-x-4 group">
+            <div className="relative">
+              {/* Logo with 3D effects */}
+              <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-yellow-600/30 shadow-2xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 bg-yellow-600/10">
+                <img 
+                  src="/new-orsa-logo.jpg" 
+                  alt="ORSA Logo" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-125"
+                />
+              </div>
+              {/* Floating ring effect */}
+              <div className="absolute inset-0 rounded-full border-2 border-yellow-600/50 animate-pulse"></div>
+              <div className="absolute -inset-2 rounded-full border border-yellow-500/30 animate-ping"></div>
+            </div>
+            <div className="flex flex-col">
+                <span className={`text-2xl font-black tracking-wider transition-colors duration-300 text-yellow-700 group-hover:text-yellow-600`}>
+                ORSA
+              </span>
+              <span className={`text-sm font-semibold transition-colors duration-300 text-gray-600`}>
+                Premium Olive Oil
+              </span>
+            </div>
+          </Link>
 
-        <div
-          className={`md:flex items-center ${
-            isOpen
-              ? "fixed top-[70px] right-0 bg-white/98 w-full h-[calc(100vh-70px)] flex-col transition-all duration-300 shadow-lg"
-              : "fixed top-[70px] -right-full bg-white/98 w-full h-[calc(100vh-70px)] flex-col transition-all duration-300 shadow-lg md:relative md:top-0 md:right-0 md:bg-transparent md:w-auto md:h-auto md:flex md:flex-row md:shadow-none"
-          }`}
-        >
-          <ul
-            className={`${
-              isOpen
-                ? "flex flex-col items-center w-full py-8"
-                : "hidden md:flex"
-            } list-none m-0 p-0`}
-          >
-            {" "}
-            <li className="mx-4 my-0 md:my-0 md:mx-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link
+              to="/"
+              className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                isActive("/")
+                  ? "bg-yellow-500 text-white shadow-lg"
+                  : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+              }`}
+              onClick={closeMenu}
+            >
+              {t("home")}
+            </Link>
+            <Link
+              to="/oil"
+              className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                isActive("/oil")
+                  ? "bg-yellow-500 text-white shadow-lg"
+                  : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+              }`}
+              onClick={closeMenu}
+            >
+              {t("our-oil")}
+            </Link>
+            <Link
+              to="/our-branches"
+              className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                isActive("/our-branches")
+                  ? "bg-yellow-500 text-white shadow-lg"
+                  : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+              }`}
+              onClick={closeMenu}
+            >
+              {t("our-branches")}
+            </Link>
+
+            {/* Contact Information */}
+            <div className="flex items-center space-x-4">
+              <div className={`text-sm font-semibold text-gray-600`}>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                  </svg>
+                  <span>+32 466 31 69 14</span>
+                </div>
+              </div>
+              <div className={`text-sm font-semibold text-gray-600`}>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                  </svg>
+                  <span>Orsa.t@hotmail.com</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setLanguage("en")}
+                className={`px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  language === "en"
+                    ? "bg-yellow-500 text-white shadow-lg"
+                    : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage("ar")}
+                className={`px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  language === "ar"
+                    ? "bg-yellow-500 text-white shadow-lg"
+                    : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                }`}
+              >
+                AR
+              </button>
+              <button
+                onClick={() => setLanguage("fr")}
+                className={`px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  language === "fr"
+                    ? "bg-yellow-500 text-white shadow-lg"
+                    : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                }`}
+              >
+                FR
+              </button>
+              <button
+                onClick={() => setLanguage("nl")}
+                className={`px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  language === "nl"
+                    ? "bg-yellow-500 text-white shadow-lg"
+                    : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                }`}
+              >
+                NL
+              </button>
+            </div>
+
+            {/* User Menu */}
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <Link
+                  to="/cart"
+                  className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    isActive("/cart")
+                      ? "bg-yellow-500 text-white shadow-lg"
+                      : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                  }`}
+                  onClick={closeMenu}
+                >
+                  {t("cart")}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    isScrolled
+                      ? "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                      : "text-white hover:text-red-300 hover:bg-white/10"
+                  }`}
+                >
+                  {t("logout")}
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/auth"
+                className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 ${
+                  isScrolled
+                    ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg"
+                    : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border border-white/30"
+                }`}
+                onClick={closeMenu}
+              >
+                {t("login")}
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={toggleMenu}
+              className={`p-2 rounded-lg transition-colors duration-300 ${
+                isScrolled
+                  ? "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                  : "text-white hover:text-emerald-300 hover:bg-white/10"
+              }`}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 backdrop-blur-md bg-white/95 border-b border-white/20 shadow-xl">
+            <div className="px-4 py-6 space-y-4">
               <Link
                 to="/"
-                onClick={() => setIsOpen(false)}
-                className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
+                className={`block px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                  isActive("/")
+                    ? "bg-emerald-500 text-white shadow-lg"
+                    : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                }`}
+                onClick={closeMenu}
               >
                 {t("home")}
               </Link>
-            </li>
-            <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
                 to="/oil"
-                onClick={() => setIsOpen(false)}
-                className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
+                className={`block px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                  isActive("/oil")
+                    ? "bg-emerald-500 text-white shadow-lg"
+                    : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                }`}
+                onClick={closeMenu}
               >
                 {t("our-oil")}
               </Link>
-            </li>
-            {/* <li className="mx-4 my-6 md:my-0 md:mx-4">
               <Link
-                to="/our-items"
-                className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
-              >
-                {t("our-items")}
-              </Link>
-            </li> */}{" "}
-            <li className="mx-4 my-6 md:my-0 md:mx-4">
-              <Link
-                to="/our-branches"
-                onClick={() => setIsOpen(false)}
-                className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
+                to="/branches"
+                className={`block px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                  isActive("/branches")
+                    ? "bg-emerald-500 text-white shadow-lg"
+                    : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                }`}
+                onClick={closeMenu}
               >
                 {t("our-branches")}
               </Link>
-            </li>{" "}
-            <li className="mx-4 my-6 md:my-0 md:mx-4">
-              <Link
-                to="/cart"
-                onClick={() => setIsOpen(false)}
-                className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Cart
-              </Link>
-            </li>{" "}
-            {user ? (
-              <li className="mx-4 my-6 md:my-0 md:mx-4">
-                <div className="flex items-center gap-4">
-                  <span className="text-[#333] font-medium">
-                    Welcome, {user.name || user.username}
-                  </span>
-                  <Dialog
-                    open={isLogoutDialogOpen}
-                    onOpenChange={setIsLogoutDialogOpen}
-                  >
-                    <DialogTrigger asChild>
-                      <button className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full">
-                        Logout
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Confirm Logout</DialogTitle>
-                        <DialogDescription>
-                          Are you sure you want to logout? You will be
-                          redirected to the home page.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter>
-                        <Button
-                          variant="outline"
-                          onClick={() => setIsLogoutDialogOpen(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          onClick={() => {
-                            logout();
-                            setIsLogoutDialogOpen(false);
-                            setIsOpen(false);
-                          }}
-                        >
-                          Logout
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+
+              {/* Mobile Contact Info */}
+              <div className="border-t border-gray-200 pt-4 space-y-2">
+                <div className="text-sm text-gray-600 flex items-center space-x-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                  </svg>
+                  <span>+32 466 31 69 14</span>
                 </div>
-              </li>
-            ) : (
-              <li className="mx-4 my-6 md:my-0 md:mx-4">
-                <Link
-                  to="/auth"
-                  onClick={() => setIsOpen(false)}
-                  className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
-                >
-                  Login
-                </Link>
-              </li>
-            )}
-            {/* <li className="mx-4 my-6 md:my-0 md:mx-4">
-              <Link
-                to="/our-offers"
-                className="text-[#333] no-underline font-medium transition-colors duration-300 hover:text-[#4a8e3b] relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:-bottom-[5px] after:left-0 after:bg-[#4a8e3b] after:transition-all after:duration-300 hover:after:w-full"
-              >
-                {t("our-offers")}
-              </Link>
-            </li> */}
-          </ul>
-        </div>
-
-        <div className="flex items-center">
-          <div className="relative mr-4">
-            <button
-              className="border border-[#4a8e3b] bg-transparent text-[#4a8e3b] py-2 px-4 rounded cursor-pointer transition-all duration-300 hover:bg-[#4a8e3b] hover:text-white flex items-center"
-              onClick={toggleLangMenu}
-            >
-              {t("toggle-language")}
-              <svg
-                className="w-4 h-4 ml-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={isLangMenuOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
-                />
-              </svg>
-            </button>
-
-            {isLangMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                <button
-                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
-                    language === "en" ? "bg-gray-100" : ""
-                  }`}
-                  onClick={() => {
-                    setLanguage("en");
-                    setIsLangMenuOpen(false);
-                  }}
-                >
-                  {t("english")}
-                </button>
-                <button
-                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
-                    language === "ar" ? "bg-gray-100" : ""
-                  }`}
-                  onClick={() => {
-                    setLanguage("ar");
-                    setIsLangMenuOpen(false);
-                  }}
-                >
-                  {t("arabic")}
-                </button>{" "}
-                <button
-                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
-                    language === "nl" ? "bg-gray-100" : ""
-                  }`}
-                  onClick={() => {
-                    setLanguage("nl");
-                    setIsLangMenuOpen(false);
-                  }}
-                >
-                  {t("dutch")}
-                </button>
-                <button
-                  className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
-                    language === "fr" ? "bg-gray-100" : ""
-                  }`}
-                  onClick={() => {
-                    setLanguage("fr");
-                    setIsLangMenuOpen(false);
-                  }}
-                >
-                  {t("french")}
-                </button>
+                <div className="text-sm text-gray-600 flex items-center space-x-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                  </svg>
+                  <span>+32 478 69 25 86</span>
+                </div>
+                <div className="text-sm text-gray-600 flex items-center space-x-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                  </svg>
+                  <span>Orsa.t@hotmail.com</span>
+                </div>
               </div>
-            )}
-          </div>
 
-          <div className="md:hidden cursor-pointer" onClick={toggleMenu}>
-            <div className="flex flex-col justify-between w-[30px] h-[21px]">
-              <span
-                className={`block h-[3px] w-full bg-[#333] transition-all duration-300 ${
-                  isOpen ? "transform translate-y-[9px] rotate-45" : ""
-                }`}
-              ></span>
-              <span
-                className={`block h-[3px] w-full bg-[#333] transition-all duration-300 ${
-                  isOpen ? "opacity-0" : ""
-                }`}
-              ></span>
-              <span
-                className={`block h-[3px] w-full bg-[#333] transition-all duration-300 ${
-                  isOpen ? "transform -translate-y-[9px] -rotate-45" : ""
-                }`}
-              ></span>
+              <div className="border-t border-gray-200 pt-4">
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setLanguage("en")}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      language === "en"
+                        ? "bg-yellow-500 text-white shadow-lg"
+                        : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                    }`}
+                  >
+                    English
+                  </button>
+                  <button
+                    onClick={() => setLanguage("ar")}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      language === "ar"
+                        ? "bg-yellow-500 text-white shadow-lg"
+                        : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                    }`}
+                  >
+                    العربية
+                  </button>
+                  <button
+                    onClick={() => setLanguage("fr")}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      language === "fr"
+                        ? "bg-yellow-500 text-white shadow-lg"
+                        : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                    }`}
+                  >
+                    Français
+                  </button>
+                  <button
+                    onClick={() => setLanguage("nl")}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      language === "nl"
+                        ? "bg-yellow-500 text-white shadow-lg"
+                        : "text-gray-700 hover:text-yellow-600 hover:bg-yellow-50"
+                    }`}
+                  >
+                    Nederlands
+                  </button>
+                </div>
+              </div>
+
+              {/* Mobile User Menu */}
+              <div className="border-t border-gray-200 pt-4">
+                {user ? (
+                  <div className="space-y-2">
+                    <Link
+                      to="/cart"
+                      className={`block px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                        isActive("/cart")
+                          ? "bg-emerald-500 text-white shadow-lg"
+                          : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                      }`}
+                      onClick={closeMenu}
+                    >
+                      {t("cart")}
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-3 rounded-lg font-semibold text-gray-700 hover:text-red-600 hover:bg-red-50 transition-all duration-300"
+                    >
+                      {t("logout")}
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    to="/auth"
+                    className="block px-4 py-3 rounded-lg font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-all duration-300 text-center"
+                    onClick={closeMenu}
+                  >
+                    {t("login")}
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Floating WhatsApp Button */}
+      <a 
+        href="https://wa.me/32478692586" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="fixed bottom-8 right-8 z-50 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 hover:shadow-green-500/25 animate-pulse"
+      >
+        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12.04 2c-5.45 0-9.91 4.46-9.91 9.91 0 1.75.46 3.45 1.35 4.96l-1.4 5.15 5.25-1.37c1.45.79 3.08 1.22 4.71 1.22 5.45 0 9.91-4.46 9.91-9.91s-4.46-9.91-9.91-9.91zm.04 1.5c4.6 0 8.41 3.74 8.41 8.41 0 4.6-3.74 8.41-8.41 8.41-1.58 0-3.1-.44-4.4-1.22l-4.5 1.18 1.2-4.4c-.8-1.3-1.2-2.8-1.2-4.4 0-4.6 3.74-8.41 8.41-8.41zm-2.3 3.4c-.2-.1-.4-.2-.6-.2-.2 0-.4 0-.6.1-.2.1-.4.2-.5.4-.1.2-.2.4-.2.6s.1.4.2.6c.1.2.3.3.5.4.2.1.4.1.6.1.2 0 .4-.1.6-.2.2-.1.4-.2.5-.4.1-.2.2-.4.2-.6s-.1-.4-.2-.6c-.1-.2-.3-.3-.5-.4zm3.8 0c-.2-.1-.4-.2-.6-.2-.2 0-.4 0-.6.1-.2.1-.4.2-.5.4-.1.2-.2.4-.2.6s.1.4.2.6c.1.2.3.3.5.4.2.1.4.1.6.1.2 0 .4-.1.6-.2.2-.1.4-.2.5-.4.1-.2.2-.4.2-.6s-.1-.4-.2-.6c-.1-.2-.3-.3-.5-.4zm3.8 0c-.2-.1-.4-.2-.6-.2-.2 0-.4 0-.6.1-.2.1-.4.2-.5.4-.1.2-.2.4-.2.6s.1.4.2.6c.1.2.3.3.5.4.2.1.4.1.6.1.2 0 .4-.1.6-.2.2-.1.4-.2.5-.4.1-.2.2-.4.2-.6s-.1-.4-.2-.6c-.1-.2-.3-.3-.5-.4z"/>
+        </svg>
+      </a>
     </nav>
   );
 };
 
 export default Navbar;
+

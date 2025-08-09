@@ -9,7 +9,6 @@ const Footer = () => {
       <div className="flex flex-wrap justify-between max-w-7xl mx-auto px-8">
         <div className="flex-1 min-w-[250px] mb-8">
           <h3 className="text-[#4a8e3b] mb-4 text-xl">ORSA GROUP</h3>
-          <p className="mb-2 leading-relaxed">{t("footer-description")}</p>
         </div>
 
         <div className="flex-1 min-w-[250px] mb-8">
