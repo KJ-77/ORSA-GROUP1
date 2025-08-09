@@ -37,7 +37,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 backdrop-blur-md bg-white/90 shadow-xl border-b border-white/20`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 backdrop-blur-md bg-white/90 shadow-xl border-b border-white/20`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Enhanced Logo Section */}
@@ -45,9 +47,9 @@ const Navbar = () => {
             <div className="relative">
               {/* Logo with 3D effects */}
               <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-yellow-600/30 shadow-2xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 bg-yellow-600/10">
-                <img 
-                  src="/new-orsa-logo.jpg" 
-                  alt="ORSA Logo" 
+                <img
+                  src="/new-orsa-logo.jpg"
+                  alt="ORSA Logo"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-125"
                 />
               </div>
@@ -56,10 +58,14 @@ const Navbar = () => {
               <div className="absolute -inset-2 rounded-full border border-yellow-500/30 animate-ping"></div>
             </div>
             <div className="flex flex-col">
-                <span className={`text-2xl font-black tracking-wider transition-colors duration-300 text-yellow-700 group-hover:text-yellow-600`}>
+              <span
+                className={`text-2xl font-black tracking-wider transition-colors duration-300 text-yellow-700 group-hover:text-yellow-600`}
+              >
                 ORSA
               </span>
-              <span className={`text-sm font-semibold transition-colors duration-300 text-gray-600`}>
+              <span
+                className={`text-sm font-semibold transition-colors duration-300 text-gray-600`}
+              >
                 Premium Olive Oil
               </span>
             </div>
@@ -105,17 +111,25 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <div className={`text-sm font-semibold text-gray-600`}>
                 <div className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
                   <span>+32 466 31 69 14</span>
                 </div>
               </div>
               <div className={`text-sm font-semibold text-gray-600`}>
                 <div className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
                   <span>Orsa.t@hotmail.com</span>
                 </div>
@@ -193,11 +207,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/auth"
-                className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 ${
-                  isScrolled
-                    ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg"
-                    : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border border-white/30"
-                }`}
+                className="px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg"
                 onClick={closeMenu}
               >
                 {t("login")}
@@ -215,11 +225,26 @@ const Navbar = () => {
                   : "text-white hover:text-emerald-300 hover:bg-white/10"
               }`}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -267,21 +292,33 @@ const Navbar = () => {
               {/* Mobile Contact Info */}
               <div className="border-t border-gray-200 pt-4 space-y-2">
                 <div className="text-sm text-gray-600 flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
                   <span>+32 466 31 69 14</span>
                 </div>
                 <div className="text-sm text-gray-600 flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
                   <span>+32 478 69 25 86</span>
                 </div>
                 <div className="text-sm text-gray-600 flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
                   <span>Orsa.t@hotmail.com</span>
                 </div>
@@ -368,21 +405,8 @@ const Navbar = () => {
           </div>
         )}
       </div>
-
-      {/* Floating WhatsApp Button */}
-      <a 
-        href="https://wa.me/32478692586" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="fixed bottom-8 right-8 z-50 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 hover:shadow-green-500/25 animate-pulse"
-      >
-        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12.04 2c-5.45 0-9.91 4.46-9.91 9.91 0 1.75.46 3.45 1.35 4.96l-1.4 5.15 5.25-1.37c1.45.79 3.08 1.22 4.71 1.22 5.45 0 9.91-4.46 9.91-9.91s-4.46-9.91-9.91-9.91zm.04 1.5c4.6 0 8.41 3.74 8.41 8.41 0 4.6-3.74 8.41-8.41 8.41-1.58 0-3.1-.44-4.4-1.22l-4.5 1.18 1.2-4.4c-.8-1.3-1.2-2.8-1.2-4.4 0-4.6 3.74-8.41 8.41-8.41zm-2.3 3.4c-.2-.1-.4-.2-.6-.2-.2 0-.4 0-.6.1-.2.1-.4.2-.5.4-.1.2-.2.4-.2.6s.1.4.2.6c.1.2.3.3.5.4.2.1.4.1.6.1.2 0 .4-.1.6-.2.2-.1.4-.2.5-.4.1-.2.2-.4.2-.6s-.1-.4-.2-.6c-.1-.2-.3-.3-.5-.4zm3.8 0c-.2-.1-.4-.2-.6-.2-.2 0-.4 0-.6.1-.2.1-.4.2-.5.4-.1.2-.2.4-.2.6s.1.4.2.6c.1.2.3.3.5.4.2.1.4.1.6.1.2 0 .4-.1.6-.2.2-.1.4-.2.5-.4.1-.2.2-.4.2-.6s-.1-.4-.2-.6c-.1-.2-.3-.3-.5-.4zm3.8 0c-.2-.1-.4-.2-.6-.2-.2 0-.4 0-.6.1-.2.1-.4.2-.5.4-.1.2-.2.4-.2.6s.1.4.2.6c.1.2.3.3.5.4.2.1.4.1.6.1.2 0 .4-.1.6-.2.2-.1.4-.2.5-.4.1-.2.2-.4.2-.6s-.1-.4-.2-.6c-.1-.2-.3-.3-.5-.4z"/>
-        </svg>
-      </a>
     </nav>
   );
 };
 
 export default Navbar;
-
