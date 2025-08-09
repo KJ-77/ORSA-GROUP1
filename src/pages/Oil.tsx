@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -28,25 +28,20 @@ const defaultProductImages = [
 
 const Oil = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const selectedFilter = "all"; // Static filter value since filtering UI is not implemented
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentImage, setCurrentImage] = useState("");
 
   const headerRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   const qualityRef = useRef<HTMLDivElement>(null);
 
-  const openImageModal = (imageSrc: string) => {
-    setCurrentImage(imageSrc);
-    setIsModalOpen(true);
-  };
-
-  const closeImageModal = () => {
-    setIsModalOpen(false);
-    setCurrentImage("");
+  const handleImageClick = (productId: number) => {
+    console.log("Image clicked for product ID:", productId);
+    console.log("Navigating to:", `/oil/${productId}`);
+    navigate(`/oil/${productId}`);
   };
 
   // Function to fetch products
@@ -346,27 +341,24 @@ const Oil = () => {
                 </div>
 
                 {/* Enhanced Image Container */}
-                <div className="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                <div
+                  className="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 cursor-pointer"
+                  onClick={() => handleImageClick(product.id)}
+                >
                   <img
                     src={
                       defaultProductImages[index % defaultProductImages.length]
                     }
                     alt={product.name}
                     className="w-full h-80 object-cover transition-transform duration-1000 group-hover:scale-125 cursor-pointer"
-                    onClick={() =>
-                      openImageModal(
-                        defaultProductImages[
-                          index % defaultProductImages.length
-                        ]
-                      )
-                    }
+                    onClick={() => handleImageClick(product.id)}
                   />
 
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
                   {/* Floating Heart Icon */}
-                  <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110">
+                  <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110 pointer-events-none">
                     <div className="w-12 h-12 bg-white/20 rounded-full backdrop-blur-md flex items-center justify-center border border-white/30 shadow-xl">
                       <svg
                         className="w-6 h-6 text-white"
@@ -383,7 +375,7 @@ const Oil = () => {
                   </div>
 
                   {/* Glassmorphism Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 backdrop-blur-sm"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 backdrop-blur-sm pointer-events-none"></div>
                 </div>
 
                 {/* Enhanced Content */}
@@ -527,28 +519,6 @@ const Oil = () => {
           </div>
         </div>
       </section>
-
-      {/* Image Modal */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-          onClick={closeImageModal}
-        >
-          <div className="relative bg-white rounded-lg overflow-hidden max-w-3xl max-h-full w-full">
-            <button
-              className="absolute top-2 right-2 text-white text-3xl font-bold p-2 z-10"
-              onClick={closeImageModal}
-            >
-              &times;
-            </button>
-            <img
-              src={currentImage}
-              alt="Product Image"
-              className="w-full h-auto object-contain"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

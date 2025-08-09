@@ -409,13 +409,6 @@ const OilDetail = () => {
                     </svg>
                     Add to Cart
                   </button>
-                  <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-5 px-8 rounded-2xl font-bold text-xl transition-all duration-500 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl transform hover:scale-105 hover:-translate-y-1">
-                    <svg className="w-6 h-6 inline mr-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                    </svg>
-                    Contact Us
-                  </button>
                 </div>
                 
                 {/* Stock Status */}
