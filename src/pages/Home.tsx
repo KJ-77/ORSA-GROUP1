@@ -1,14 +1,23 @@
 import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { OfferPopup } from "../components/Offer-popup";
+import { useOfferPopup } from "@/hooks/useOfferPopup";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  // Popup hooks
+  const salePopup = useOfferPopup();
+  const discountPopup = useOfferPopup();
+  const newsPopup = useOfferPopup();
+
   const headerRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
@@ -414,6 +423,13 @@ const Home = () => {
       repeat: -1,
       ease: "none",
     });
+
+    // Auto-open sale popup after 2 seconds (you can customize this)
+    const timer = setTimeout(() => {
+      salePopup.openPopup();
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -422,7 +438,7 @@ const Home = () => {
       <div
         ref={headerRef}
         className="min-h-screen flex items-center justify-center text-center bg-cover bg-center relative text-white overflow-hidden"
-        style={{ backgroundImage: `url(\"/new-background.jpg\")` }}
+        style={{ backgroundImage: `url("/new-background.jpg")` }}
       >
         {/* Advanced Background Effects */}
         <div className="hero-overlay absolute inset-0 bg-gradient-to-br from-black/40 via-transparent to-black/60"></div>
@@ -958,6 +974,46 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Offer Popups */}
+      <OfferPopup
+        isOpen={salePopup.isOpen}
+        onClose={salePopup.closePopup}
+        title="🔥 MEGA SALE! 50% OFF"
+        description="Limited time offer on our premium Lebanese olive oil collection. High-quality oils at unbeatable prices. Sale ends in 24 hours!"
+        imageUrl="/oil1.jpg"
+        imageAlt="Premium oils on sale"
+        buttonText="Shop Sale Items"
+        buttonLink="/oil"
+        type="sale"
+      />
+
+      <OfferPopup
+        isOpen={discountPopup.isOpen}
+        onClose={discountPopup.closePopup}
+        title="💰 Special Discount - 30% OFF"
+        description="Get 30% off on all orders above $100. Use code SAVE30 at checkout. Valid for new and existing customers."
+        imageUrl="/oil2.jpg"
+        imageAlt="Discount offer"
+        buttonText="Apply Discount"
+        onButtonClick={() => {
+          console.log("Discount applied!");
+          navigate("/cart");
+        }}
+        type="discount"
+      />
+
+      <OfferPopup
+        isOpen={newsPopup.isOpen}
+        onClose={newsPopup.closePopup}
+        title="📢 New Products Available!"
+        description="We've just added new premium oil varieties to our collection. Discover exotic flavors and premium quality oils from Lebanon."
+        imageUrl="/oil3.jpg"
+        imageAlt="New oil products"
+        buttonText="Explore New Products"
+        buttonLink="/oil?filter=new"
+        type="news"
+      />
     </div>
   );
 };
