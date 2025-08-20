@@ -96,7 +96,7 @@ const Navbar = () => {
               }`}
               onClick={closeMenu}
             >
-              {t("our-oil")}
+              {t("our-products")}
             </Link>
             <Link
               to="/our-branches"
@@ -277,7 +277,7 @@ const Navbar = () => {
                 }`}
                 onClick={closeMenu}
               >
-                {t("our-oil")}
+                {t("our-products")}
               </Link>
               <Link
                 to="/our-branches"

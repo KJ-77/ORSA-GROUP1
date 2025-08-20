@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { OfferPopup } from "../components/Offer-popup";
+import { useOfferPopup } from "@/hooks/useOfferPopup";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -33,6 +35,11 @@ const Oil = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const selectedFilter = "all"; // Static filter value since filtering UI is not implemented
+
+  // Popup hooks
+  const salePopup = useOfferPopup();
+  const discountPopup = useOfferPopup();
+  const newsPopup = useOfferPopup();
 
   const headerRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
@@ -69,6 +76,13 @@ const Oil = () => {
 
   useEffect(() => {
     fetchProducts();
+
+    // Auto-open sale popup after 2 seconds (you can customize this)
+    const timer = setTimeout(() => {
+      salePopup.openPopup(); //change popup type and text at the end of code
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -276,7 +290,7 @@ const Oil = () => {
       <div
         ref={headerRef}
         className="py-32 bg-cover bg-center relative overflow-hidden"
-        style={{ backgroundImage: `url(\"/new-background.jpg\")` }}
+        style={{ backgroundImage: `url("/new-background.jpg")` }}
       >
         {/* Advanced Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70"></div>
@@ -308,7 +322,7 @@ const Oil = () => {
             </div>
 
             <h1 className="text-5xl md:text-7xl text-center text-transparent bg-gradient-to-r from-white via-emerald-200 to-cyan-200 bg-clip-text mb-8 font-black">
-              {t("our-oil")}
+              {t("our-products")}
             </h1>
             <p className="text-lg md:text-2xl text-center text-gray-200 max-w-4xl mx-auto leading-relaxed">
               Discover our premium collection of Lebanese olive oils, crafted
@@ -394,7 +408,7 @@ const Oil = () => {
                   {/* Price and Stock */}
                   <div className="flex justify-between items-center mb-6">
                     <div className="text-3xl font-black text-emerald-600">
-                      ${product.price}
+                      €{product.price}
                     </div>
                     <div
                       className={`px-4 py-2 rounded-full text-sm font-bold ${
@@ -519,6 +533,46 @@ const Oil = () => {
           </div>
         </div>
       </section>
+
+      {/* Offer Popups */}
+      <OfferPopup
+        isOpen={salePopup.isOpen}
+        onClose={salePopup.closePopup}
+        title="🔥 MEGA SALE! 50% OFF"
+        description="Limited time offer on our premium Lebanese olive oil collection. High-quality oils at unbeatable prices. Sale ends in 24 hours!"
+        imageUrl="/oil1.jpg"
+        imageAlt="Premium oils on sale"
+        buttonText="Shop Sale Items"
+        buttonLink="/oil"
+        type="sale"
+      />
+
+      <OfferPopup
+        isOpen={discountPopup.isOpen}
+        onClose={discountPopup.closePopup}
+        title="💰 Special Discount - 30% OFF"
+        description="Get 30% off on all orders above $100. Use code SAVE30 at checkout. Valid for new and existing customers."
+        imageUrl="/oil2.jpg"
+        imageAlt="Discount offer"
+        buttonText="Apply Discount"
+        onButtonClick={() => {
+          console.log("Discount applied!");
+          navigate("/cart");
+        }}
+        type="discount"
+      />
+
+      <OfferPopup
+        isOpen={newsPopup.isOpen}
+        onClose={newsPopup.closePopup}
+        title="📢 New Products Available!"
+        description="We've just added new premium oil varieties to our collection. Discover exotic flavors and premium quality oils from Lebanon."
+        imageUrl="/oil3.jpg"
+        imageAlt="New oil products"
+        buttonText="Explore New Products"
+        buttonLink="/oil?filter=new"
+        type="news"
+      />
     </div>
   );
 };

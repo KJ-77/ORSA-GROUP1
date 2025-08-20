@@ -228,7 +228,7 @@ const Cart = () => {
                       </p>
                       <div className="flex justify-between items-center">
                         <p className="text-xl font-bold text-[#4a8e3b]">
-                          ${product.price}
+                          €{product.price}
                         </p>
                         <div className="flex gap-2">
                           <Link
@@ -258,13 +258,13 @@ const Cart = () => {
                     <span className="text-gray-600">
                       Items ({cartProducts.length}):
                     </span>
-                    <span className="font-semibold">${calculateTotal()}</span>
+                    <span className="font-semibold">€{calculateTotal()}</span>
                   </div>
                   <div className="border-t pt-4">
                     <div className="flex justify-between items-center mb-4">
                       <span className="text-xl font-semibold">Total:</span>
                       <span className="text-xl font-bold text-[#4a8e3b]">
-                        ${calculateTotal()}
+                        €{calculateTotal()}
                       </span>
                     </div>
                     <button className="w-full bg-[#4a8e3b] text-white py-3 px-6 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]">

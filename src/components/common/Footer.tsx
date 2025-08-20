@@ -27,7 +27,7 @@ const Footer = () => {
                 to="/oil"
                 className="text-[#ddd] no-underline transition-colors duration-300 hover:text-[#4a8e3b]"
               >
-                {t("our-oil")}
+                {t("our-products")}
               </Link>
             </li>
             {/* <li className="mb-2">

@@ -301,7 +301,7 @@ const OilDetail = () => {
               </Link>
               <span className="text-emerald-400">→</span>
               <Link to="/oil" className="hover:text-emerald-400 transition-colors duration-300 font-semibold">
-                Our Oil
+                Our Products
               </Link>
               <span className="text-emerald-400">→</span>
               <span className="text-emerald-300 font-bold">{product.name}</span>
@@ -416,7 +416,7 @@ const OilDetail = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-2xl font-black text-emerald-700">
-                        ${product.price}
+                        €{product.price}
                       </p>
                       <p className="text-emerald-600 font-semibold">
                         {product.quantity > 0
