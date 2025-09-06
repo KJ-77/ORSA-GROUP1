@@ -102,7 +102,23 @@ const Cart = () => {
         (product) => product !== null
       ) as ApiProduct[];
 
-      setCartProducts(validProducts);
+      // Update products with quantity (default to 1 for now)
+      const productsWithQuantity = validProducts.map((product) => ({
+        ...product,
+        quantity: 1, // You can enhance this later to support different quantities
+      }));
+
+      setCartProducts(productsWithQuantity);
+
+      // Update localStorage with proper cart format for checkout
+      const checkoutCart = productsWithQuantity.map((product) => ({
+        id: product.id.toString(),
+        name: product.name,
+        price: parseFloat(product.price),
+        quantity: product.quantity,
+        image: product.primaryImage,
+      }));
+      localStorage.setItem("cart", JSON.stringify(checkoutCart));
     } catch (err) {
       console.error("Error loading cart products:", err);
       setError("Failed to load cart products. Please try again later.");
@@ -267,7 +283,10 @@ const Cart = () => {
                         €{calculateTotal()}
                       </span>
                     </div>
-                    <button className="w-full bg-[#4a8e3b] text-white py-3 px-6 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]">
+                    <button
+                      onClick={() => navigate("/checkout")}
+                      className="w-full bg-[#4a8e3b] text-white py-3 px-6 rounded font-semibold transition-all duration-300 hover:bg-[#3b7e2c]"
+                    >
                       Proceed to Checkout
                     </button>
                   </div>
