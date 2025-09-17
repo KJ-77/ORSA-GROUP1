@@ -6,8 +6,22 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 interface StripeProviderProps {
   children: React.ReactNode;
+  clientSecret?: string;
 }
 
-export const StripeProvider: React.FC<StripeProviderProps> = ({ children }) => {
-  return <Elements stripe={stripePromise}>{children}</Elements>;
+export const StripeProvider: React.FC<StripeProviderProps> = ({
+  children,
+  clientSecret,
+}) => {
+  const options = clientSecret
+    ? {
+        clientSecret,
+      }
+    : {};
+
+  return (
+    <Elements stripe={stripePromise} options={options}>
+      {children}
+    </Elements>
+  );
 };

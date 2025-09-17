@@ -34,7 +34,8 @@ const Checkout: React.FC = () => {
       const createPaymentIntent = async () => {
         try {
           const apiUrl =
-            import.meta.env.VITE_API_URL || "http://localhost:3001";
+            import.meta.env.VITE_API_URL ||
+            "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com";
           const response = await fetch(`${apiUrl}/api/create-payment-intent`, {
             method: "POST",
             headers: {
@@ -129,14 +130,23 @@ const Checkout: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
-        <StripeProvider>
-          <CheckoutForm
-            clientSecret={clientSecret}
-            onSuccess={handlePaymentSuccess}
-            onError={handlePaymentError}
-            cart={cart}
-          />
-        </StripeProvider>
+        {clientSecret ? (
+          <StripeProvider clientSecret={clientSecret}>
+            <CheckoutForm
+              clientSecret={clientSecret}
+              onSuccess={handlePaymentSuccess}
+              onError={handlePaymentError}
+              cart={cart}
+            />
+          </StripeProvider>
+        ) : (
+          <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-500 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Initializing payment...</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

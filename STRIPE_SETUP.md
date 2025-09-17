@@ -7,8 +7,8 @@ This project integrates Stripe payment processing into the ORSA olive oil e-comm
 ### Frontend (.env in root directory)
 
 ```
-VITE_STRIPE_PUBLISHABLE_KEY=pk_live_51RpXokLdSoUxQBJkJyZbMFQefVdKnLaTtCEb8DuPyc7cQTGzyCfp467ceRrwHTiFUucHznjjqXTBEWctGsVDh5Mm00ymL42fbv
-VITE_API_URL=http://localhost:3001
+VITE_STRIPE_PUBLISHABLE_KEY=pk_live_51RpXokLdSoUxQBJkJyZbMFQefVdKnLaTtCEb8DuPyc7cQTGzyCfp467ceRrwHTiFUucHznjqXTBEWctGsVDh5Mm00ymL42fbv
+VITE_API_URL=https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com
 ```
 
 ### Backend (backend/.env)
