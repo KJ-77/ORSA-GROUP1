@@ -43,7 +43,7 @@ export function OfferPopupDemo() {
         isOpen={discountPopup.isOpen}
         onClose={discountPopup.closePopup}
         title="💰 Special Discount - 30% OFF"
-        description="Get 30% off on all orders above $100. Use code SAVE30 at checkout. Valid for new and existing customers."
+        description="Get 30% off on all orders above €100. Use code SAVE30 at checkout. Valid for new and existing customers."
         imageUrl="/oil2.jpg"
         imageAlt="Discount offer"
         buttonText="Apply Discount"

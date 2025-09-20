@@ -91,13 +91,13 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
             <span>
               {item.name} x {item.quantity}
             </span>
-            <span>${(item.price * item.quantity).toFixed(2)}</span>
+            <span>€{(item.price * item.quantity).toFixed(2)}</span>
           </div>
         ))}
         <div className="border-t pt-2 mt-4">
           <div className="flex justify-between items-center font-bold text-lg">
             <span>Total</span>
-            <span>${calculateTotal().toFixed(2)}</span>
+            <span>€{calculateTotal().toFixed(2)}</span>
           </div>
         </div>
       </div>
@@ -206,7 +206,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
               : "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl transform hover:scale-[1.02]"
           }`}
         >
-          {isLoading ? "Processing..." : `Pay $${calculateTotal().toFixed(2)}`}
+          {isLoading ? "Processing..." : `Pay €${calculateTotal().toFixed(2)}`}
         </button>
       </form>
 

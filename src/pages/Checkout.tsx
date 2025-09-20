@@ -49,7 +49,7 @@ const Checkout: React.FC = () => {
                   0
                 ) * 100
               ), // Convert to cents
-              currency: "usd",
+              currency: "eur",
               items: parsedCart,
             }),
           });

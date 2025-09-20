@@ -10,7 +10,7 @@ async function testCreatePaymentIntent() {
       },
       body: JSON.stringify({
         amount: 2500, // $25.00 in cents
-        currency: "usd",
+        currency: "eur",
         items: [
           {
             id: "1",
