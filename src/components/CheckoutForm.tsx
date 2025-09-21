@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   useStripe,
   useElements,
   PaymentElement,
 } from "@stripe/react-stripe-js";
+import { useAuth } from "../context/AuthContext";
 
 interface CheckoutFormProps {
   clientSecret: string;
-  onSuccess: () => void;
+  onSuccess: (customerInfo: {
+    name: string;
+    email: string;
+    address: string;
+    city: string;
+    country: string;
+  }) => void;
   onError: (error: string) => void;
   cart: Array<{
     id: string;
@@ -25,6 +32,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
 }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
@@ -33,6 +41,18 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
     city: "",
     country: "",
   });
+
+  // Pre-populate customer info with authenticated user data
+  useEffect(() => {
+    if (user) {
+      setCustomerInfo((prev) => ({
+        ...prev,
+        name: user.name || user.attributes?.given_name || "",
+        email: user.email || user.attributes?.email || "",
+        address: user.attributes?.address || "",
+      }));
+    }
+  }, [user]);
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -68,7 +88,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
       if (error) {
         onError(error.message || "Payment failed");
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        onSuccess();
+        onSuccess(customerInfo);
       }
     } catch {
       onError("An unexpected error occurred");
