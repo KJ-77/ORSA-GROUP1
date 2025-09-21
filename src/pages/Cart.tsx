@@ -4,6 +4,14 @@ import { useAuth } from "../context/AuthContext";
 
 // API Product interface (same as in Oil.tsx)
 
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+}
+
 const Cart = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -59,16 +67,33 @@ const Cart = () => {
 
   // Function to remove item from cart
   const removeFromCart = (productId: number) => {
+    // Update the displayed products first
+    setCartProducts((prev) =>
+      prev.filter((product) => product.id !== productId)
+    );
+
+    // Update localStorage - remove the product from cart
     const existingCart = localStorage.getItem("cart");
     if (existingCart) {
-      const cartItems: number[] = JSON.parse(existingCart);
-      const updatedCartItems = cartItems.filter((id) => id !== productId);
-      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      const cartItems = JSON.parse(existingCart);
 
-      // Update the displayed products
-      setCartProducts((prev) =>
-        prev.filter((product) => product.id !== productId)
-      );
+      // Handle both old format (array of IDs) and new format (array of objects)
+      let updatedCartItems;
+      if (typeof cartItems[0] === "number") {
+        // Old format: array of product IDs
+        updatedCartItems = cartItems.filter((id: number) => id !== productId);
+      } else {
+        // New format: array of cart objects
+        updatedCartItems = cartItems.filter(
+          (item: CartItem) => parseInt(item.id) !== productId
+        );
+      }
+
+      if (updatedCartItems.length === 0) {
+        localStorage.removeItem("cart");
+      } else {
+        localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      }
     }
   };
 
@@ -76,6 +101,52 @@ const Cart = () => {
   const clearCart = () => {
     localStorage.removeItem("cart");
     setCartProducts([]);
+  };
+
+  // Function to update product quantity
+  const updateQuantity = (productId: number, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+
+    setCartProducts((prev) =>
+      prev.map((product) =>
+        product.id === productId
+          ? { ...product, quantity: newQuantity }
+          : product
+      )
+    );
+
+    // Update localStorage with new quantities
+    const updatedProducts = cartProducts.map((product) =>
+      product.id === productId ? { ...product, quantity: newQuantity } : product
+    );
+
+    const checkoutCart = updatedProducts.map((product) => ({
+      id: product.id.toString(),
+      name: product.name,
+      price: parseFloat(product.price),
+      quantity: product.quantity,
+      image: product.primaryImage,
+    }));
+    localStorage.setItem("cart", JSON.stringify(checkoutCart));
+  };
+
+  // Function to increment quantity
+  const incrementQuantity = (productId: number) => {
+    const product = cartProducts.find((p) => p.id === productId);
+    if (product) {
+      updateQuantity(productId, product.quantity + 1);
+    }
+  };
+
+  // Function to decrement quantity
+  const decrementQuantity = (productId: number) => {
+    const product = cartProducts.find((p) => p.id === productId);
+    if (product) {
+      updateQuantity(productId, product.quantity - 1);
+    }
   };
   // Function to load cart products
   const loadCartProducts = useCallback(async () => {
@@ -85,7 +156,7 @@ const Cart = () => {
 
       // Get cart items from localStorage
       const existingCart = localStorage.getItem("cart");
-      const cartItems: number[] = existingCart ? JSON.parse(existingCart) : [];
+      const cartItems = existingCart ? JSON.parse(existingCart) : [];
 
       if (cartItems.length === 0) {
         setCartProducts([]);
@@ -93,24 +164,51 @@ const Cart = () => {
         return;
       }
 
-      // Fetch all products in cart
-      const productPromises = cartItems.map((id) => fetchProductById(id));
-      const products = await Promise.all(productPromises);
+      // Check if cart items are in the new format (with quantities) or old format (just IDs)
+      const isOldFormat = typeof cartItems[0] === "number";
 
-      // Filter out any null results (failed fetches)
-      const validProducts = products.filter(
-        (product) => product !== null
-      ) as ApiProduct[];
+      let productsWithQuantity: ApiProduct[] = [];
 
-      // Update products with quantity (default to 1 for now)
-      const productsWithQuantity = validProducts.map((product) => ({
-        ...product,
-        quantity: 1, // You can enhance this later to support different quantities
-      }));
+      if (isOldFormat) {
+        // Handle old format: array of product IDs
+        const productPromises = cartItems.map((id: number) =>
+          fetchProductById(id)
+        );
+        const products = await Promise.all(productPromises);
+
+        // Filter out any null results (failed fetches)
+        const validProducts = products.filter(
+          (product) => product !== null
+        ) as ApiProduct[];
+
+        // Update products with default quantity of 1
+        productsWithQuantity = validProducts.map((product) => ({
+          ...product,
+          quantity: 1,
+        }));
+      } else {
+        // Handle new format: array of cart items with quantities
+        const productPromises = cartItems.map((item: CartItem) =>
+          fetchProductById(parseInt(item.id))
+        );
+        const products = await Promise.all(productPromises);
+
+        // Filter out any null results and combine with stored quantities
+        productsWithQuantity = products
+          .map((product, index) => {
+            if (!product) return null;
+            const cartItem = cartItems[index];
+            return {
+              ...product,
+              quantity: cartItem.quantity || 1,
+            };
+          })
+          .filter((product) => product !== null) as ApiProduct[];
+      }
 
       setCartProducts(productsWithQuantity);
 
-      // Update localStorage with proper cart format for checkout
+      // Always update localStorage with proper cart format for checkout
       const checkoutCart = productsWithQuantity.map((product) => ({
         id: product.id.toString(),
         name: product.name,
@@ -131,9 +229,14 @@ const Cart = () => {
   const calculateTotal = () => {
     return cartProducts
       .reduce((total, product) => {
-        return total + parseFloat(product.price);
+        return total + parseFloat(product.price) * product.quantity;
       }, 0)
       .toFixed(2);
+  };
+
+  // Calculate total quantity of items
+  const calculateTotalQuantity = () => {
+    return cartProducts.reduce((total, product) => total + product.quantity, 0);
   };
   useEffect(() => {
     // Redirect to login if user is not authenticated
@@ -210,7 +313,8 @@ const Cart = () => {
             <div>
               <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-semibold text-gray-800">
-                  Cart Items ({cartProducts.length})
+                  Cart Items ({cartProducts.length} products,{" "}
+                  {calculateTotalQuantity()} total items)
                 </h2>
                 <button
                   onClick={clearCart}
@@ -242,10 +346,51 @@ const Cart = () => {
                       <p className="text-gray-600 mb-4">
                         {product.description}
                       </p>
+
+                      {/* Quantity Controls */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <span className="text-gray-700 font-medium">
+                          Quantity:
+                        </span>
+                        <div className="flex items-center border border-gray-300 rounded">
+                          <button
+                            onClick={() => decrementQuantity(product.id)}
+                            className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-lg font-semibold"
+                            disabled={product.quantity <= 1}
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            value={product.quantity}
+                            onChange={(e) => {
+                              const newQuantity = parseInt(e.target.value) || 1;
+                              updateQuantity(product.id, newQuantity);
+                            }}
+                            className="w-16 px-2 py-1 text-center border-0 focus:outline-none"
+                            min="1"
+                          />
+                          <button
+                            onClick={() => incrementQuantity(product.id)}
+                            className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-lg font-semibold"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
                       <div className="flex justify-between items-center">
-                        <p className="text-xl font-bold text-[#4a8e3b]">
-                          €{product.price}
-                        </p>
+                        <div>
+                          <p className="text-lg font-semibold text-gray-700">
+                            €{product.price} each
+                          </p>
+                          <p className="text-xl font-bold text-[#4a8e3b]">
+                            Total: €
+                            {(
+                              parseFloat(product.price) * product.quantity
+                            ).toFixed(2)}
+                          </p>
+                        </div>
                         <div className="flex gap-2">
                           <Link
                             to={`/oil/${product.id}`}
@@ -272,7 +417,7 @@ const Cart = () => {
                   <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-gray-600">
-                      Items ({cartProducts.length}):
+                      Items ({calculateTotalQuantity()} total):
                     </span>
                     <span className="font-semibold">€{calculateTotal()}</span>
                   </div>
