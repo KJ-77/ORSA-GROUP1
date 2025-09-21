@@ -169,9 +169,9 @@ const Checkout: React.FC = () => {
       console.log("Order created:", orderResponse);
 
       // Create order items
-      if (orderResponse.id) {
-        console.log("Creating order items for order:", orderResponse.id);
-        await createOrderItems(orderResponse.id, cart);
+      if (orderResponse.orderId) {
+        console.log("Creating order items for order:", orderResponse.orderId);
+        await createOrderItems(orderResponse.orderId, cart);
         console.log("Order items created successfully");
       } else {
         console.warn("Order created but no ID returned, skipping order items");
