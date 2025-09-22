@@ -8,13 +8,23 @@ import { useAuth } from "../context/AuthContext";
 
 interface CheckoutFormProps {
   clientSecret: string;
-  onSuccess: (customerInfo: {
-    name: string;
-    email: string;
-    address: string;
-    city: string;
-    country: string;
-  }) => void;
+  onSuccess: (
+    customerInfo: {
+      name: string;
+      email: string;
+      address: string;
+      city: string;
+      country: string;
+    },
+    paymentIntent: {
+      id: string;
+      amount: number;
+      currency: string;
+      status: string;
+      created?: number;
+      payment_method?: string;
+    }
+  ) => void;
   onError: (error: string) => void;
   cart: Array<{
     id: string;
@@ -88,7 +98,17 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
       if (error) {
         onError(error.message || "Payment failed");
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        onSuccess(customerInfo);
+        onSuccess(customerInfo, {
+          id: paymentIntent.id,
+          amount: paymentIntent.amount,
+          currency: paymentIntent.currency,
+          status: paymentIntent.status,
+          created: paymentIntent.created,
+          payment_method:
+            typeof paymentIntent.payment_method === "string"
+              ? paymentIntent.payment_method
+              : paymentIntent.payment_method?.id || undefined,
+        });
       }
     } catch {
       onError("An unexpected error occurred");

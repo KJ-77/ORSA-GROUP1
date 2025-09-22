@@ -140,27 +140,50 @@ const Checkout: React.FC = () => {
     }
   }, [navigate]);
 
-  const handlePaymentSuccess = async (customerInfo: {
-    name: string;
-    email: string;
-    address: string;
-    city: string;
-    country: string;
-  }) => {
+  const handlePaymentSuccess = async (
+    customerInfo: {
+      name: string;
+      email: string;
+      address: string;
+      city: string;
+      country: string;
+    },
+    paymentIntent: {
+      id: string;
+      amount: number;
+      currency: string;
+      status: string;
+      created?: number;
+      payment_method?: string;
+    }
+  ) => {
     try {
+      // Log Stripe payment information
+      console.log("=== STRIPE PAYMENT SUCCESS ===");
+      console.log("Transaction ID:", paymentIntent.id);
+      console.log("Amount (in cents):", paymentIntent.amount);
+      console.log("Amount (in euros):", paymentIntent.amount / 100);
+      console.log("Currency:", paymentIntent.currency);
+      console.log("Status:", paymentIntent.status);
+      console.log(
+        "Created:",
+        paymentIntent.created ? new Date(paymentIntent.created * 1000) : "N/A"
+      );
+      console.log("Payment Method ID:", paymentIntent.payment_method || "N/A");
+      console.log("Full Payment Intent:", paymentIntent);
+      console.log("==============================");
       // Calculate total price
       const totalPrice = cart.reduce(
         (total, item) => total + item.price * item.quantity,
         0
       );
 
-
       // Prepare order data
       const orderData = {
         user_name: customerInfo.name || user?.name || "Guest",
         user_location: `${customerInfo.address}, ${customerInfo.city}, ${customerInfo.country}`,
         order_status: "In Progress",
-        total_price: (totalPrice - totalPrice),
+        total_price: totalPrice - totalPrice,
         user_id: user?.username || undefined,
       };
 
