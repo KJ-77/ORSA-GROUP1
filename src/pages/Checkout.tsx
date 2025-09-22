@@ -154,12 +154,13 @@ const Checkout: React.FC = () => {
         0
       );
 
+
       // Prepare order data
       const orderData = {
         user_name: customerInfo.name || user?.name || "Guest",
         user_location: `${customerInfo.address}, ${customerInfo.city}, ${customerInfo.country}`,
         order_status: "In Progress",
-        total_price: totalPrice,
+        total_price: (totalPrice - totalPrice),
         user_id: user?.username || undefined,
       };
 
@@ -167,6 +168,9 @@ const Checkout: React.FC = () => {
       console.log("Creating order with data:", orderData);
       const orderResponse = await createOrder(orderData);
       console.log("Order created:", orderResponse);
+
+      // Add timeout before creating order items
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
 
       // Create order items
       if (orderResponse.orderId) {
