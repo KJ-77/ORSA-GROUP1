@@ -177,7 +177,13 @@ const OilDetail = () => {
   }, [id]);
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
     if (!loading && product) {
+      // Clear any existing ScrollTriggers
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
       // Ultra-enhanced header animation
       if (headerRef.current) {
         const breadcrumb = headerRef.current.querySelector(".breadcrumb");
@@ -328,6 +334,11 @@ const OilDetail = () => {
         });
       }
     }
+
+    // Cleanup function to kill ScrollTriggers when component unmounts
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
   }, [loading, product]);
 
   if (loading) {
