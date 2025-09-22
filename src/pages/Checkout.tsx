@@ -172,19 +172,15 @@ const Checkout: React.FC = () => {
       console.log("Payment Method ID:", paymentIntent.payment_method || "N/A");
       console.log("Full Payment Intent:", paymentIntent);
       console.log("==============================");
-      // Calculate total price
-      const totalPrice = cart.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      );
 
       // Prepare order data
       const orderData = {
         user_name: customerInfo.name || user?.name || "Guest",
         user_location: `${customerInfo.address}, ${customerInfo.city}, ${customerInfo.country}`,
         order_status: "In Progress",
-        total_price: totalPrice - totalPrice,
+        total_price: paymentIntent.amount / 100, // Convert cents to euros
         user_id: user?.username || undefined,
+        stripe_id: paymentIntent.id || undefined,
       };
 
       // Create order in database
