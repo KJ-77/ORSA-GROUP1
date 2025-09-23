@@ -44,6 +44,12 @@ interface AuthContextType {
   signup: (signupData: SignupData) => Promise<string>;
   confirmSignup: (username: string, code: string) => Promise<void>;
   resendConfirmationCode: (username: string) => Promise<void>;
+  forgotPassword: (username: string) => Promise<void>;
+  confirmPasswordReset: (
+    username: string,
+    code: string,
+    newPassword: string
+  ) => Promise<void>;
   logout: () => void;
   loading: boolean;
   error: string | null;
@@ -409,6 +415,72 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (username: string): Promise<void> => {
+    setLoading(true);
+    setError(null);
+
+    return new Promise((resolve, reject) => {
+      const userData = {
+        Username: username,
+        Pool: userPool,
+      };
+
+      const cognitoUser = new CognitoUser(userData);
+
+      cognitoUser.forgotPassword({
+        onSuccess: () => {
+          console.log("Password reset code sent successfully");
+          setLoading(false);
+          resolve();
+        },
+        onFailure: (err) => {
+          console.error("Forgot password error:", err);
+          setError(err.message || "An error occurred while sending reset code");
+          setLoading(false);
+          reject(err);
+        },
+        inputVerificationCode: () => {
+          // This callback is called when the verification code is sent
+          console.log("Verification code sent");
+          setLoading(false);
+          resolve();
+        },
+      });
+    });
+  };
+
+  const confirmPasswordReset = async (
+    username: string,
+    code: string,
+    newPassword: string
+  ): Promise<void> => {
+    setLoading(true);
+    setError(null);
+
+    return new Promise((resolve, reject) => {
+      const userData = {
+        Username: username,
+        Pool: userPool,
+      };
+
+      const cognitoUser = new CognitoUser(userData);
+
+      cognitoUser.confirmPassword(code, newPassword, {
+        onSuccess: () => {
+          console.log("Password reset successful");
+          setLoading(false);
+          resolve();
+        },
+        onFailure: (err) => {
+          console.error("Password reset confirmation error:", err);
+          setError(err.message || "An error occurred while resetting password");
+          setLoading(false);
+          reject(err);
+        },
+      });
+    });
+  };
+
   const logout = () => {
     const currentUser = userPool.getCurrentUser();
     if (currentUser) {
@@ -423,6 +495,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signup,
     confirmSignup,
     resendConfirmationCode,
+    forgotPassword,
+    confirmPasswordReset,
     logout,
     loading,
     error,

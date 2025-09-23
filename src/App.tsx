@@ -9,6 +9,7 @@ import OilDetail from "./pages/OilDetail";
 import OurBranches from "./pages/OurBranches";
 import Cart from "./pages/Cart";
 import Auth from "./pages/Auth";
+import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 
@@ -31,6 +32,7 @@ function App() {
               <Route path="/payment-success" element={<PaymentSuccess />} />
               <Route path="/our-branches" element={<OurBranches />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               {/* <Route
                   path="/our-items"
                   element={<div>Our Items Page (to be implemented)</div>}
