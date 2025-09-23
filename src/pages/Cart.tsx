@@ -1,8 +1,29 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 // API Product interface (same as in Oil.tsx)
+interface ApiProduct {
+  id: number;
+  name: string;
+  price: string;
+  quantity: number;
+  description: string;
+  primaryImage?: string;
+}
+
+// API Image interface
+interface ApiImage {
+  id: number;
+  product_id: number;
+  image_url: string;
+  image_key: string;
+  alt_text: string | null;
+  display_order: number;
+  is_primary: number;
+  created_at: string;
+  updated_at: string;
+}
 
 interface CartItem {
   id: string;
@@ -16,27 +37,25 @@ const Cart = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [cartProducts, setCartProducts] = useState<ApiProduct[]>([]);
+  const [productImages, setProductImages] = useState<
+    Record<number, ApiImage[]>
+  >({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  interface ApiProduct {
-    id: number;
-    name: string;
-    price: string;
-    quantity: number;
-    description: string;
-    primaryImage?: string;
-  }
-  const defaultProductImages = [
-    "/oil1.jpg",
-    "/oil2.jpg",
-    "/oil3.jpg",
-    "/oil4.jpg",
-    "/oil5.jpg",
-    "/oil6.jpg",
-    "/oil21.jpg",
-    "/oil22.jpg",
-    "/oil23.jpg",
-  ];
+  const defaultProductImages = useMemo(
+    () => [
+      "/oil1.jpg",
+      "/oil2.jpg",
+      "/oil3.jpg",
+      "/oil4.jpg",
+      "/oil5.jpg",
+      "/oil6.jpg",
+      "/oil21.jpg",
+      "/oil22.jpg",
+      "/oil23.jpg",
+    ],
+    []
+  );
   // Function to fetch a single product by ID
   const fetchProductById = useCallback(
     async (productId: number): Promise<ApiProduct | null> => {
@@ -58,6 +77,52 @@ const Cart = () => {
       }
     },
     []
+  );
+
+  // Function to fetch images for all products
+  const fetchAllProductImages = useCallback(async (products: ApiProduct[]) => {
+    const imagePromises = products.map(async (product) => {
+      try {
+        const response = await fetch(
+          `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${product.id}/images`
+        );
+
+        if (!response.ok) {
+          console.warn(`Failed to fetch images for product ${product.id}`);
+          return { productId: product.id, images: [] };
+        }
+
+        const images: ApiImage[] = await response.json();
+        return { productId: product.id, images };
+      } catch (error) {
+        console.warn(`Error fetching images for product ${product.id}:`, error);
+        return { productId: product.id, images: [] };
+      }
+    });
+
+    const results = await Promise.all(imagePromises);
+    const imagesMap: Record<number, ApiImage[]> = {};
+
+    results.forEach(({ productId, images }) => {
+      imagesMap[productId] = images;
+    });
+
+    setProductImages(imagesMap);
+  }, []);
+
+  // Function to get display image for a product
+  const getProductDisplayImage = useCallback(
+    (productId: number, index: number) => {
+      const images = productImages[productId];
+      if (images && images.length > 0) {
+        // Find primary image or use first image
+        const primaryImage = images.find((img) => img.is_primary === 1);
+        return primaryImage ? primaryImage.image_url : images[0].image_url;
+      }
+      // Fallback to default images
+      return defaultProductImages[index % defaultProductImages.length];
+    },
+    [productImages, defaultProductImages]
   );
 
   // Function to get default product image
@@ -104,34 +169,23 @@ const Cart = () => {
   };
 
   // Function to update product quantity
-  const updateQuantity = (productId: number, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      removeFromCart(productId);
-      return;
-    }
+  const updateQuantity = useCallback(
+    (productId: number, newQuantity: number) => {
+      if (newQuantity <= 0) {
+        removeFromCart(productId);
+        return;
+      }
 
-    setCartProducts((prev) =>
-      prev.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: newQuantity }
-          : product
-      )
-    );
-
-    // Update localStorage with new quantities
-    const updatedProducts = cartProducts.map((product) =>
-      product.id === productId ? { ...product, quantity: newQuantity } : product
-    );
-
-    const checkoutCart = updatedProducts.map((product) => ({
-      id: product.id.toString(),
-      name: product.name,
-      price: parseFloat(product.price),
-      quantity: product.quantity,
-      image: product.primaryImage,
-    }));
-    localStorage.setItem("cart", JSON.stringify(checkoutCart));
-  };
+      setCartProducts((prev) =>
+        prev.map((product) =>
+          product.id === productId
+            ? { ...product, quantity: newQuantity }
+            : product
+        )
+      );
+    },
+    []
+  );
 
   // Function to increment quantity
   const incrementQuantity = (productId: number) => {
@@ -208,22 +262,15 @@ const Cart = () => {
 
       setCartProducts(productsWithQuantity);
 
-      // Always update localStorage with proper cart format for checkout
-      const checkoutCart = productsWithQuantity.map((product) => ({
-        id: product.id.toString(),
-        name: product.name,
-        price: parseFloat(product.price),
-        quantity: product.quantity,
-        image: product.primaryImage,
-      }));
-      localStorage.setItem("cart", JSON.stringify(checkoutCart));
+      // Fetch images for all products
+      await fetchAllProductImages(productsWithQuantity);
     } catch (err) {
       console.error("Error loading cart products:", err);
       setError("Failed to load cart products. Please try again later.");
     } finally {
       setLoading(false);
     }
-  }, [fetchProductById]);
+  }, [fetchProductById, fetchAllProductImages]);
 
   // Calculate total price
   const calculateTotal = () => {
@@ -246,6 +293,20 @@ const Cart = () => {
     }
     loadCartProducts();
   }, [loadCartProducts, user, navigate]);
+
+  // Update localStorage cart with correct images when productImages are loaded
+  useEffect(() => {
+    if (cartProducts.length > 0 && Object.keys(productImages).length > 0) {
+      const checkoutCart = cartProducts.map((product, index) => ({
+        id: product.id.toString(),
+        name: product.name,
+        price: parseFloat(product.price),
+        quantity: product.quantity,
+        image: getProductDisplayImage(product.id, index),
+      }));
+      localStorage.setItem("cart", JSON.stringify(checkoutCart));
+    }
+  }, [cartProducts, productImages, getProductDisplayImage]);
   return (
     <div className="w-full min-h-screen">
       {/* Page Header */}
@@ -331,7 +392,7 @@ const Cart = () => {
                     className="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row gap-6"
                   >
                     <img
-                      src={product.primaryImage || getProductImage(index)}
+                      src={getProductDisplayImage(product.id, index)}
                       alt={product.name}
                       className="w-full md:w-32 h-32 object-cover rounded"
                       onError={(e) => {
