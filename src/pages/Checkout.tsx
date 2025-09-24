@@ -99,36 +99,84 @@ const Checkout: React.FC = () => {
       // Create payment intent
       const createPaymentIntent = async () => {
         try {
+          // Validate cart data
+          const validationErrors: string[] = [];
+          parsedCart.forEach((item: CartItem, index: number) => {
+            if (!item.id)
+              validationErrors.push(`Item ${index + 1}: Missing ID`);
+            if (!item.name)
+              validationErrors.push(`Item ${index + 1}: Missing name`);
+            if (typeof item.price !== "number" || item.price <= 0)
+              validationErrors.push(
+                `Item ${index + 1}: Invalid price - ${item.price}`
+              );
+            if (typeof item.quantity !== "number" || item.quantity <= 0)
+              validationErrors.push(
+                `Item ${index + 1}: Invalid quantity - ${item.quantity}`
+              );
+          });
+
+          if (validationErrors.length > 0) {
+            console.error("Cart validation errors:", validationErrors);
+            setError(`Cart validation failed: ${validationErrors.join(", ")}`);
+            return;
+          }
+
+          const totalAmount = Math.round(
+            parsedCart.reduce(
+              (total: number, item: CartItem) =>
+                total + item.price * item.quantity,
+              0
+            ) * 100
+          );
+
+          // For Stripe payment intent, we only need amount and currency
+          // The items will be stored in our database when payment succeeds
+          const requestPayload = {
+            amount: totalAmount,
+            currency: "eur",
+            itemCount: parsedCart.length,
+            description: `Order with ${parsedCart.length} item${
+              parsedCart.length > 1 ? "s" : ""
+            }`,
+          };
+
           const apiUrl =
             import.meta.env.VITE_API_URL ||
             "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com";
+
           const response = await fetch(`${apiUrl}/api/create-payment-intent`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              amount: Math.round(
-                parsedCart.reduce(
-                  (total: number, item: CartItem) =>
-                    total + item.price * item.quantity,
-                  0
-                ) * 100
-              ), // Convert to cents
-              currency: "eur",
-              items: parsedCart,
-            }),
+            body: JSON.stringify(requestPayload),
           });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("API Error Response:", errorText);
+            setError(
+              `Payment service error: ${response.status} ${response.statusText}`
+            );
+            return;
+          }
 
           const data = await response.json();
 
           if (data.clientSecret) {
             setClientSecret(data.clientSecret);
           } else {
-            setError("Failed to initialize payment");
+            console.error("No client secret in response:", data);
+            setError(
+              "Failed to initialize payment - no client secret received"
+            );
           }
-        } catch {
-          setError("Failed to connect to payment service");
+        } catch (error) {
+          console.error("Payment intent creation error:", error);
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+          setError(`Failed to connect to payment service: ${errorMessage}`);
         } finally {
           setIsLoading(false);
         }
@@ -189,7 +237,7 @@ const Checkout: React.FC = () => {
       console.log("Order created:", orderResponse);
 
       // Add timeout before creating order items
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
+      // await new Promise((resolve) => setTimeout(resolve, 1000)); 1 second delay
 
       // Create order items
       if (orderResponse.orderId) {

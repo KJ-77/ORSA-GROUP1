@@ -93,6 +93,7 @@ const Cart = () => {
         }
 
         const images: ApiImage[] = await response.json();
+
         return { productId: product.id, images };
       } catch (error) {
         console.warn(`Error fetching images for product ${product.id}:`, error);
@@ -304,6 +305,7 @@ const Cart = () => {
         quantity: product.quantity,
         image: getProductDisplayImage(product.id, index),
       }));
+
       localStorage.setItem("cart", JSON.stringify(checkoutCart));
     }
   }, [cartProducts, productImages, getProductDisplayImage]);
