@@ -26,6 +26,9 @@ const translations: { [key: string]: { [key: string]: string } } = {
     cart: "Cart",
     login: "Login",
     logout: "Logout",
+    "confirm-logout": "Confirm Logout",
+    "logout-message": "Are you sure you want to logout? You will need to sign in again to access your account.",
+    cancel: "Cancel",
     "product-details": "Product Details",
   },
   ar: {
@@ -43,6 +46,9 @@ const translations: { [key: string]: { [key: string]: string } } = {
     cart: "السلة",
     login: "تسجيل الدخول",
     logout: "تسجيل الخروج",
+    "confirm-logout": "تأكيد تسجيل الخروج",
+    "logout-message": "هل أنت متأكد من رغبتك في تسجيل الخروج؟ ستحتاج إلى تسجيل الدخول مرة أخرى للوصول إلى حسابك.",
+    cancel: "إلغاء",
     "product-details": "تفاصيل المنتج",
   },
   fr: {
@@ -60,6 +66,9 @@ const translations: { [key: string]: { [key: string]: string } } = {
     cart: "Panier",
     login: "Connexion",
     logout: "Déconnexion",
+    "confirm-logout": "Confirmer la Déconnexion",
+    "logout-message": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
+    cancel: "Annuler",
     "product-details": "Détails du Produit",
   },
   nl: {
@@ -77,6 +86,9 @@ const translations: { [key: string]: { [key: string]: string } } = {
     cart: "Winkelwagen",
     login: "Inloggen",
     logout: "Uitloggen",
+    "confirm-logout": "Uitloggen Bevestigen",
+    "logout-message": "Weet je zeker dat je wilt uitloggen? Je moet opnieuw inloggen om toegang te krijgen tot je account.",
+    cancel: "Annuleren",
     "product-details": "Productdetails",
   },
 };
