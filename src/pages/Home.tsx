@@ -424,12 +424,16 @@ const Home = () => {
       ease: "none",
     });
 
-    // Auto-open sale popup after 2 seconds (you can customize this)
-    const timer = setTimeout(() => {
-      salePopup.openPopup();
-    }, 2000);
 
-    return () => clearTimeout(timer);
+
+    //FOR POPUP
+
+    // Auto-open sale popup after 2 seconds (you can customize this)
+    // const timer = setTimeout(() => {
+    //   salePopup.openPopup();
+    // }, 2000);
+    // return () => clearTimeout(timer);
+
   }, []);
 
   return (
@@ -641,157 +645,6 @@ const Home = () => {
                 <span className="stat-number">100</span>%
               </h3>
               <p className="text-xl text-gray-200">Customer Satisfaction</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ultra-Enhanced Products Section */}
-      <section
-        ref={productsRef}
-        className="py-40 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden"
-      >
-        <div className="parallax-element absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent"></div>
-
-        <div className="max-w-7xl mx-auto px-8 relative z-10">
-          <h2 className="products-title text-6xl text-center text-transparent bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text mb-20 font-black">
-            Our Premium Products
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {/* Product Card 1 */}
-            <div className="product-card backdrop-blur-md bg-white/90 rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-4xl group relative transform-gpu perspective-1000 border border-white/20">
-              <div className="card-image relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                <img
-                  src="/oil1.jpg"
-                  alt="Extra Virgin Olive Oil"
-                  className="w-full h-72 object-cover transition-transform duration-1000 group-hover:scale-125"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110">
-                  <div className="w-10 h-10 bg-white/20 rounded-full backdrop-blur-md flex items-center justify-center border border-white/30">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 backdrop-blur-sm"></div>
-              </div>
-              <div className="card-content p-8 relative">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-emerald-50 to-transparent rounded-bl-3xl opacity-50"></div>
-                <h3 className="text-3xl mb-4 text-gray-800 font-black group-hover:text-emerald-700 transition-colors duration-500">
-                  Extra Virgin Olive Oil
-                </h3>
-                <p className="mb-6 text-gray-600 leading-relaxed text-lg line-clamp-3">
-                  Our finest oil, hand-picked and cold-pressed for exceptional
-                  flavor and health benefits.
-                </p>
-                <Link
-                  to="/oil/1"
-                  className="inline-flex items-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-6 rounded-full font-bold transition-all duration-500 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl transform hover:scale-105"
-                >
-                  View Details
-                  <span className="ml-2">→</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Product Card 2 */}
-            <div className="product-card backdrop-blur-md bg-white/90 rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-4xl group relative transform-gpu perspective-1000 border border-white/20">
-              <div className="card-image relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                <img
-                  src="/oil2.jpg"
-                  alt="Organic Olive Oil"
-                  className="w-full h-72 object-cover transition-transform duration-1000 group-hover:scale-125"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110">
-                  <div className="w-10 h-10 bg-white/20 rounded-full backdrop-blur-md flex items-center justify-center border border-white/30">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 backdrop-blur-sm"></div>
-              </div>
-              <div className="card-content p-8 relative">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-emerald-50 to-transparent rounded-bl-3xl opacity-50"></div>
-                <h3 className="text-3xl mb-4 text-gray-800 font-black group-hover:text-emerald-700 transition-colors duration-500">
-                  Organic Olive Oil
-                </h3>
-                <p className="mb-6 text-gray-600 leading-relaxed text-lg line-clamp-3">
-                  Sustainably produced, this organic oil offers a balanced
-                  flavor and rich nutritional value.
-                </p>
-                <Link
-                  to="/oil/2"
-                  className="inline-flex items-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-6 rounded-full font-bold transition-all duration-500 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl transform hover:scale-105"
-                >
-                  View Details
-                  <span className="ml-2">→</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Product Card 3 */}
-            <div className="product-card backdrop-blur-md bg-white/90 rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 hover:shadow-4xl group relative transform-gpu perspective-1000 border border-white/20">
-              <div className="card-image relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                <img
-                  src="/oil3.jpg"
-                  alt="Garlic Infused Olive Oil"
-                  className="w-full h-72 object-cover transition-transform duration-1000 group-hover:scale-125"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110">
-                  <div className="w-10 h-10 bg-white/20 rounded-full backdrop-blur-md flex items-center justify-center border border-white/30">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 backdrop-blur-sm"></div>
-              </div>
-              <div className="card-content p-8 relative">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-emerald-50 to-transparent rounded-bl-3xl opacity-50"></div>
-                <h3 className="text-3xl mb-4 text-gray-800 font-black group-hover:text-emerald-700 transition-colors duration-500">
-                  Garlic Infused Olive Oil
-                </h3>
-                <p className="mb-6 text-gray-600 leading-relaxed text-lg line-clamp-3">
-                  Aromatic and versatile, perfect for adding depth to your
-                  culinary creations.
-                </p>
-                <Link
-                  to="/oil/3"
-                  className="inline-flex items-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-6 rounded-full font-bold transition-all duration-500 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl transform hover:scale-105"
-                >
-                  View Details
-                  <span className="ml-2">→</span>
-                </Link>
-              </div>
             </div>
           </div>
         </div>

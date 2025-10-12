@@ -59,8 +59,8 @@ const Footer = () => {
 
         <div className="flex-1 min-w-[250px] mb-8">
           <h3 className="text-[#4a8e3b] mb-4 text-xl">{t("contact-us")}</h3>
-          <p className="mb-2">{t("email")}: info@orsagroup.com</p>
-          <p className="mb-2">{t("phone")}: +123-456-7890</p>
+          <p className="mb-2">{t("email")}: Orsa.t@hotmail.com</p>
+          <p className="mb-2">{t("phone")}: +32 466 31 69 14</p>
           <div className="flex gap-4 mt-4">
             {/* Social media links will go here */}
           </div>
