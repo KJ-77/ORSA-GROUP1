@@ -125,14 +125,14 @@ const OurBranches = () => {
     {
       id: 1,
       name: "Lebanon Headquarters",
-      address: "Beirut Central District, Lebanon",
+      address: "Hasbaiyya, Lebanon",
       phone: "+32 466 31 69 14",
       hours: "Mon-Fri: 9:00 AM - 6:00 PM",
       description:
         "Our main headquarters in the heart of Lebanon, serving as the central hub for all European operations.",
-      mapUrl: "https://maps.google.com/?q=Beirut+Central+District,+Lebanon",
+      mapUrl: "https://maps.app.goo.gl/ssy116Siht1TmBz5A",
       mapEmbed:
-        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13249.114069868514!2d35.50229724249348!3d33.89633563239309!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151f17215880a78f%3A0x729182bae99836b4!2sBeirut%20Central%20District%2C%20Beirut%2C%20Lebanon!5e0!3m2!1sen!2sus!4v1652690749261!5m2!1sen!2sus",
+        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d548218.1678235683!2d35.8649574809203!3d33.70424846532812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151ec69cc4ea1465%3A0xe5a197746f6edd48!2sHasbaiyya!5e1!3m2!1sen!2slb!4v1760279671628!5m2!1sen!2slb",
       isHeadquarters: true,
     },
     {
