@@ -86,21 +86,21 @@ const OurBranches = () => {
   const branches = [
     {
       id: 1,
-      name: "Brussels Headquarters",
-      address: "Rue de la Loi 123, 1040 Brussels, Belgium",
+      name: "Lebanon Headquarters",
+      address: "Beirut Central District, Lebanon",
       phone: "+32 466 31 69 14",
-      email: "brussels@orsa.be",
+      email: "beirut@orsa.be",
       hours: "Mon-Fri: 9:00 AM - 6:00 PM",
-      description: "Our main headquarters in the heart of Brussels, serving as the central hub for all European operations.",
+      description: "Our main headquarters in the heart of Lebanon, serving as the central hub for all European operations.",
       image: "/pic72.jpg",
       isHeadquarters: true
     },
     {
       id: 2,
-      name: "Antwerp Distribution Center",
-      address: "Noorderlaan 45, 2030 Antwerp, Belgium",
+      name: "Beelgium Distribution Center",
+      address: "Grotewinkellaan 80, 1853 Grimbergen, Belgium",
       phone: "+32 478 69 25 86",
-      email: "antwerp@orsa.be",
+      email: "belgium@orsa.be",
       hours: "Mon-Sat: 8:00 AM - 7:00 PM",
       description: "Our primary distribution center handling logistics and wholesale operations across Belgium and Netherlands.",
       image: "/pic74.jpg",
@@ -154,7 +154,7 @@ const OurBranches = () => {
         </div>
       </div>
 
-      {/* Ultra-Enhanced Branches Section */}
+      {/* Ultra-Enhanced Branches Section -----------------------------------------------------------------------------------------------*/ }
       <section ref={branchesRef} className="py-40 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         <div className="parallax-bg absolute inset-0 bg-gradient-to-br from-yellow-50/50 to-transparent"></div>
         
