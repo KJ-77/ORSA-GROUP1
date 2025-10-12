@@ -127,7 +127,6 @@ const OurBranches = () => {
       name: "Lebanon Headquarters",
       address: "Beirut Central District, Lebanon",
       phone: "+32 466 31 69 14",
-      email: "beirut@orsa.be",
       hours: "Mon-Fri: 9:00 AM - 6:00 PM",
       description:
         "Our main headquarters in the heart of Lebanon, serving as the central hub for all European operations.",
@@ -138,10 +137,9 @@ const OurBranches = () => {
     },
     {
       id: 2,
-      name: "Beelgium Distribution Center",
+      name: "Belgium Distribution Center",
       address: "Grotewinkellaan 80, 1853 Grimbergen, Belgium",
       phone: "+32 478 69 25 86",
-      email: "belgium@orsa.be",
       hours: "Mon-Sat: 8:00 AM - 7:00 PM",
       description:
         "Our primary distribution center handling logistics and wholesale operations across Belgium and Netherlands.",
@@ -151,20 +149,19 @@ const OurBranches = () => {
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2516.9295886847384!2d4.36675731577342!3d50.92686817954371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c24765f9f333%3A0x605c157948878c46!2sGrotewinkellaan%2080%2C%201853%20Grimbergen%2C%20Belgium!5e0!3m2!1sen!2sus!4v1652690859615!5m2!1sen!2sus",
       isHeadquarters: false,
     },
-    {
-      id: 3,
-      name: "Ghent Retail Store",
-      address: "Korenlei 78, 9000 Ghent, Belgium",
-      phone: "+32 478 69 25 86",
-      email: "ghent@orsa.be",
-      hours: "Tue-Sun: 10:00 AM - 8:00 PM",
-      description:
-        "Our flagship retail store offering the complete range of ORSA olive oils and tasting experiences.",
-      mapUrl: "https://maps.google.com/?q=Korenlei+78,+9000+Ghent,+Belgium",
-      mapEmbed:
-        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2507.9472638547365!2d3.7194527157416227!3d51.05407787956251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c371b7b1b1b1b1%3A0x7a7a7a7a7a7a7a7a!2sKorenlei%2078%2C%209000%20Gent%2C%20Belgium!5e0!3m2!1sen!2sus!4v1652690949461!5m2!1sen!2sus",
-      isHeadquarters: false,
-    },
+    // {
+    //   id: 3,
+    //   name: "Ghent Retail Store",
+    //   address: "Korenlei 78, 9000 Ghent, Belgium",
+    //   phone: "+32 478 69 25 86",
+    //   hours: "Tue-Sun: 10:00 AM - 8:00 PM",
+    //   description:
+    //     "Our flagship retail store offering the complete range of ORSA olive oils and tasting experiences.",
+    //   mapUrl: "https://maps.google.com/?q=Korenlei+78,+9000+Ghent,+Belgium",
+    //   mapEmbed:
+    //     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2507.9472638547365!2d3.7194527157416227!3d51.05407787956251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c371b7b1b1b1b1%3A0x7a7a7a7a7a7a7a7a!2sKorenlei%2078%2C%209000%20Gent%2C%20Belgium!5e0!3m2!1sen!2sus!4v1652690949461!5m2!1sen!2sus",
+    //   isHeadquarters: false,
+    // },
   ];
 
   return (
@@ -326,27 +323,6 @@ const OurBranches = () => {
                       </div>
 
                       <div className="flex items-start space-x-4">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg
-                            className="w-4 h-4 text-white"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="text-gray-800 font-semibold text-sm md:text-base">
-                            Email
-                          </p>
-                          <p className="text-gray-600 text-xs md:text-sm">
-                            {branch.email}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start space-x-4">
                         <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
                           <svg
                             className="w-4 h-4 text-white"
@@ -371,19 +347,13 @@ const OurBranches = () => {
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
+                    {/* Action Button */}
                     <div className="flex gap-4">
                       <a
                         href={`tel:${branch.phone}`}
-                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-full font-bold text-center transition-all duration-500 hover:from-green-600 hover:to-emerald-700 hover:shadow-xl transform hover:scale-105"
+                        className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-full font-bold text-center transition-all duration-500 hover:from-green-600 hover:to-emerald-700 hover:shadow-xl transform hover:scale-105"
                       >
                         Call Now
-                      </a>
-                      <a
-                        href={`mailto:${branch.email}`}
-                        className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-600 text-white py-3 px-6 rounded-full font-bold text-center transition-all duration-500 hover:from-blue-600 hover:to-cyan-700 hover:shadow-xl transform hover:scale-105"
-                      >
-                        Send Email
                       </a>
                     </div>
                   </div>
