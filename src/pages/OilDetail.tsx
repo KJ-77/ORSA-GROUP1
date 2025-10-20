@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useLanguage } from "../context/LanguageContext";
+// import { useLanguage } from "../context/LanguageContext"; // Not currently used
 import { useAuth } from "../context/AuthContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -50,7 +50,7 @@ const defaultProductImages = [
 ];
 
 const OilDetail = () => {
-  const {} = useLanguage();
+  // const {} = useLanguage(); // Not currently used
   const { user } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -59,13 +59,40 @@ const OilDetail = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [allProductIds, setAllProductIds] = useState<number[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(-1);
 
   const headerRef = useRef<HTMLDivElement>(null);
   const productRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
 
+  // Function to fetch all product IDs
+  const fetchAllProductIds = useCallback(async () => {
+    try {
+      const response = await fetch(
+        "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products"
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: ApiProduct[] = await response.json();
+      const ids = data.map((product) => product.id).sort((a, b) => a - b);
+      setAllProductIds(ids);
+
+      // Find current index
+      if (id) {
+        const index = ids.indexOf(parseInt(id));
+        setCurrentIndex(index);
+      }
+    } catch (err) {
+      console.error("Error fetching product IDs:", err);
+    }
+  }, [id]);
+
   // Function to fetch product details
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -85,10 +112,10 @@ const OilDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   // Function to fetch product images
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async () => {
     try {
       const response = await fetch(
         `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${id}/images`
@@ -103,6 +130,21 @@ const OilDetail = () => {
       setImages(data);
     } catch (error) {
       console.warn(`Error fetching images for product ${id}:`, error);
+    }
+  }, [id]);
+
+  // Navigation functions
+  const goToNextProduct = () => {
+    if (currentIndex >= 0 && currentIndex < allProductIds.length - 1) {
+      const nextId = allProductIds[currentIndex + 1];
+      navigate(`/oil/${nextId}`);
+    }
+  };
+
+  const goToPreviousProduct = () => {
+    if (currentIndex > 0) {
+      const prevId = allProductIds[currentIndex - 1];
+      navigate(`/oil/${prevId}`);
     }
   };
 
@@ -171,8 +213,9 @@ const OilDetail = () => {
     if (id) {
       fetchProduct();
       fetchImages();
+      fetchAllProductIds();
     }
-  }, [id]);
+  }, [id, fetchProduct, fetchImages, fetchAllProductIds]);
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -344,7 +387,7 @@ const OilDetail = () => {
       <div
         ref={headerRef}
         className="py-20 bg-cover bg-center relative overflow-hidden"
-        style={{ backgroundImage: `url(\"/new-background.jpg\")` }}
+        style={{ backgroundImage: `url("/new-background.jpg")` }}
       >
         {/* Advanced Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70"></div>
@@ -385,6 +428,57 @@ const OilDetail = () => {
         className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/30 to-transparent"></div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={goToPreviousProduct}
+          disabled={currentIndex <= 0}
+          className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl ${
+            currentIndex <= 0
+              ? "bg-gray-300 cursor-not-allowed opacity-50"
+              : "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 hover:scale-110 hover:shadow-2xl"
+          }`}
+          aria-label="Previous product"
+        >
+          <svg
+            className="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={3}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <button
+          onClick={goToNextProduct}
+          disabled={currentIndex >= allProductIds.length - 1 || currentIndex === -1}
+          className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl ${
+            currentIndex >= allProductIds.length - 1 || currentIndex === -1
+              ? "bg-gray-300 cursor-not-allowed opacity-50"
+              : "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 hover:scale-110 hover:shadow-2xl"
+          }`}
+          aria-label="Next product"
+        >
+          <svg
+            className="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={3}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
 
         <div className="max-w-7xl mx-auto px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -529,7 +623,7 @@ const OilDetail = () => {
       <section
         ref={detailsRef}
         className="py-32 bg-cover bg-center relative overflow-hidden"
-        style={{ backgroundImage: `url(\"/new-background.jpg\")` }}
+        style={{ backgroundImage: `url("/new-background.jpg")` }}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/80"></div>
 
