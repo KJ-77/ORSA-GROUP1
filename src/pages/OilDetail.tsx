@@ -595,11 +595,7 @@ const OilDetail = () => {
                       <p className="text-2xl font-black text-emerald-700">
                         €{product.price}
                       </p>
-                      <p className="text-emerald-600 font-semibold">
-                        {product.quantity > 0
-                          ? `${product.quantity} in stock`
-                          : "Out of stock"}
-                      </p>
+                      
                     </div>
                     <div className="text-right">
                       <div

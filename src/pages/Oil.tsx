@@ -456,17 +456,7 @@ const Oil = () => {
                     <div className="text-3xl font-black text-emerald-600">
                       €{product.price}
                     </div>
-                    <div
-                      className={`px-4 py-2 rounded-full text-sm font-bold ${
-                        product.quantity > 0
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {product.quantity > 0
-                        ? `${product.quantity} in stock`
-                        : "Out of stock"}
-                    </div>
+                    
                   </div>
 
                   {/* Enhanced Button */}
