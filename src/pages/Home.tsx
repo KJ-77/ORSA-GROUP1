@@ -324,7 +324,7 @@ const Home = () => {
             statItems.forEach((item, index) => {
               const number = item.querySelector(".stat-number");
               if (number) {
-                const finalValues = [50, 500, 20, 80];
+                const finalValues = [50, 500,  80];
                 const finalValue = finalValues[index] || 0;
 
                 gsap.fromTo(
@@ -621,7 +621,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-gray-900 opacity-10"></div>
 
         <div className="max-w-7xl mx-auto px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
             <div className="stat-item p-8 backdrop-blur-md bg-white/10 rounded-3xl border border-white/20 shadow-2xl transform-gpu">
               <h3 className="text-5xl font-black mb-4 text-emerald-200">
                 <span className="stat-number">50</span>+
@@ -633,12 +633,6 @@ const Home = () => {
                 <span className="stat-number">1000</span>+
               </h3>
               <p className="text-xl text-gray-200">Happy Customers</p>
-            </div>
-            <div className="stat-item p-8 backdrop-blur-md bg-white/10 rounded-3xl border border-white/20 shadow-2xl transform-gpu">
-              <h3 className="text-5xl font-black mb-4 text-emerald-200">
-                <span className="stat-number">25</span>+
-              </h3>
-              <p className="text-xl text-gray-200">Available Products</p>
             </div>
             <div className="stat-item p-8 backdrop-blur-md bg-white/10 rounded-3xl border border-white/20 shadow-2xl transform-gpu">
               <h3 className="text-5xl font-black mb-4 text-emerald-200">
