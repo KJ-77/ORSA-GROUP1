@@ -392,7 +392,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       };
 
       const response = await fetch(
-        "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/users",
+        import.meta.env.VITE_API_URL + "/users",
         {
           method: "POST",
           headers: {

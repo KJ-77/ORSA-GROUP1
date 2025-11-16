@@ -58,7 +58,7 @@ const Oil = () => {
     const imagePromises = products.map(async (product) => {
       try {
         const response = await fetch(
-          `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${product.id}/images`
+          `${import.meta.env.VITE_API_URL}/products/${product.id}/images`
         );
 
         if (!response.ok) {
@@ -89,7 +89,7 @@ const Oil = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products"
+        import.meta.env.VITE_API_URL + "/products"
       );
 
       if (!response.ok) {

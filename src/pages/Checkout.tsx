@@ -29,8 +29,7 @@ const Checkout: React.FC = () => {
     user_id?: string;
   }) => {
     const apiUrl =
-      import.meta.env.VITE_API_URL ||
-      "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com";
+      import.meta.env.VITE_API_URL;
 
     const response = await fetch(`${apiUrl}/orders`, {
       method: "POST",
@@ -50,8 +49,7 @@ const Checkout: React.FC = () => {
   // API function to create order items
   const createOrderItems = async (orderId: string, items: CartItem[]) => {
     const apiUrl =
-      import.meta.env.VITE_API_URL ||
-      "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com";
+      import.meta.env.VITE_API_URL;
 
     const orderItems = items.map((item) => ({
       product_name: item.name,
@@ -142,8 +140,7 @@ const Checkout: React.FC = () => {
           };
 
           const apiUrl =
-            import.meta.env.VITE_API_URL ||
-            "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com";
+            import.meta.env.VITE_API_URL;
 
           const response = await fetch(`${apiUrl}/api/create-payment-intent`, {
             method: "POST",

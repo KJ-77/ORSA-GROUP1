@@ -70,7 +70,7 @@ const OilDetail = () => {
   const fetchAllProductIds = useCallback(async () => {
     try {
       const response = await fetch(
-        "https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products"
+        `${import.meta.env.VITE_API_URL}/products`
       );
 
       if (!response.ok) {
@@ -96,7 +96,7 @@ const OilDetail = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${id}`
+        `${import.meta.env.VITE_API_URL}/products/${id}`
       );
 
       if (!response.ok) {
@@ -118,7 +118,7 @@ const OilDetail = () => {
   const fetchImages = useCallback(async () => {
     try {
       const response = await fetch(
-        `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${id}/images`
+        `${import.meta.env.VITE_API_URL}/products/${id}/images`
       );
 
       if (!response.ok) {

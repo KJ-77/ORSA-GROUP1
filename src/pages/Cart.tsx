@@ -61,7 +61,7 @@ const Cart = () => {
     async (productId: number): Promise<ApiProduct | null> => {
       try {
         const response = await fetch(
-          `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${productId}`
+          `${import.meta.env.VITE_API_URL}/products/${productId}`
         );
 
         if (!response.ok) {
@@ -84,7 +84,7 @@ const Cart = () => {
     const imagePromises = products.map(async (product) => {
       try {
         const response = await fetch(
-          `https://rlg7ahwue7.execute-api.eu-west-3.amazonaws.com/products/${product.id}/images`
+          `${import.meta.env.VITE_API_URL}/products/${product.id}/images`
         );
 
         if (!response.ok) {
