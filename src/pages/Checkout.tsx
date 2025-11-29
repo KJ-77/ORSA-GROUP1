@@ -54,7 +54,7 @@ const Checkout: React.FC = () => {
     user_id?: string;
   }) => {
     // 🧪 TESTING: Uncomment line below to simulate database failure
-    throw new Error('Simulated database failure for testing recovery system');
+    // throw new Error('Simulated database failure for testing recovery system');
 
     const apiUrl =
       import.meta.env.VITE_API_URL;
