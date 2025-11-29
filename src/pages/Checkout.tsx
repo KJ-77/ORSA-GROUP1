@@ -12,6 +12,31 @@ interface CartItem {
   image?: string;
 }
 
+// Utility function to retry async operations with exponential backoff
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  initialDelay: number = 1000
+): Promise<T> {
+  let lastError: Error;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+
+      if (attempt < maxRetries - 1) {
+        const delay = initialDelay * Math.pow(2, attempt);
+        console.log(`Attempt ${attempt + 1} failed, retrying in ${delay}ms...`, lastError.message);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  throw lastError!;
+}
+
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -28,6 +53,9 @@ const Checkout: React.FC = () => {
     total_price: number;
     user_id?: string;
   }) => {
+    // 🧪 TESTING: Uncomment line below to simulate database failure
+    // throw new Error('Simulated database failure for testing recovery system');
+
     const apiUrl =
       import.meta.env.VITE_API_URL;
 
@@ -128,8 +156,8 @@ const Checkout: React.FC = () => {
             ) * 100
           );
 
-          // For Stripe payment intent, we only need amount and currency
-          // The items will be stored in our database when payment succeeds
+          // Store full order details in Stripe metadata as backup
+          // This allows recovery if database save fails
           const requestPayload = {
             amount: totalAmount,
             currency: "eur",
@@ -137,6 +165,12 @@ const Checkout: React.FC = () => {
             description: `Order with ${parsedCart.length} item${
               parsedCart.length > 1 ? "s" : ""
             }`,
+            metadata: {
+              cart_items: JSON.stringify(parsedCart),
+              user_id: user?.username || "guest",
+              user_name: user?.name || "Guest",
+              timestamp: new Date().toISOString(),
+            },
           };
 
           const apiUrl =
@@ -228,32 +262,46 @@ const Checkout: React.FC = () => {
         stripe_id: paymentIntent.id || undefined,
       };
 
-      // Create order in database
+      // Create order in database with retry logic
       console.log("Creating order with data:", orderData);
-      const orderResponse = await createOrder(orderData);
+      const orderResponse = await retryWithBackoff(
+        () => createOrder(orderData),
+        3, // 3 retries
+        1000 // 1 second initial delay
+      );
       console.log("Order created:", orderResponse);
 
-      // Add timeout before creating order items
-      // await new Promise((resolve) => setTimeout(resolve, 1000)); 1 second delay
-
-      // Create order items
+      // Create order items with retry logic
       if (orderResponse.orderId) {
         console.log("Creating order items for order:", orderResponse.orderId);
-        await createOrderItems(orderResponse.orderId, cart);
+        await retryWithBackoff(
+          () => createOrderItems(orderResponse.orderId, cart),
+          3,
+          1000
+        );
         console.log("Order items created successfully");
       } else {
-        console.warn("Order created but no ID returned, skipping order items");
+        throw new Error("Order created but no ID returned");
       }
 
       // Clear cart after successful database operations
       localStorage.removeItem("cart");
       navigate("/payment-success");
     } catch (error) {
-      console.error("Error saving order to database:", error);
-      // Still navigate to success page since payment succeeded
-      // but show a warning or handle this case appropriately
-      localStorage.removeItem("cart");
-      navigate("/payment-success");
+      console.error("CRITICAL: Failed to save order to database after retries:", error);
+      console.error("Payment Intent ID:", paymentIntent.id);
+      console.error("Order details are saved in Stripe metadata for recovery");
+
+      // DO NOT clear cart - keep it for recovery
+      // Navigate to a special error page that shows payment was successful
+      // but order needs manual processing
+      navigate("/payment-success", {
+        state: {
+          orderSaveFailed: true,
+          paymentIntentId: paymentIntent.id,
+          error: error instanceof Error ? error.message : String(error),
+        },
+      });
     }
   };
 
