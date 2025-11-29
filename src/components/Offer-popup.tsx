@@ -113,7 +113,7 @@ export function OfferPopup({
           </DialogTitle>
 
           {/* Description */}
-          <DialogDescription className="text-gray-600 text-base leading-relaxed">
+          <DialogDescription className="text-gray-600 text-base leading-relaxed whitespace-pre-line">
             {description}
           </DialogDescription>
         </DialogHeader>

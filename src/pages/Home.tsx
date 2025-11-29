@@ -324,7 +324,7 @@ const Home = () => {
             statItems.forEach((item, index) => {
               const number = item.querySelector(".stat-number");
               if (number) {
-                const finalValues = [50, 500,  80];
+                const finalValues = [50, 500, 80];
                 const finalValue = finalValues[index] || 0;
 
                 gsap.fromTo(
@@ -424,18 +424,14 @@ const Home = () => {
       ease: "none",
     });
 
-
-
     //FOR POPUP
 
     // Auto-open sale popup after 2 seconds (you can customize this)
-    // const timer = setTimeout(() => {
-    //   salePopup.openPopup();
-    // }, 2000);
-    // return () => clearTimeout(timer);
-
-  }, []);
-
+    const timer = setTimeout(() => {
+      newsPopup.openPopup();
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [newsPopup]);
   return (
     <div className="w-full overflow-hidden relative">
       {/* Ultra-Enhanced Hero Section with 3D Elements */}
@@ -853,12 +849,13 @@ const Home = () => {
       <OfferPopup
         isOpen={newsPopup.isOpen}
         onClose={newsPopup.closePopup}
-        title="📢 New Products Available!"
-        description="We've just added new premium oil varieties to our collection. Discover exotic flavors and premium quality oils from Lebanon."
+        title="Livraison"
+        description={`* Commande à partir de 80€ Livraison gratuite à Bruxelles.
+        * Hors Bruxelles frais à charge de client.`}
         imageUrl="/oil3.jpg"
-        imageAlt="New oil products"
+        imageAlt="Delivery Offer"
         buttonText="Explore New Products"
-        buttonLink="/oil?filter=new"
+        buttonLink="/products"
         type="news"
       />
     </div>
