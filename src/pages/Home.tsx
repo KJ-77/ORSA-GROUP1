@@ -16,7 +16,10 @@ const Home = () => {
   // Popup hooks
   const salePopup = useOfferPopup();
   const discountPopup = useOfferPopup();
-  const newsPopup = useOfferPopup();
+  const newsPopup = useOfferPopup({
+    storageKey: "newsPopup_lastShown",
+    showOnceDaily: true,
+  });
 
   const headerRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -432,6 +435,7 @@ const Home = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, [newsPopup]);
+
   return (
     <div className="w-full overflow-hidden relative">
       {/* Ultra-Enhanced Hero Section with 3D Elements */}
