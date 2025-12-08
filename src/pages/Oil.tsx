@@ -14,19 +14,16 @@ interface ApiProduct {
   price: string;
   quantity: number;
   description: string;
+  images: ApiImage[];
 }
 
 // API Image interface
 interface ApiImage {
   id: number;
-  product_id: number;
   image_url: string;
   image_key: string;
-  alt_text: string | null;
   display_order: number;
   is_primary: number;
-  created_at: string;
-  updated_at: string;
 }
 
 // Default product images
@@ -36,9 +33,6 @@ const Oil = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [products, setProducts] = useState<ApiProduct[]>([]);
-  const [productImages, setProductImages] = useState<
-    Record<number, ApiImage[]>
-  >({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const selectedFilter = "all"; // Static filter value since filtering UI is not implemented
@@ -53,38 +47,7 @@ const Oil = () => {
     navigate(`/oil/${productId}`);
   };
 
-  // Function to fetch images for all products
-  const fetchAllProductImages = useCallback(async (products: ApiProduct[]) => {
-    const imagePromises = products.map(async (product) => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/products/${product.id}/images`
-        );
-
-        if (!response.ok) {
-          console.warn(`Failed to fetch images for product ${product.id}`);
-          return { productId: product.id, images: [] };
-        }
-
-        const images: ApiImage[] = await response.json();
-        return { productId: product.id, images };
-      } catch (error) {
-        console.warn(`Error fetching images for product ${product.id}:`, error);
-        return { productId: product.id, images: [] };
-      }
-    });
-
-    const results = await Promise.all(imagePromises);
-    const imagesMap: Record<number, ApiImage[]> = {};
-
-    results.forEach(({ productId, images }) => {
-      imagesMap[productId] = images;
-    });
-
-    setProductImages(imagesMap);
-  }, []);
-
-  // Function to fetch products
+  // Function to fetch products (now includes images in response)
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
@@ -99,24 +62,20 @@ const Oil = () => {
       const data: ApiProduct[] = await response.json();
       setProducts(data);
       setError(null);
-
-      // Fetch images for all products
-      await fetchAllProductImages(data);
     } catch (err) {
       console.error("Error fetching products:", err);
       setError("Failed to load products. Please try again later.");
     } finally {
       setLoading(false);
     }
-  }, [fetchAllProductImages]);
+  }, []);
 
   // Function to get display image for a product
-  const getProductDisplayImage = (productId: number, index: number) => {
-    const images = productImages[productId];
-    if (images && images.length > 0) {
+  const getProductDisplayImage = (product: ApiProduct, index: number) => {
+    if (product.images && product.images.length > 0) {
       // Find primary image or use first image
-      const primaryImage = images.find((img) => img.is_primary === 1);
-      return primaryImage ? primaryImage.image_url : images[0].image_url;
+      const primaryImage = product.images.find((img) => img.is_primary === 1);
+      return primaryImage ? primaryImage.image_url : product.images[0].image_url;
     }
     // Fallback to default images
     return defaultProductImages[index % defaultProductImages.length];
@@ -401,7 +360,7 @@ const Oil = () => {
                   onClick={() => handleImageClick(product.id)}
                 >
                   <img
-                    src={getProductDisplayImage(product.id, index)}
+                    src={getProductDisplayImage(product, index)}
                     alt={product.name}
                     className="w-full h-80 object-cover transition-transform duration-1000 group-hover:scale-125 cursor-pointer"
                     onClick={() => handleImageClick(product.id)}
