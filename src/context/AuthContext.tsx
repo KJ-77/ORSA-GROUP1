@@ -140,11 +140,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const cognitoUser = new CognitoUser(userData);
       cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: (result) => {
+        onSuccess: () => {
           // Log the authentication result to see the token
-          console.log("Authentication result:", result);
-          console.log("Access Token:", result.getAccessToken().getJwtToken());
-          console.log("ID Token:", result.getIdToken().getJwtToken()); // Get user attributes after successful login
           cognitoUser.getUserAttributes((_err, attributes) => {
             console.log("User attributes:", attributes);
             const userAttributes: { [key: string]: string } = {};
