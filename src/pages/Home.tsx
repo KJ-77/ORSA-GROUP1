@@ -854,7 +854,8 @@ const Home = () => {
         isOpen={newsPopup.isOpen}
         onClose={newsPopup.closePopup}
         title="Livraison"
-        description={`* Commande à partir de 80€ Livraison gratuite à Bruxelles.
+        description={`* Payement à la livraison
+        * Commande à partir de 80€ Livraison gratuite à Bruxelles.
         * Hors Bruxelles frais à charge de client.`}
         imageUrl="/oil3.jpg"
         imageAlt="Delivery Offer"
